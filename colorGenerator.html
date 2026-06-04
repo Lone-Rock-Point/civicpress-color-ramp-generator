@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Color Ramp System Generator</title>
+
+<style>
+body{
+  font-family:Arial,sans-serif;
+  margin:0;
+  padding:20px;
+  background:#fafafa;
+  color:#1f2020;
+}
+
+h1{
+  font-size:22px;
+  margin-bottom:18px;
+}
+
+.input-grid{
+  display:grid;
+  grid-template-columns:repeat(4,190px);
+  gap:10px;
+  margin-bottom:18px;
+}
+
+input{
+  padding:8px;
+  border:1px solid #ccc;
+  border-radius:6px;
+}
+
+button{
+  padding:10px 14px;
+  background:#0047BA;
+  color:white;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+button:hover{
+  background:#003A8F;
+}
+
+.export-btn{
+  background:#1f2020;
+  margin-left:10px;
+}
+
+.export-btn:hover{
+  background:#3a3b3b;
+}
+
+.figma-btn{
+  background:#7B61FF;
+}
+
+.figma-btn:hover{
+  background:#6146e0;
+}
+
+.group{
+  margin-top:28px;
+  padding:18px;
+  border-radius:12px;
+  background:white;
+  box-shadow:0 2px 10px rgba(0,0,0,0.08);
+}
+
+.group-title{
+  font-size:18px;
+  font-weight:bold;
+  margin-bottom:14px;
+}
+
+.sub-title{
+  font-size:13px;
+  font-weight:bold;
+  margin:14px 0 8px;
+}
+
+.row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+}
+
+.swatch{
+  width:95px;
+  height:95px;
+  border-radius:8px;
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  padding:6px;
+  font-size:10px;
+  font-weight:bold;
+  cursor:pointer;
+  box-shadow:0 2px 6px rgba(0,0,0,0.12);
+  position:relative;
+  transition: transform 0.1s;
+}
+
+.swatch:hover {
+  transform: scale(1.05);
+}
+
+/* Anchor badge shown on the swatch that matches the input hex */
+.anchor-badge {
+  position:absolute;
+  top:6px;
+  right:6px;
+  background:rgba(255,255,255,0.92);
+  border-radius:3px;
+  padding:1px 4px;
+  font-size:9px;
+  font-weight:bold;
+  color:#1f2020;
+  letter-spacing:0.03em;
+}
+
+.label{
+  background:rgba(255,255,255,0.75);
+  padding:2px 4px;
+  border-radius:4px;
+  text-align:center;
+}
+
+/* Small pill showing which slot the input landed in */
+.anchor-info {
+  font-size:11px;
+  color:#555;
+  margin-bottom:6px;
+}
+
+.anchor-info strong {
+  color:#0047BA;
+}
+
+.slider-wrap{
+  margin-top:12px;
+}
+
+.slider-wrap label{
+  display:block;
+  font-size:12px;
+  margin-bottom:4px;
+}
+
+.slider-value{
+  font-weight:bold;
+}
+
+input[type=range]{
+  width:220px;
+}
+
+.tooltip{
+  position:fixed;
+  bottom:20px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#1f2020;
+  color:white;
+  padding:8px 12px;
+  border-radius:6px;
+  opacity:0;
+  transition:0.2s;
+  font-size:12px;
+  pointer-events:none;
+}
+
+.tooltip.show{
+  opacity:1;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Color Ramp System Generator</h1>
+
+<div class="input-grid">
+  <label>Primary Base<br><input id="primary" value="#0047BA" placeholder="Primary Base" /></label>
+  <label>Secondary Base<br><input id="secondary" value="#E63C2F" placeholder="Secondary Base" /></label>
+  <label>Tertiary Base<br><input id="tertiary" value="#2F6B55" placeholder="Tertiary Base" /></label>
+
+  <label style="align-self:end">
+    <input type="checkbox" id="defaultGray" checked />
+    Default Grays
+  </label>
+</div>
+
+<button onclick="generate()">Generate System</button>
+<button class="export-btn" onclick="exportCSS()">Export CSS Variables</button>
+<button class="export-btn figma-btn" onclick="exportFigmaSVG()">Export SVG for Figma</button>
+
+<div id="output"></div>
+
+<div class="tooltip" id="tooltip">Copied</div>
+
+<script>
+/* Live state — kept in sync by generate() and sliders */
+let currentSystem = {};
+
+const TONE_NAMES_7 = ["Lightest", "Lighter", "Light", "Base", "Dark", "Darker", "Darkest"];
+const TONE_NAMES_5 = ["Lightest", "Light", "Base", "Dark", "Darkest"];
+
+/* ===========================
+   COLOR UTILITIES
+=========================== */
+
+function hexToHsl(hex){
+  let r=parseInt(hex.substr(1,2),16)/255;
+  let g=parseInt(hex.substr(3,2),16)/255;
+  let b=parseInt(hex.substr(5,2),16)/255;
+
+  let max=Math.max(r,g,b);
+  let min=Math.min(r,g,b);
+  let h,s,l=(max+min)/2;
+
+  if(max===min){
+    h=s=0;
+  } else {
+    let d=max-min;
+    s=l>0.5 ? d/(2-max-min) : d/(max+min);
+    switch(max){
+      case r: h=(g-b)/d+(g<b?6:0); break;
+      case g: h=(b-r)/d+2; break;
+      case b: h=(r-g)/d+4; break;
+    }
+    h*=60;
+  }
+
+  return {h,s,l};
+}
+
+function hslToHex(h,s,l){
+  l = Math.max(0, Math.min(1, l));
+  s = Math.max(0, Math.min(1, s));
+
+  let c=(1-Math.abs(2*l-1))*s;
+  let x=c*(1-Math.abs((h/60)%2-1));
+  let m=l-c/2;
+  let r=0,g=0,b=0;
+
+  if(h<60){r=c;g=x;}
+  else if(h<120){r=x;g=c;}
+  else if(h<180){g=c;b=x;}
+  else if(h<240){g=x;b=c;}
+  else if(h<300){r=x;b=c;}
+  else{r=c;b=x;}
+
+  r=Math.round((r+m)*255);
+  g=Math.round((g+m)*255);
+  b=Math.round((b+m)*255);
+
+  return "#" + [r,g,b].map(v=>v.toString(16).padStart(2,"0")).join("");
+}
+
+/* ===========================
+   SMART ANCHOR RAMP
+   
+   Instead of always placing the input at slot 4 (index 3),
+   we measure its lightness and choose the closest slot from
+   a fixed 7-point scale. Then we rebuild the full ramp using
+   a consistent step size derived from available headroom.
+
+   Target lightness values for the 7 slots (lightest → darkest):
+     Slot 1: ~0.93   Slot 2: ~0.80   Slot 3: ~0.65
+     Slot 4: ~0.50   Slot 5: ~0.36   Slot 6: ~0.22   Slot 7: ~0.10
+=========================== */
+
+const SLOT_TARGETS = [0.93, 0.80, 0.65, 0.50, 0.36, 0.22, 0.10];
+
+/**
+ * Given a hex color, decide which of the 7 slots it best fits,
+ * then generate the full 7-step ramp so that:
+ *  - The input hex lands exactly at its slot
+ *  - Surrounding slots use uniform steps calculated from available room
+ *
+ * Returns { colors: string[7], anchorSlot: 0-6 }
+ */
+function ramp7Smart(hex) {
+  const { h, s, l } = hexToHsl(hex);
+
+  // Find the closest slot by lightness distance
+  let anchorSlot = 0;
+  let minDist = Infinity;
+  SLOT_TARGETS.forEach((target, i) => {
+    const dist = Math.abs(target - l);
+    if (dist < minDist) { minDist = dist; anchorSlot = i; }
+  });
+
+  // How much lightness room exists above and below the anchor
+  const lightnessAbove = 0.97 - l;   // max we'll go toward white
+  const lightnessBelow = l - 0.12;   // max we'll go toward black (floor raised to avoid near-black)
+
+  // Number of slots above and below the anchor
+  const slotsAbove = anchorSlot;           // indices 0..(anchorSlot-1)
+  const slotsBelow = 6 - anchorSlot;       // indices (anchorSlot+1)..6
+
+  // Per-step size in each direction (guard against divide-by-zero)
+  const stepUp   = slotsAbove > 0 ? lightnessAbove / slotsAbove : 0;
+  const stepDown = slotsBelow > 0 ? lightnessBelow / slotsBelow : 0;
+
+  const colors = [];
+  for (let i = 0; i < 7; i++) {
+    if (i === anchorSlot) {
+      colors.push(hex); // preserve the exact input color
+    } else if (i < anchorSlot) {
+      // Lighter slots — step away from anchor upward
+      const distance = anchorSlot - i;
+      colors.push(hslToHex(h, s, l + stepUp * distance));
+    } else {
+      // Darker slots — step away from anchor downward
+      const distance = i - anchorSlot;
+      colors.push(hslToHex(h, s, l - stepDown * distance));
+    }
+  }
+
+  return { colors, anchorSlot };
+}
+
+/* 5-step extended ramp (unchanged) */
+function ramp5(hex, shift){
+  const { h, s } = hexToHsl(hex);
+  const shifted = (h + shift) % 360;
+  return [0.75, 0.60, 0.45, 0.30, 0.18].map(v => hslToHex(shifted, s, v));
+}
+
+/* ===========================
+   UI HELPERS
+=========================== */
+
+function showTooltip(text) {
+  const t = document.getElementById("tooltip");
+  t.innerText = text;
+  t.classList.add("show");
+  setTimeout(() => t.classList.remove("show"), 900);
+}
+
+function swatch(color, label, isAnchor = false){
+  const d = document.createElement("div");
+  d.className = "swatch";
+  d.style.background = color;
+
+  d.innerHTML = `
+    ${isAnchor ? '<span class="anchor-badge">INPUT</span>' : ''}
+    <div class="label">${label}<br>${color}</div>
+  `;
+
+  d.onclick = () => {
+    navigator.clipboard.writeText(color);
+    showTooltip("Copied " + color);
+  };
+
+  return d;
+}
+
+function row(colors, labels, anchorSlot = -1){
+  const r = document.createElement("div");
+  r.className = "row";
+  colors.forEach((c, i) => {
+    r.appendChild(swatch(c, labels[i], i === anchorSlot));
+  });
+  return r;
+}
+
+function subtitle(text){
+  const d = document.createElement("div");
+  d.className = "sub-title";
+  d.innerText = text;
+  return d;
+}
+
+function anchorInfo(anchorSlot, hex) {
+  const d = document.createElement("div");
+  d.className = "anchor-info";
+  const slotNum = anchorSlot + 1;
+  const lightPercent = Math.round(hexToHsl(hex).l * 100);
+  d.innerHTML = `Input <strong>${hex}</strong> (L=${lightPercent}%) placed at slot <strong>${slotNum} of 7</strong>`;
+  return d;
+}
+
+/* Slider that updates the extended ramp row in place */
+function addSlider(container, baseHex, extLabels, defaultShift, sliderId){
+  const extRowId = sliderId + "-ext-row";
+
+  const sliderWrap = document.createElement("div");
+  sliderWrap.className = "slider-wrap";
+  sliderWrap.innerHTML = `
+    <label>
+      Extended Hue Shift:
+      <span class="slider-value" id="${sliderId}-value">${defaultShift}°</span>
+    </label>
+    <input type="range" min="0" max="360" value="${defaultShift}" id="${sliderId}" />
+  `;
+
+  container.appendChild(sliderWrap);
+  container.appendChild(subtitle("Extended Ramp"));
+
+  const extRow = row(ramp5(baseHex, defaultShift), extLabels);
+  extRow.id = extRowId;
+  container.appendChild(extRow);
+
+  const slider = sliderWrap.querySelector("input[type=range]");
+  const valueLabel = sliderWrap.querySelector(".slider-value");
+
+  slider.addEventListener("input", () => {
+    const shift = parseInt(slider.value);
+    valueLabel.innerText = shift + "°";
+
+    const newColors = ramp5(baseHex, shift);
+    currentSystem[sliderId] = newColors;
+
+    const existingRow = document.getElementById(extRowId);
+    const swatches = existingRow.querySelectorAll(".swatch");
+
+    newColors.forEach((color, i) => {
+      swatches[i].style.background = color;
+      swatches[i].querySelector(".label").innerHTML =
+        extLabels[i] + "<br>" + color;
+      swatches[i].onclick = () => {
+        navigator.clipboard.writeText(color);
+        showTooltip("Copied " + color);
+      };
+    });
+  });
+}
+
+function group(title, baseHex, colorName, extNum, sliderId, defaultShift){
+  const { colors: baseRamp, anchorSlot } = ramp7Smart(baseHex);
+  const baseLabels = TONE_NAMES_7.map(t => t === "Base" ? colorName : `${colorName} ${t}`);
+  const extLabels  = TONE_NAMES_5.map(t => t === "Base" ? `Extended Palette ${extNum}` : `Extended Palette ${extNum} ${t}`);
+
+  const g = document.createElement("div");
+  g.className = "group";
+
+  const t = document.createElement("div");
+  t.className = "group-title";
+  t.innerText = title;
+  g.appendChild(t);
+
+  g.appendChild(anchorInfo(anchorSlot, baseHex));
+  g.appendChild(subtitle("Base Ramp"));
+  g.appendChild(row(baseRamp, baseLabels, anchorSlot));
+
+  addSlider(g, baseHex, extLabels, defaultShift, sliderId);
+
+  return { element: g, colors: baseRamp };
+}
+
+/* ===========================
+   EXPORT CSS
+=========================== */
+
+function exportCSS(){
+  const lines = [":root {"];
+  const toneNames = ["lightest","lighter","light","base","dark","darker","darkest"];
+
+  function addVars(prefix, arr){
+    if (!arr) return;
+    arr.forEach((color, i) => {
+      lines.push(`  --${prefix}-${toneNames[i]}: ${color};`);
+    });
+  }
+
+  lines.push("\n  /* Primary */");
+  addVars("color-primary",          currentSystem.primary);
+  addVars("color-primary-extended", currentSystem.primaryShift);
+
+  lines.push("\n  /* Secondary */");
+  addVars("color-secondary",          currentSystem.secondary);
+  addVars("color-secondary-extended", currentSystem.secondaryShift);
+
+  lines.push("\n  /* Tertiary */");
+  addVars("color-tertiary",          currentSystem.tertiary);
+  addVars("color-tertiary-extended", currentSystem.tertiaryShift);
+
+  lines.push("\n  /* Semantic */");
+  lines.push(`  --color-background: ${currentSystem.semantic.background};`);
+  lines.push(`  --color-foreground: ${currentSystem.semantic.foreground};`);
+  lines.push(`  --color-reverse:    ${currentSystem.semantic.reverse};`);
+
+  lines.push("\n  /* Grays */");
+  addVars("color-gray", currentSystem.grays);
+
+  lines.push("}");
+
+  const css = lines.join("\n");
+  const blob = new Blob([css], { type: "text/css" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "color-system.css";
+  a.click();
+}
+
+/* ===========================
+   EXPORT SVG FOR FIGMA
+
+   Layout (all units in px):
+   - Each swatch:        100 × 100, corner radius 8
+   - Swatch gap:         12
+   - Section label row:  20px tall, above each row of swatches
+   - Group title row:    28px tall, above each section
+   - Group padding:      20px (top/bottom), 20px (left/right)
+   - Group gap:          24px between groups
+   - Total canvas width: auto-fit to widest group + margins
+   - Font:               system-ui / Arial
+
+   Figma treats every <rect> as an individually selectable frame
+   and every <text> as editable — so once imported you get a
+   real layer per swatch, named by its token label.
+=========================== */
+
+function hexToRgb(hex) {
+  return {
+    r: parseInt(hex.substr(1,2),16),
+    g: parseInt(hex.substr(3,2),16),
+    b: parseInt(hex.substr(5,2),16)
+  };
+}
+
+/* Pick black or white label text based on relative luminance */
+function labelColor(hex) {
+  const { r, g, b } = hexToRgb(hex);
+  const lum = (0.299*r + 0.587*g + 0.114*b) / 255;
+  return lum > 0.55 ? "#1f2020" : "#ffffff";
+}
+
+function exportFigmaSVG() {
+  const SW  = 100;   // swatch width
+  const SH  = 100;   // swatch height
+  const GAP = 12;    // gap between swatches
+  const R   = 8;     // corner radius
+  const PAD = 20;    // group padding
+  const GROUP_GAP = 24;
+  const TITLE_H   = 28;   // group title row height
+  const SECTION_H = 20;   // sub-section label row height
+
+  /* Build section data from currentSystem */
+  const mkBase  = name => TONE_NAMES_7.map(t => t === "Base" ? name : `${name} ${t}`);
+  const mkExt   = num  => TONE_NAMES_5.map(t => t === "Base" ? `Extended Palette ${num}` : `Extended Palette ${num} ${t}`);
+  const grayNames = TONE_NAMES_7.map(t => t === "Base" ? "Base" : `Base ${t}`);
+
+  const sections = [
+    { title: "Primary System", rows: [
+        { label: "Base Ramp",     colors: currentSystem.primary,        names: mkBase("Primary") },
+        { label: "Extended Ramp", colors: currentSystem.primaryShift,   names: mkExt(1) }
+    ]},
+    { title: "Secondary System", rows: [
+        { label: "Base Ramp",     colors: currentSystem.secondary,      names: mkBase("Secondary") },
+        { label: "Extended Ramp", colors: currentSystem.secondaryShift, names: mkExt(2) }
+    ]},
+    { title: "Tertiary System", rows: [
+        { label: "Base Ramp",     colors: currentSystem.tertiary,       names: mkBase("Tertiary") },
+        { label: "Extended Ramp", colors: currentSystem.tertiaryShift,  names: mkExt(3) }
+    ]},
+    { title: "Semantic Colors", rows: [
+        { label: "", colors: [
+            currentSystem.semantic.background,
+            currentSystem.semantic.foreground,
+            currentSystem.semantic.reverse
+          ],
+          names: ["Background","Foreground","Reverse"]
+        }
+    ]},
+    { title: "Base Grays", rows: [
+        { label: "", colors: currentSystem.grays, names: grayNames }
+    ]}
+  ];
+
+  /* Measure max row width to set canvas width */
+  const maxSwatches = Math.max(...sections.flatMap(s => s.rows.map(r => r.colors.length)));
+  const rowW = maxSwatches * (SW + GAP) - GAP;
+  const canvasW = PAD * 2 + rowW;
+
+  /* Build SVG elements, tracking Y position */
+  const elems = [];
+  let y = PAD;
+
+  sections.forEach(section => {
+    const groupStartY = y;
+
+    /* Group title */
+    elems.push(
+      `<text x="${PAD}" y="${y + 18}" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#1f2020">${escXML(section.title)}</text>`
+    );
+    y += TITLE_H;
+
+    section.rows.forEach(rowDef => {
+      /* Sub-section label (skip if empty) */
+      if (rowDef.label) {
+        elems.push(
+          `<text x="${PAD}" y="${y + 13}" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#555555">${escXML(rowDef.label)}</text>`
+        );
+        y += SECTION_H;
+      }
+
+      /* Swatches */
+      rowDef.colors.forEach((color, i) => {
+        const x = PAD + i * (SW + GAP);
+        const tc = labelColor(color);
+        const tokenName = rowDef.names[i] || (i + 1);
+
+        /* Swatch rect — named via id so Figma shows it as a layer */
+        elems.push(`<rect id="${escXML(tokenName)}" x="${x}" y="${y}" width="${SW}" height="${SH}" rx="${R}" ry="${R}" fill="${color}" />`);
+
+        /* Token label (top-left, small) */
+        elems.push(
+          `<text x="${x + 6}" y="${y + 15}" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="${tc}" opacity="0.85">${escXML(String(tokenName))}</text>`
+        );
+
+        /* Hex value (bottom-left) */
+        elems.push(
+          `<text x="${x + 6}" y="${y + SH - 8}" font-family="Arial, sans-serif" font-size="9" fill="${tc}" opacity="0.85">${color.toUpperCase()}</text>`
+        );
+      });
+
+      y += SH + GAP;
+    });
+
+    /* Group background rect — drawn before content but placed via insert */
+    const groupH = y - groupStartY + PAD / 2;
+    elems.unshift(
+      `<rect x="4" y="${groupStartY - 8}" width="${canvasW - 8}" height="${groupH}" rx="10" ry="10" fill="#ffffff" opacity="0.6" />`
+    );
+
+    y += GROUP_GAP;
+  });
+
+  const totalH = y + PAD;
+
+  const svg = [
+    `<svg xmlns="http://www.w3.org/2000/svg" width="${canvasW}" height="${totalH}" viewBox="0 0 ${canvasW} ${totalH}">`,
+    `  <rect width="${canvasW}" height="${totalH}" fill="#f5f5f5" />`,
+    ...elems.map(e => "  " + e),
+    `</svg>`
+  ].join("\n");
+
+  const blob = new Blob([svg], { type: "image/svg+xml" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "color-system.svg";
+  a.click();
+}
+
+function escXML(str) {
+  return String(str)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;");
+}
+
+/* ===========================
+   GENERATE
+=========================== */
+
+function generate(){
+  const primary   = document.getElementById("primary").value.trim();
+  const secondary = document.getElementById("secondary").value.trim();
+  const tertiary  = document.getElementById("tertiary").value.trim();
+  const useDefault = document.getElementById("defaultGray").checked;
+
+  const out = document.getElementById("output");
+  out.innerHTML = "";
+
+  /* Build groups — each returns { element, colors } */
+  const pGroup = group("Primary System",   primary,   "Primary",   1, "primaryShift",   180);
+  const sGroup = group("Secondary System", secondary, "Secondary", 2, "secondaryShift", 150);
+  const tGroup = group("Tertiary System",  tertiary,  "Tertiary",  3, "tertiaryShift",  150);
+
+  /* Snapshot into currentSystem */
+  currentSystem = {
+    primary:        pGroup.colors,
+    primaryShift:   ramp5(primary,   180),
+    secondary:      sGroup.colors,
+    secondaryShift: ramp5(secondary, 150),
+    tertiary:       tGroup.colors,
+    tertiaryShift:  ramp5(tertiary,  150),
+    semantic: {
+      background: "#FAFAFA",
+      foreground: "#1F2020",
+      reverse:    "#FFFFFF"
+    },
+    grays: useDefault
+      ? ["#FAFAFA","#F3F3F3","#E8E8E8","#DCDCDC","#B8B8B8","#8C8C8C","#717271"]
+      : ramp7Smart("#808080").colors
+  };
+
+  out.appendChild(pGroup.element);
+  out.appendChild(sGroup.element);
+  out.appendChild(tGroup.element);
+
+  /* SEMANTIC */
+  const semantic = document.createElement("div");
+  semantic.className = "group";
+
+  const semTitle = document.createElement("div");
+  semTitle.className = "group-title";
+  semTitle.innerText = "Semantic Colors";
+  semantic.appendChild(semTitle);
+
+  const semRow = document.createElement("div");
+  semRow.className = "row";
+  semRow.appendChild(swatch(currentSystem.semantic.background, "Background"));
+  semRow.appendChild(swatch(currentSystem.semantic.foreground,  "Foreground"));
+  semRow.appendChild(swatch(currentSystem.semantic.reverse,     "Reverse"));
+  semantic.appendChild(semRow);
+  out.appendChild(semantic);
+
+  /* GRAYS */
+  const grayGroup = document.createElement("div");
+  grayGroup.className = "group";
+
+  const grayTitle = document.createElement("div");
+  grayTitle.className = "group-title";
+  grayTitle.innerText = "Base Grays";
+  grayGroup.appendChild(grayTitle);
+  const grayLabels = TONE_NAMES_7.map(t => t === "Base" ? "Base" : `Base ${t}`);
+  grayGroup.appendChild(row(currentSystem.grays, grayLabels));
+  out.appendChild(grayGroup);
+}
+
+generate();
+</script>
+
+</body>
+</html>
