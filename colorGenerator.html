@@ -3,14 +3,15 @@
 <head>
 <meta charset="UTF-8" />
 <title>Color Ramp System Generator</title>
+<style id="theme-vars"></style>
 
 <style>
 body{
   font-family:Arial,sans-serif;
   margin:0;
   padding:20px;
-  background:#fafafa;
-  color:#1f2020;
+  background:var(--color-base-minus-3,#fafafa);
+  color:var(--color-foreground,#1f2020);
 }
 
 h1{
@@ -20,59 +21,116 @@ h1{
 
 .input-grid{
   display:grid;
-  grid-template-columns:repeat(4,190px);
+  grid-template-columns:repeat(3,190px);
   gap:10px;
+  margin-bottom:12px;
+}
+
+.input-options{
+  display:flex;
+  gap:18px;
+  align-items:center;
   margin-bottom:18px;
+  flex-wrap:wrap;
+}
+
+select{
+  padding:7px 10px;
+  border:1px solid var(--color-base,#ccc);
+  border-radius:6px;
+  background:var(--color-background,white);
+  color:var(--color-foreground,#1f2020);
+  font-size:13px;
+  cursor:pointer;
+}
+
+.ext-card{
+  border-top:1px solid #e8e8e8;
+  padding-top:16px;
+  margin-top:16px;
+}
+
+.ext-controls{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  margin-bottom:10px;
+  flex-wrap:wrap;
 }
 
 input{
   padding:8px;
-  border:1px solid #ccc;
+  border:1px solid var(--color-base,#ccc);
   border-radius:6px;
+  background:var(--color-background,white);
+  color:var(--color-foreground,#1f2020);
 }
 
 button{
   padding:10px 14px;
-  background:#0047BA;
-  color:white;
+  background:var(--color-primary,#0047BA);
+  color:var(--color-reverse,white);
   border:none;
   border-radius:6px;
   cursor:pointer;
 }
 
 button:hover{
-  background:#003A8F;
+  background:var(--color-primary-dark,#003A8F);
 }
 
 .export-btn{
-  background:#1f2020;
+  background:var(--color-base-plus-1,#1f2020);
   margin-left:10px;
 }
 
 .export-btn:hover{
-  background:#3a3b3b;
+  background:var(--color-base-plus-2,#3a3b3b);
 }
 
 .figma-btn{
-  background:#7B61FF;
+  background:var(--color-secondary,#7B61FF);
 }
 
 .figma-btn:hover{
-  background:#6146e0;
+  background:var(--color-secondary-dark,#6146e0);
 }
 
 .group{
   margin-top:28px;
   padding:18px;
   border-radius:12px;
-  background:white;
-  box-shadow:0 2px 10px rgba(0,0,0,0.08);
+  background:var(--color-background,white);
+  box-shadow:var(--shadow-group,0 2px 10px rgba(0,0,0,0.08));
+}
+
+.group-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:14px;
 }
 
 .group-title{
   font-size:18px;
   font-weight:bold;
-  margin-bottom:14px;
+}
+
+.reset-btn{
+  font-size:11px;
+  padding:3px 10px;
+  background:transparent;
+  color:var(--color-base-plus-1,#777);
+  border:1px solid var(--color-base,#ddd);
+  border-radius:4px;
+  cursor:pointer;
+  margin-left:0;
+}
+
+.reset-btn:hover{
+  background:var(--color-base-minus-2,#f5f5f5);
+  border-color:var(--color-base-plus-1,#aaa);
+  color:var(--color-foreground,#333);
 }
 
 .sub-title{
@@ -98,13 +156,31 @@ button:hover{
   font-size:10px;
   font-weight:bold;
   cursor:pointer;
-  box-shadow:0 2px 6px rgba(0,0,0,0.12);
+  box-shadow:var(--shadow-swatch,0 2px 6px rgba(0,0,0,0.12));
   position:relative;
   transition: transform 0.1s;
 }
 
 .swatch:hover {
   transform: scale(1.05);
+}
+
+.contrast-badges{
+  position:absolute;
+  top:6px;
+  left:6px;
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+  pointer-events:none;
+}
+
+.contrast-badge{
+  font-size:8px;
+  font-weight:bold;
+  line-height:1.3;
+  letter-spacing:0.05em;
+  text-shadow:0 0 3px rgba(128,128,128,0.5);
 }
 
 /* Anchor badge shown on the swatch that matches the input hex */
@@ -122,21 +198,48 @@ button:hover{
 }
 
 .label{
-  background:rgba(255,255,255,0.75);
+  background:var(--label-bg,rgba(255,255,255,0.75));
   padding:2px 4px;
   border-radius:4px;
   text-align:center;
 }
 
+.hex-input{
+  background:transparent;
+  border:none;
+  font-size:10px;
+  font-weight:bold;
+  width:68px;
+  text-align:center;
+  color:inherit;
+  padding:0;
+  cursor:text;
+  outline:none;
+  font-family:monospace;
+  display:block;
+  margin:0 auto;
+}
+
+.hex-input:focus{
+  outline:1px solid rgba(0,0,0,0.3);
+  border-radius:2px;
+}
+
+.hex-input.invalid{
+  outline:2px solid #E63C2F;
+  border-radius:2px;
+  color:#E63C2F;
+}
+
 /* Small pill showing which slot the input landed in */
 .anchor-info {
   font-size:11px;
-  color:#555;
+  color:var(--color-base-plus-1,#555);
   margin-bottom:6px;
 }
 
 .anchor-info strong {
-  color:#0047BA;
+  color:var(--color-primary,#0047BA);
 }
 
 .slider-wrap{
@@ -162,8 +265,8 @@ input[type=range]{
   bottom:20px;
   left:50%;
   transform:translateX(-50%);
-  background:#1f2020;
-  color:white;
+  background:var(--color-foreground,#1f2020);
+  color:var(--color-reverse,white);
   padding:8px 12px;
   border-radius:6px;
   opacity:0;
@@ -175,6 +278,36 @@ input[type=range]{
 .tooltip.show{
   opacity:1;
 }
+
+.color-source-ui{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:12px;
+  flex-wrap:wrap;
+  font-size:13px;
+}
+
+.step-select{
+  background:transparent;
+  border:none;
+  font-size:10px;
+  font-weight:bold;
+  width:76px;
+  text-align:center;
+  color:inherit;
+  padding:0;
+  cursor:pointer;
+  outline:none;
+  font-family:inherit;
+  display:block;
+  margin:0 auto;
+}
+
+.step-select:focus{
+  outline:1px solid rgba(0,0,0,0.3);
+  border-radius:2px;
+}
 </style>
 </head>
 
@@ -182,20 +315,24 @@ input[type=range]{
 
 <h1>Color Ramp System Generator</h1>
 
-<div class="input-grid">
-  <label>Primary Base<br><input id="primary" value="#0047BA" placeholder="Primary Base" /></label>
-  <label>Secondary Base<br><input id="secondary" value="#E63C2F" placeholder="Secondary Base" /></label>
-  <label>Tertiary Base<br><input id="tertiary" value="#2F6B55" placeholder="Tertiary Base" /></label>
-
-  <label style="align-self:end">
-    <input type="checkbox" id="defaultGray" checked />
-    Default Grays
+<div class="input-options">
+  <label><input type="checkbox" id="darkMode" /> Dark Mode</label>
+  <label><input type="checkbox" id="enableExtended" checked /> Enable Extended Colors</label>
+  <label id="extCountWrap">Count
+    <select id="extCount">
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3" selected>3</option>
+    </select>
   </label>
 </div>
 
-<button onclick="generate()">Generate System</button>
-<button class="export-btn" onclick="exportCSS()">Export CSS Variables</button>
-<button class="export-btn figma-btn" onclick="exportFigmaSVG()">Export SVG for Figma</button>
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:0">
+  <button onclick="exportThemeJSON()">Export theme.json</button>
+  <button class="export-btn figma-btn" style="margin-left:0" onclick="exportFigmaSVG()">Export SVG</button>
+  <button class="export-btn" style="margin-left:0" onclick="exportCSS()">Export CSS Variables</button>
+  <button class="reset-btn" style="margin-left:auto;padding:10px 14px;font-size:14px" onclick="resetAll()">Reset All</button>
+</div>
 
 <div id="output"></div>
 
@@ -204,9 +341,195 @@ input[type=range]{
 <script>
 /* Live state — kept in sync by generate() and sliders */
 let currentSystem = {};
+let darkMode = false;
+let currentSemanticGroupEl = null;
+let currentGrayGroupEl = null;
+let currentExtSectionEl = null;
 
 const TONE_NAMES_7 = ["Lightest", "Lighter", "Light", "Base", "Dark", "Darker", "Darkest"];
 const TONE_NAMES_5 = ["Lightest", "Light", "Base", "Dark", "Darkest"];
+
+/* ===========================
+   USWDS SYSTEM COLOR TOKENS
+=========================== */
+const USWDS_COLORS = {
+  "Red cool":        {5:"#f8eff1",10:"#f3e1e4",20:"#ecbec6",30:"#e09aa6",40:"#e16b80",50:"#cd425b",60:"#9e394b",70:"#68363f",80:"#40282c",90:"#1e1517"},
+  "Red cool vivid":  {5:"#fff2f5",10:"#f8dfe2",20:"#f8b9c5",30:"#fd8ba0",40:"#f45d79",50:"#e41d3d",60:"#b21d38",70:"#822133",80:"#4f1c24"},
+  "Red":             {5:"#f9eeee",10:"#f8e1de",20:"#f7bbb1",30:"#f2938c",40:"#e9695f",50:"#d83933",60:"#a23737",70:"#6f3331",80:"#3e2927",90:"#1b1616"},
+  "Red vivid":       {5:"#fff3f2",10:"#fde0db",20:"#fdb8ae",30:"#ff8d7b",40:"#fb5a47",50:"#e52207",60:"#b50909",70:"#8b0a03",80:"#5c1111"},
+  "Red warm":        {5:"#f6efea",10:"#f4e3db",20:"#ecc0a7",30:"#dca081",40:"#d27a56",50:"#c3512c",60:"#805039",70:"#524236",80:"#332d29",90:"#1f1c18"},
+  "Red warm vivid":  {5:"#fff5ee",10:"#fce1d4",20:"#f6bd9c",30:"#f39268",40:"#ef5e25",50:"#d54309",60:"#9c3d10",70:"#63340f",80:"#3e2a1e"},
+  "Orange warm":     {5:"#faeee5",10:"#fbe0d0",20:"#f7bca2",30:"#f3966d",40:"#e17141",50:"#bd5727",60:"#914734",70:"#633a32",80:"#3d2925",90:"#1c1615"},
+  "Orange warm vivid":{5:"#fff3ea",10:"#ffe2d1",20:"#fbbaa7",30:"#fc906d",40:"#ff580a",50:"#cf4900",60:"#a72f10",70:"#782312",80:"#3d231d"},
+  "Orange":          {5:"#f6efe9",10:"#f2e4d4",20:"#f3bf90",30:"#f09860",40:"#dd7533",50:"#a86437",60:"#775540",70:"#524236",80:"#332d27",90:"#1b1614"},
+  "Orange vivid":    {5:"#fef2e4",10:"#fce2c5",20:"#ffbc78",30:"#fa9441",40:"#e66f0e",50:"#c05600",60:"#8c471c",70:"#5f3617",80:"#352313"},
+  "Gold":            {5:"#f5f0e6",10:"#f1e5cd",20:"#dec69a",30:"#c7a97b",40:"#ad8b65",50:"#8e704f",60:"#6b5947",70:"#4d4438",80:"#322d26",90:"#191714"},
+  "Gold vivid":      {5:"#fef0c8",10:"#ffe396",20:"#ffbe2e",30:"#e5a000",40:"#c2850c",50:"#936f38",60:"#7a591a",70:"#5c410a",80:"#3b2b15"},
+  "Yellow":          {5:"#faf3d1",10:"#f5e6af",20:"#e6c74c",30:"#c9ab48",40:"#a88f48",50:"#8a7237",60:"#6b5a39",70:"#504332",80:"#332d27",90:"#1a1614"},
+  "Yellow vivid":    {5:"#fff5c2",10:"#fee685",20:"#face00",30:"#ddaa01",40:"#b38c00",50:"#947100",60:"#776017",70:"#5c4809",80:"#422d19"},
+  "Green warm":      {5:"#f1f4d7",10:"#e7eab7",20:"#cbd17a",30:"#a6b557",40:"#8a984b",50:"#6f7a41",60:"#5a5f38",70:"#45472f",80:"#2d2f21",90:"#171712"},
+  "Green warm vivid":{5:"#f5fbc1",10:"#e7f434",20:"#c5d30a",30:"#a3b72c",40:"#7e9c1d",50:"#6a7d00",60:"#5a6613",70:"#4b4e10",80:"#38380b"},
+  "Green":           {5:"#eaf4dd",10:"#dfeacd",20:"#b8d293",30:"#9bb672",40:"#7d9b4e",50:"#607f35",60:"#4c6424",70:"#3c4a29",80:"#293021",90:"#161814"},
+  "Green vivid":     {5:"#ddf9c7",10:"#c5ee93",20:"#98d035",30:"#7fb135",40:"#719f2a",50:"#538200",60:"#466c04",70:"#2f4a0b",80:"#243413"},
+  "Green cool":      {5:"#ecf3ec",10:"#dbebde",20:"#b4d0b9",30:"#86b98e",40:"#5e9f69",50:"#4d8055",60:"#446443",70:"#37493b",80:"#28312a",90:"#1a1f1a"},
+  "Green cool vivid":{5:"#e3f5e1",10:"#b7f5bd",20:"#70e17b",30:"#21c834",40:"#00a91c",50:"#008817",60:"#216e1f",70:"#154c21",80:"#19311e"},
+  "Mint":            {5:"#dbf6ed",10:"#c7efe2",20:"#92d9bb",30:"#5abf95",40:"#34a37e",50:"#2e8367",60:"#286846",70:"#204e34",80:"#193324",90:"#0d1a12"},
+  "Mint vivid":      {5:"#c9fbeb",10:"#83fcd4",20:"#0ceda6",30:"#04c585",40:"#00a871",50:"#008659",60:"#146947",70:"#0c4e29",80:"#0d351e"},
+  "Mint cool":       {5:"#e0f7f6",10:"#c4eeeb",20:"#9bd4cf",30:"#6fbab3",40:"#4f9e99",50:"#40807e",60:"#376462",70:"#2a4b45",80:"#203131",90:"#111818"},
+  "Mint cool vivid": {5:"#d5fbf3",10:"#7efbe1",20:"#29e1cb",30:"#1dc2ae",40:"#00a398",50:"#008480",60:"#0f6460",70:"#0b4b3f",80:"#123131"},
+  "Cyan":            {5:"#e7f6f8",10:"#ccecf2",20:"#99deea",30:"#5dc0d1",40:"#449dac",50:"#168092",60:"#2a646d",70:"#2c4a4e",80:"#203133",90:"#111819"},
+  "Cyan vivid":      {5:"#e5faff",10:"#a8f2ff",20:"#52daf2",30:"#00bde3",40:"#009ec1",50:"#0081a1",60:"#00687d",70:"#0e4f5c",80:"#093b44"},
+  "Blue cool":       {5:"#e7f2f5",10:"#dae9ee",20:"#adcfdc",30:"#82b4c9",40:"#6499af",50:"#3a7d95",60:"#2e6276",70:"#224a58",80:"#14333d",90:"#0f191c"},
+  "Blue cool vivid": {5:"#e1f3f8",10:"#c3ebfa",20:"#97d4ea",30:"#59b9de",40:"#28a0cb",50:"#0d7ea2",60:"#07648d",70:"#074b69",80:"#002d3f"},
+  "Blue":            {5:"#eff6fb",10:"#d9e8f6",20:"#aacdec",30:"#73b3e7",40:"#4f97d1",50:"#2378c3",60:"#2c608a",70:"#274863",80:"#1f303e",90:"#11181d"},
+  "Blue vivid":      {5:"#e8f5ff",10:"#cfe8ff",20:"#a1d3ff",30:"#58b4ff",40:"#2491ff",50:"#0076d6",60:"#005ea2",70:"#0b4778",80:"#112f4e"},
+  "Blue warm":       {5:"#ecf1f7",10:"#e1e7f1",20:"#bbcae4",30:"#98afd2",40:"#7292c7",50:"#4a77b4",60:"#345d96",70:"#2f4668",80:"#252f3e",90:"#13171f"},
+  "Blue warm vivid": {5:"#edf5ff",10:"#d4e5ff",20:"#adcdff",30:"#81aefc",40:"#5994f6",50:"#2672de",60:"#0050d8",70:"#1a4480",80:"#162e51"},
+  "Indigo cool":     {5:"#eef0f9",10:"#e1e6f9",20:"#bbc8f5",30:"#96abee",40:"#6b8ee8",50:"#496fd8",60:"#3f57a6",70:"#374274",80:"#292d42",90:"#151622"},
+  "Indigo cool vivid":{5:"#edf0ff",10:"#dee5ff",20:"#b8c8ff",30:"#94adff",40:"#628ef4",50:"#4866ff",60:"#3e4ded",70:"#222fbf",80:"#1b2b85"},
+  "Indigo":          {5:"#efeff8",10:"#e5e4fa",20:"#c5c5f3",30:"#a5a8eb",40:"#8889db",50:"#676cc8",60:"#4d52af",70:"#3d4076",80:"#2b2c40",90:"#16171f"},
+  "Indigo vivid":    {5:"#f0f0ff",10:"#e0e0ff",20:"#ccceff",30:"#a3a7fa",40:"#8289ff",50:"#656bd7",60:"#4a50c4",70:"#3333a3",80:"#212463"},
+  "Indigo warm":     {5:"#f1eff7",10:"#e7e3fa",20:"#cbc4f2",30:"#afa5e8",40:"#9287d8",50:"#7665d1",60:"#5e519e",70:"#453c7b",80:"#2e2c40",90:"#18161d"},
+  "Indigo warm vivid":{5:"#f5f2ff",10:"#e4deff",20:"#cfc4fd",30:"#b69fff",40:"#967efb",50:"#745fe9",60:"#5942d2",70:"#3d2c9d",80:"#261f5b"},
+  "Violet":          {5:"#f4f1f9",10:"#ebe3f9",20:"#d0c3e9",30:"#b8a2e3",40:"#9d84d2",50:"#8168b3",60:"#665190",70:"#4c3d69",80:"#312b3f",90:"#18161d"},
+  "Violet vivid":    {5:"#f7f2ff",10:"#ede3ff",20:"#d5bfff",30:"#c39deb",40:"#ad79e9",50:"#9355dc",60:"#783cb9",70:"#54278f",80:"#39215e"},
+  "Violet warm":     {5:"#f8f0f9",10:"#f6dff8",20:"#e2bee4",30:"#d29ad8",40:"#bf77c8",50:"#b04abd",60:"#864381",70:"#5c395a",80:"#382936",90:"#1b151b"},
+  "Violet warm vivid":{5:"#fef2ff",10:"#fbdcff",20:"#f4b2ff",30:"#ee83ff",40:"#d85bef",50:"#be32d0",60:"#93348c",70:"#711e6c",80:"#481441"},
+  "Magenta":         {5:"#f9f0f2",10:"#f6e1e8",20:"#f0bbcc",30:"#e895b3",40:"#e0699f",50:"#c84281",60:"#8b4566",70:"#66364b",80:"#402731",90:"#1b1617"},
+  "Magenta vivid":   {5:"#fff2f5",10:"#ffddea",20:"#ffb4cf",30:"#ff87b2",40:"#fd4496",50:"#d72d79",60:"#ab2165",70:"#731f44",80:"#4f172e"},
+  "Gray cool":       {0:"#ffffff",1:"#fbfcfd",2:"#f7f9fa",3:"#f5f6f7",4:"#f1f3f6",5:"#edeff0",10:"#dfe1e2",20:"#c6cace",30:"#a9aeb1",40:"#8d9297",50:"#71767a",60:"#565c65",70:"#3d4551",80:"#2d2e2f",90:"#1c1d1f"},
+  "Gray":            {0:"#ffffff",1:"#fcfcfc",2:"#f9f9f9",3:"#f6f6f6",4:"#f3f3f3",5:"#f0f0f0",10:"#e6e6e6",20:"#c9c9c9",30:"#adadad",40:"#919191",50:"#757575",60:"#5c5c5c",70:"#454545",80:"#2e2e2e",90:"#1b1b1b"},
+  "Gray warm":       {0:"#ffffff",1:"#fcfcfb",2:"#f9f9f7",3:"#f6f6f2",4:"#f5f5f0",5:"#f0f0ec",10:"#e6e6e2",20:"#cac9c0",30:"#afaea2",40:"#929285",50:"#76766a",60:"#5d5d52",70:"#454540",80:"#2e2e2a",90:"#171716"},
+};
+
+const GRAY_FAMILIES    = ["Gray cool", "Gray", "Gray warm"];
+const NON_GRAY_FAMILIES = Object.keys(USWDS_COLORS).filter(f => !GRAY_FAMILIES.includes(f));
+const MAIN_STEPS  = [10, 20, 30, 50, 70, 80, 90];
+const EXT_STEPS   = [5, 30, 50, 70, 80];
+const GRAY_STEPS  = [5, 20, 30, 50, 60, 70, 80];
+
+function uswdsTokenName(family, step) {
+  if (step === 0) return 'white';
+  const isVivid = /vivid/i.test(family);
+  const base = family
+    .replace(/\s*vivid\s*/gi, '')
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, '-');
+  return `${base}-${step}${isVivid ? 'v' : ''}`;
+}
+
+function getMainSteps(family) {
+  const data = USWDS_COLORS[family] || {};
+  return Object.keys(data).map(Number).includes(90) ? MAIN_STEPS : [10, 20, 30, 50, 60, 70, 80];
+}
+
+function lookupStep(family, step) {
+  const data = USWDS_COLORS[family] || {};
+  if (data[step]) return data[step];
+  const keys = Object.keys(data).map(Number).sort((a,b)=>a-b);
+  if (!keys.length) return "#808080";
+  const nearest = keys.reduce((a,b) => Math.abs(b-step) < Math.abs(a-step) ? b : a);
+  return data[nearest] || "#808080";
+}
+
+/* Default state constants */
+const SECTION_DEFAULTS = {
+  primary:   { mode: "uswds", family: "CivicPress Default", customHex: "#0050d8", generateRamp: false },
+  secondary: { mode: "uswds", family: "CivicPress Default", customHex: "#d83933", generateRamp: false },
+  tertiary:  { mode: "uswds", family: "CivicPress Default", customHex: "#2e8367", generateRamp: false },
+  gray:      { mode: "uswds", family: "Gray",               customHex: "#757575" },
+  semantic:  { mode: "uswds", family: "Gray" },
+};
+const EXT_SECTION_DEFAULTS = [
+  { source: "uswds", family: "CivicPress Default", shift: 150, custom: "" },
+  { source: "uswds", family: "CivicPress Default", shift: 150, custom: "" },
+  { source: "uswds", family: "CivicPress Default", shift: 150, custom: "" },
+];
+
+/* Hardcoded theme.json defaults — per-swatch family+step so each gets the right step-select */
+const SECTION_RAMP_DEFAULTS = {
+  primary: {
+    colors: ["#d9e8f6","#aacdec","#73b3e7","#0050d8","#1a4480","#162e51","#11181d"],
+    cfgs: [
+      {family:"Blue",           step:10},
+      {family:"Blue",           step:20},
+      {family:"Blue",           step:30},
+      {family:"Blue warm vivid",step:60},
+      {family:"Blue warm vivid",step:70},
+      {family:"Blue warm vivid",step:80},
+      {family:"Blue",           step:90},
+    ]
+  },
+  secondary: {
+    colors: ["#fde0db","#f7bbb1","#f2938c","#d83933","#b50909","#8b0a03","#5c1111"],
+    cfgs: [
+      {family:"Red vivid",step:10},
+      {family:"Red",      step:20},
+      {family:"Red",      step:30},
+      {family:"Red",      step:50},
+      {family:"Red vivid",step:60},
+      {family:"Red vivid",step:70},
+      {family:"Red vivid",step:80},
+    ]
+  },
+  tertiary: {
+    colors: ["#c9fbeb","#c7efe2","#5abf95","#2e8367","#286846","#0c4e29","#203131"],
+    cfgs: [
+      {family:"Mint vivid",step: 5},
+      {family:"Mint",      step:10},
+      {family:"Mint",      step:30},
+      {family:"Mint",      step:50},
+      {family:"Mint",      step:60},
+      {family:"Mint vivid",step:70},
+      {family:"Mint cool", step:80},
+    ]
+  },
+};
+const EXT_RAMP_DEFAULTS = [
+  {
+    colors: ["#fff5c2","#fee685","#ddaa01","#b38c00","#776017"],
+    cfgs: [
+      {family:"Yellow vivid",step: 5},
+      {family:"Yellow vivid",step:10},
+      {family:"Yellow vivid",step:30},
+      {family:"Yellow vivid",step:40},
+      {family:"Yellow vivid",step:60},
+    ]
+  },
+  {
+    colors: ["#f9f0f2","#e895b3","#c84281","#66364b","#402731"],
+    cfgs: [
+      {family:"Magenta",step: 5},
+      {family:"Magenta",step:30},
+      {family:"Magenta",step:50},
+      {family:"Magenta",step:70},
+      {family:"Magenta",step:80},
+    ]
+  },
+  {
+    colors: ["#f4f1f9","#b8a2e3","#8168b3","#4c3d69","#312b3f"],
+    cfgs: [
+      {family:"Violet",step: 5},
+      {family:"Violet",step:30},
+      {family:"Violet",step:50},
+      {family:"Violet",step:70},
+      {family:"Violet",step:80},
+    ]
+  },
+];
+
+/* Section state — survives regeneration */
+let sectionState = {
+  primary:   { ...SECTION_DEFAULTS.primary   },
+  secondary: { ...SECTION_DEFAULTS.secondary },
+  tertiary:  { ...SECTION_DEFAULTS.tertiary  },
+  gray:      { ...SECTION_DEFAULTS.gray      },
+  semantic:  { ...SECTION_DEFAULTS.semantic  },
+};
+
+/* Persistent state for extended palette cards — survives regeneration */
+let extState = EXT_SECTION_DEFAULTS.map(d => ({ ...d }));
 
 /* ===========================
    COLOR UTILITIES
@@ -342,29 +665,110 @@ function showTooltip(text) {
   setTimeout(() => t.classList.remove("show"), 900);
 }
 
-function swatch(color, label, isAnchor = false){
+function swatch(color, label, isAnchor = false, onChange = null, uswdsConfig = null){
   const d = document.createElement("div");
   d.className = "swatch";
   d.style.background = color;
+  let currentColor = color;
+
+  /* Contrast badges */
+  const badgesEl = document.createElement("div");
+  badgesEl.className = "contrast-badges";
+
+  function refreshBadges() {
+    const bg = currentSystem.semantic?.background || "#fafafa";
+    const fg = currentSystem.semantic?.foreground || "#1f2020";
+    badgesEl.innerHTML = "";
+    [[fg, "fg"], [bg, "bg"]].forEach(([semHex]) => {
+      const ratio = contrastRatio(currentColor, semHex);
+      const level = ratio >= 7 ? "AAA" : ratio >= 4.5 ? "AA" : null;
+      if (!level) return;
+      const b = document.createElement("span");
+      b.className = "contrast-badge";
+      b.innerText = level;
+      b.style.color = semHex;
+      badgesEl.appendChild(b);
+    });
+  }
+  swatchRegistry.push(refreshBadges);
+
+  let controlHTML;
+  if (uswdsConfig) {
+    const { family, step } = uswdsConfig;
+    const data = USWDS_COLORS[family] || {};
+    const steps = Object.keys(data).map(Number).sort((a,b)=>a-b).filter(s=>s>=0);
+    const opts = steps.map(s =>
+      `<option value="${data[s]}"${s===step?' selected':''}>${uswdsTokenName(family, s)}</option>`
+    ).join("");
+    controlHTML = `<select class="step-select">${opts}</select>`;
+  } else {
+    controlHTML = `<input class="hex-input" type="text" value="${color}" spellcheck="false" />`;
+  }
 
   d.innerHTML = `
-    ${isAnchor ? '<span class="anchor-badge">INPUT</span>' : ''}
-    <div class="label">${label}<br>${color}</div>
+    <span class="anchor-badge"${isAnchor ? '' : ' style="display:none"'}>INPUT</span>
+    <div class="label">
+      <div>${label}</div>
+      ${controlHTML}
+    </div>
   `;
 
-  d.onclick = () => {
-    navigator.clipboard.writeText(color);
-    showTooltip("Copied " + color);
-  };
+  if (uswdsConfig) {
+    const sel = d.querySelector(".step-select");
+    sel.addEventListener("change", () => {
+      currentColor = sel.value;
+      d.style.background = sel.value;
+      refreshBadges();
+      if (onChange) onChange(sel.value);
+      applyTheme();
+    });
+    d.addEventListener("click", (e) => {
+      if (e.target === sel) return;
+      navigator.clipboard.writeText(sel.value);
+      showTooltip("Copied " + sel.value);
+    });
+  } else {
+    const hexInput = d.querySelector(".hex-input");
+    let lastValidColor = color;
+    hexInput.addEventListener("input", () => {
+      const val = hexInput.value.trim();
+      if (isValidColor(val)) {
+        hexInput.classList.remove("invalid");
+        currentColor = val;
+        d.style.background = val;
+        lastValidColor = val;
+        refreshBadges();
+        if (onChange) onChange(val);
+        applyTheme();
+      } else {
+        hexInput.classList.add("invalid");
+      }
+    });
+    hexInput.addEventListener("blur", () => {
+      if (hexInput.classList.contains("invalid")) {
+        hexInput.value = lastValidColor;
+        hexInput.classList.remove("invalid");
+      }
+    });
+    d.addEventListener("click", (e) => {
+      if (e.target === hexInput) return;
+      navigator.clipboard.writeText(hexInput.value);
+      showTooltip("Copied " + hexInput.value);
+    });
+  }
 
+  d.appendChild(badgesEl);
+  refreshBadges();
   return d;
 }
 
-function row(colors, labels, anchorSlot = -1){
+function row(colors, labels, anchorSlot = -1, onChange = null, swatchConfigs = null){
   const r = document.createElement("div");
   r.className = "row";
   colors.forEach((c, i) => {
-    r.appendChild(swatch(c, labels[i], i === anchorSlot));
+    const cfg = swatchConfigs ? swatchConfigs[i] : null;
+    r.appendChild(swatch(c, labels[i], i === anchorSlot,
+      onChange ? (val) => onChange(i, val) : null, cfg));
   });
   return r;
 }
@@ -385,72 +789,512 @@ function anchorInfo(anchorSlot, hex) {
   return d;
 }
 
-/* Slider that updates the extended ramp row in place */
-function addSlider(container, baseHex, extLabels, defaultShift, sliderId){
-  const extRowId = sliderId + "-ext-row";
-
-  const sliderWrap = document.createElement("div");
-  sliderWrap.className = "slider-wrap";
-  sliderWrap.innerHTML = `
-    <label>
-      Extended Hue Shift:
-      <span class="slider-value" id="${sliderId}-value">${defaultShift}°</span>
-    </label>
-    <input type="range" min="0" max="360" value="${defaultShift}" id="${sliderId}" />
-  `;
-
-  container.appendChild(sliderWrap);
-  container.appendChild(subtitle("Extended Ramp"));
-
-  const extRow = row(ramp5(baseHex, defaultShift), extLabels);
-  extRow.id = extRowId;
-  container.appendChild(extRow);
-
-  const slider = sliderWrap.querySelector("input[type=range]");
-  const valueLabel = sliderWrap.querySelector(".slider-value");
-
-  slider.addEventListener("input", () => {
-    const shift = parseInt(slider.value);
-    valueLabel.innerText = shift + "°";
-
-    const newColors = ramp5(baseHex, shift);
-    currentSystem[sliderId] = newColors;
-
-    const existingRow = document.getElementById(extRowId);
-    const swatches = existingRow.querySelectorAll(".swatch");
-
-    newColors.forEach((color, i) => {
-      swatches[i].style.background = color;
-      swatches[i].querySelector(".label").innerHTML =
-        extLabels[i] + "<br>" + color;
-      swatches[i].onclick = () => {
-        navigator.clipboard.writeText(color);
-        showTooltip("Copied " + color);
-      };
-    });
-  });
-}
-
-function group(title, baseHex, colorName, extNum, sliderId, defaultShift){
-  const { colors: baseRamp, anchorSlot } = ramp7Smart(baseHex);
-  const baseLabels = TONE_NAMES_7.map(t => t === "Base" ? colorName : `${colorName} ${t}`);
-  const extLabels  = TONE_NAMES_5.map(t => t === "Base" ? `Extended Palette ${extNum}` : `Extended Palette ${extNum} ${t}`);
-
-  const g = document.createElement("div");
-  g.className = "group";
-
+function groupHeader(title, resetFn) {
+  const header = document.createElement("div");
+  header.className = "group-header";
   const t = document.createElement("div");
   t.className = "group-title";
   t.innerText = title;
-  g.appendChild(t);
+  const btn = document.createElement("button");
+  btn.className = "reset-btn";
+  btn.innerText = "Reset";
+  btn.onclick = () => { resetFn(); swatchRegistry.forEach(fn => fn()); };
+  header.appendChild(t);
+  header.appendChild(btn);
+  return header;
+}
 
-  g.appendChild(anchorInfo(anchorSlot, baseHex));
-  g.appendChild(subtitle("Base Ramp"));
-  g.appendChild(row(baseRamp, baseLabels, anchorSlot));
+function buildColorSourceUI(sectionKey, families, onRebuild) {
+  const state = sectionState[sectionKey];
+  const displayFamilies = SECTION_RAMP_DEFAULTS[sectionKey]
+    ? ["CivicPress Default", ...families]
+    : families;
 
-  addSlider(g, baseHex, extLabels, defaultShift, sliderId);
+  const wrap = document.createElement("div");
+  wrap.className = "color-source-ui";
 
-  return { element: g, colors: baseRamp };
+  const modeSelect = document.createElement("select");
+  modeSelect.innerHTML = '<option value="uswds">USWDS</option><option value="custom">Custom</option>';
+  modeSelect.value = state.mode;
+
+  const familyWrap = document.createElement("span");
+  const familySelect = document.createElement("select");
+  displayFamilies.forEach(f => {
+    const o = document.createElement("option");
+    o.value = f; o.textContent = f;
+    familySelect.appendChild(o);
+  });
+  if (!displayFamilies.includes(state.family)) state.family = displayFamilies[0];
+  familySelect.value = state.family;
+  familyWrap.appendChild(familySelect);
+  familyWrap.style.display = state.mode === "uswds" ? "" : "none";
+
+  const customWrap = document.createElement("span");
+  customWrap.style.display = state.mode === "custom" ? "" : "none";
+
+  const genLabel = document.createElement("label");
+  genLabel.style.cssText = "font-size:12px;display:inline-flex;align-items:center;gap:5px;white-space:nowrap";
+  const genCheckbox = document.createElement("input");
+  genCheckbox.type = "checkbox";
+  genCheckbox.checked = !!state.generateRamp;
+  genLabel.appendChild(genCheckbox);
+  genLabel.appendChild(document.createTextNode("Generate Ramp"));
+
+  const seedWrap = document.createElement("span");
+  seedWrap.style.cssText = "display:inline-flex;align-items:center;gap:6px";
+  seedWrap.style.display = state.generateRamp ? "inline-flex" : "none";
+  const seedIn = document.createElement("input");
+  seedIn.type = "text";
+  seedIn.value = state.customHex || "#808080";
+  seedIn.style.cssText = "width:110px;padding:6px 8px;border:1px solid #ccc;border-radius:6px";
+  seedWrap.appendChild(seedIn);
+
+  customWrap.appendChild(genLabel);
+  customWrap.appendChild(seedWrap);
+
+  function syncHex() {
+    const v = seedIn.value.trim();
+    if (/^#[0-9a-fA-F]{6}$/.test(v)) { state.customHex = v; if (state.generateRamp) onRebuild(); }
+  }
+  seedIn.addEventListener("blur", syncHex);
+  seedIn.addEventListener("keydown", e => { if (e.key === "Enter") seedIn.blur(); });
+
+  genCheckbox.addEventListener("change", () => {
+    state.generateRamp = genCheckbox.checked;
+    seedWrap.style.display = state.generateRamp ? "inline-flex" : "none";
+    onRebuild();
+  });
+
+  modeSelect.addEventListener("change", () => {
+    state.mode = modeSelect.value;
+    if (state.mode === "custom") {
+      // Seed input defaults to the current Base slot (index 3) of whatever ramp is showing
+      const base = currentSystem[sectionKey] && currentSystem[sectionKey][3];
+      if (base) { state.customHex = base; seedIn.value = base; }
+    }
+    familyWrap.style.display = state.mode === "uswds" ? "" : "none";
+    customWrap.style.display  = state.mode === "custom" ? "" : "none";
+    onRebuild();
+  });
+  familySelect.addEventListener("change", () => {
+    state.family = familySelect.value;
+    onRebuild();
+  });
+
+  wrap.appendChild(modeSelect);
+  wrap.appendChild(familyWrap);
+  wrap.appendChild(customWrap);
+
+  function reset() {
+    const def = SECTION_DEFAULTS[sectionKey] || {};
+    Object.assign(state, JSON.parse(JSON.stringify(def)));
+    modeSelect.value = state.mode;
+    familySelect.value = state.family;
+    familyWrap.style.display = state.mode === "uswds" ? "" : "none";
+    customWrap.style.display  = state.mode === "custom" ? "" : "none";
+    genCheckbox.checked = !!state.generateRamp;
+    seedWrap.style.display = state.generateRamp ? "inline-flex" : "none";
+    if (state.customHex) seedIn.value = state.customHex;
+    onRebuild();
+  }
+
+  return { element: wrap, reset };
+}
+
+function group(title, sectionKey, colorName, systemKey) {
+  const state = sectionState[sectionKey];
+  const g = document.createElement("div");
+  g.className = "group";
+
+  const rampArea = document.createElement("div");
+  let lastColors = [], lastRampRow = null;
+
+  function buildRamp() {
+    rampArea.innerHTML = "";
+    const baseLabels = TONE_NAMES_7.map(t => t === "Base" ? colorName : `${colorName} ${t}`);
+
+    if (state.mode === "uswds") {
+      const themeDefaults = SECTION_RAMP_DEFAULTS[sectionKey];
+      let colors, cfgs;
+      if (state.family === "CivicPress Default" && themeDefaults) {
+        colors = [...themeDefaults.colors];
+        cfgs   = themeDefaults.cfgs;
+      } else {
+        const steps = getMainSteps(state.family);
+        colors = steps.map(s => lookupStep(state.family, s));
+        cfgs   = steps.map(s => ({ family: state.family, step: s }));
+      }
+      lastColors = colors;
+      currentSystem[systemKey] = [...colors];
+      rampArea.appendChild(subtitle("Color Ramp"));
+      lastRampRow = row(colors, baseLabels, -1, (i, val) => { currentSystem[systemKey][i] = val; }, cfgs);
+    } else {
+      // Preserve whatever colors are currently showing; fall back to theme defaults
+      const preserved = currentSystem[systemKey];
+      const fallback  = SECTION_RAMP_DEFAULTS[sectionKey]?.colors || Array(7).fill("#808080");
+      const baseColors = (preserved && preserved.length === 7) ? [...preserved] : [...fallback];
+
+      if (state.generateRamp && /^#[0-9a-fA-F]{6}$/.test(state.customHex || "")) {
+        const { colors, anchorSlot } = ramp7Smart(state.customHex);
+        lastColors = colors;
+        currentSystem[systemKey] = [...colors];
+        rampArea.appendChild(anchorInfo(anchorSlot, state.customHex));
+        rampArea.appendChild(subtitle("Color Ramp"));
+        lastRampRow = row(colors, baseLabels, anchorSlot, (i, val) => { currentSystem[systemKey][i] = val; });
+      } else {
+        lastColors = baseColors;
+        currentSystem[systemKey] = [...baseColors];
+        rampArea.appendChild(subtitle("Color Ramp"));
+        lastRampRow = row(baseColors, baseLabels, -1, (i, val) => { currentSystem[systemKey][i] = val; });
+      }
+    }
+    rampArea.appendChild(lastRampRow);
+  }
+
+  const { element: sourceEl, reset: resetSection } = buildColorSourceUI(sectionKey, NON_GRAY_FAMILIES, buildRamp);
+  g.appendChild(groupHeader(title, resetSection));
+  g.appendChild(sourceEl);
+  g.appendChild(rampArea);
+  buildRamp();
+
+  return { element: g };
+}
+
+function buildExtendedCard(num, sourceHexes){
+  const idx    = num - 1;
+  const state  = extState[idx];
+  const rowId  = `ext-${num}-row`;
+  const extLabels = TONE_NAMES_5.map(t =>
+    t === "Base" ? `Extended Palette ${num}` : `Extended Palette ${num} ${t}`
+  );
+
+  const card = document.createElement("div");
+  card.className = "ext-card";
+  card.appendChild(subtitle(`Extended Palette ${num}`));
+
+  /* Controls */
+  const controls = document.createElement("div");
+  controls.className = "ext-controls";
+
+  const sourceSelect = document.createElement("select");
+  sourceSelect.innerHTML = `
+    <option value="uswds">USWDS</option>
+    <option value="primary">Hue Shift: Primary</option>
+    <option value="secondary">Hue Shift: Secondary</option>
+    <option value="tertiary">Hue Shift: Tertiary</option>
+    <option value="custom">Custom Color</option>
+  `;
+  sourceSelect.value = state.source;
+
+  const extFamilies = EXT_RAMP_DEFAULTS[idx]
+    ? ["CivicPress Default", ...NON_GRAY_FAMILIES]
+    : NON_GRAY_FAMILIES;
+
+  const uswdsFamilyWrap = document.createElement("span");
+  const uswdsFamilySelect = document.createElement("select");
+  extFamilies.forEach(f => {
+    const o = document.createElement("option");
+    o.value = f; o.textContent = f;
+    uswdsFamilySelect.appendChild(o);
+  });
+  if (!extFamilies.includes(state.family)) state.family = extFamilies[0];
+  uswdsFamilySelect.value = state.family;
+  uswdsFamilyWrap.appendChild(uswdsFamilySelect);
+  uswdsFamilyWrap.style.display = state.source === "uswds" ? "inline-flex" : "none";
+
+  const shiftWrap = document.createElement("div");
+  shiftWrap.className = "slider-wrap";
+  shiftWrap.style.display = (state.source === "custom" || state.source === "uswds") ? "none" : "flex";
+  shiftWrap.style.alignItems = "center";
+  shiftWrap.style.gap = "8px";
+  shiftWrap.innerHTML = `
+    <label style="margin:0;font-size:12px;white-space:nowrap">
+      Hue Shift: <span class="slider-value">${state.shift}°</span>
+    </label>
+    <input type="range" min="0" max="360" value="${state.shift}" style="width:160px;margin:0" />
+  `;
+
+  const customWrap = document.createElement("div");
+  customWrap.style.display = state.source === "custom" ? "flex" : "none";
+  customWrap.style.alignItems = "center";
+  customWrap.style.gap = "8px";
+  customWrap.innerHTML = `
+    <label style="margin:0;font-size:12px;white-space:nowrap">Base Color:</label>
+    <input type="text" placeholder="#rrggbb" value="${state.custom}"
+      style="width:100px;padding:6px 8px;border:1px solid #ccc;border-radius:6px" />
+  `;
+
+  controls.appendChild(sourceSelect);
+  controls.appendChild(uswdsFamilyWrap);
+  controls.appendChild(shiftWrap);
+  controls.appendChild(customWrap);
+  card.appendChild(controls);
+
+  /* Ramp row */
+  const EXT5_TARGETS = [0.75, 0.60, 0.45, 0.30, 0.18];
+
+  function getSourceHex(){
+    if (state.source === "custom"){
+      const hex = customWrap.querySelector("input").value.trim();
+      return /^#[0-9a-fA-F]{6}$/.test(hex) ? hex : null;
+    }
+    return sourceHexes[state.source];
+  }
+
+  function computeAnchorSlot(){
+    const hex = getSourceHex();
+    if (!hex) return -1;
+    const { l } = hexToHsl(hex);
+    let best = 0, minDist = Infinity;
+    EXT5_TARGETS.forEach((t, i) => {
+      const d = Math.abs(t - l);
+      if (d < minDist){ minDist = d; best = i; }
+    });
+    return best;
+  }
+
+  function computeColors(){
+    if (state.source === "uswds"){
+      const extDef = EXT_RAMP_DEFAULTS[idx];
+      if (state.family === "CivicPress Default" && extDef) return [...extDef.colors];
+      const fam = uswdsFamilySelect.value;
+      return EXT_STEPS.map(s => lookupStep(fam, s));
+    }
+    if (state.source === "custom"){
+      const hex = customWrap.querySelector("input").value.trim();
+      return /^#[0-9a-fA-F]{6}$/.test(hex) ? ramp5(hex, 0) : null;
+    }
+    return ramp5(sourceHexes[state.source], state.shift);
+  }
+
+  function getSwatchConfigs(){
+    if (state.source === "uswds"){
+      if (state.family === "CivicPress Default" && EXT_RAMP_DEFAULTS[idx]) return EXT_RAMP_DEFAULTS[idx].cfgs;
+      const fam = uswdsFamilySelect.value;
+      return EXT_STEPS.map(s => ({ family: fam, step: s }));
+    }
+    return null;
+  }
+
+  const rampContainer = document.createElement("div");
+  card.appendChild(rampContainer);
+
+  function applyRamp(colors, anchorSlot){
+    currentSystem.extended[idx] = colors;
+    rampContainer.innerHTML = "";
+    const newRow = row(colors, extLabels, anchorSlot,
+      (i, val) => { currentSystem.extended[idx][i] = val; },
+      getSwatchConfigs());
+    rampContainer.appendChild(newRow);
+  }
+
+  const initialColors = computeColors() || ramp5(sourceHexes.primary, 0);
+  applyRamp(initialColors, state.source === "uswds" ? -1 : computeAnchorSlot());
+
+  /* Expose reset — restores source, family, and swatches to section defaults */
+  card._reset = () => {
+    const def = EXT_SECTION_DEFAULTS[idx] || EXT_SECTION_DEFAULTS[0];
+    Object.assign(state, { ...def });
+    sourceSelect.value = state.source;
+    uswdsFamilySelect.value = state.family || NON_GRAY_FAMILIES[0];
+    const isUswds  = state.source === "uswds";
+    const isCustom = state.source === "custom";
+    const isShift  = !isUswds && !isCustom;
+    uswdsFamilyWrap.style.display = isUswds  ? "inline-flex" : "none";
+    shiftWrap.style.display       = isShift  ? "flex"        : "none";
+    customWrap.style.display      = isCustom ? "flex"        : "none";
+    updateRamp();
+    swatchRegistry.forEach(fn => fn());
+  };
+
+  /* Live update */
+  function updateRamp(){
+    const colors = computeColors();
+    if (!colors) return;
+    applyRamp(colors, computeAnchorSlot());
+  }
+
+  sourceSelect.addEventListener("change", () => {
+    state.source = sourceSelect.value;
+    const isUswds  = state.source === "uswds";
+    const isCustom = state.source === "custom";
+    const isShift  = !isUswds && !isCustom;
+    uswdsFamilyWrap.style.display = isUswds  ? "inline-flex" : "none";
+    shiftWrap.style.display       = isShift  ? "flex"        : "none";
+    customWrap.style.display      = isCustom ? "flex"        : "none";
+    // Pre-fill custom input so computeColors() doesn't return null on first switch
+    if (isCustom && !state.custom) {
+      const defaultHex = lookupStep(uswdsFamilySelect.value, 50);
+      state.custom = defaultHex;
+      customWrap.querySelector("input[type=text]").value = defaultHex;
+    }
+    updateRamp();
+  });
+
+  uswdsFamilySelect.addEventListener("change", () => {
+    state.family = uswdsFamilySelect.value;
+    updateRamp();
+  });
+
+  shiftWrap.querySelector("input[type=range]").addEventListener("input", function(){
+    state.shift = parseInt(this.value);
+    shiftWrap.querySelector(".slider-value").innerText = state.shift + "°";
+    updateRamp();
+  });
+
+  customWrap.querySelector("input[type=text]").addEventListener("input", function(){
+    state.custom = this.value;
+    updateRamp();
+  });
+
+  return card;
+}
+
+function getSectionBaseHex(key) {
+  const st = sectionState[key];
+  if (!st) return "#808080";
+  if (st.mode === "custom") return st.customHex || "#808080";
+  if (st.family === "CivicPress Default") {
+    const def = SECTION_RAMP_DEFAULTS[key];
+    return def ? def.colors[3] : "#808080"; // index 3 = Base slot
+  }
+  return lookupStep(st.family, 50);
+}
+
+function buildExtendedSection(sourceHexes){
+  if (!document.getElementById("enableExtended").checked) return null;
+  const count = parseInt(document.getElementById("extCount").value);
+
+  // Always derive from sectionState so hue-shift uses the live primary/secondary/tertiary color
+  const resolvedHexes = {
+    primary:   getSectionBaseHex("primary"),
+    secondary: getSectionBaseHex("secondary"),
+    tertiary:  getSectionBaseHex("tertiary"),
+  };
+
+  const section = document.createElement("div");
+  section.className = "group";
+
+  const cards = [];
+  for (let i = 1; i <= count; i++){
+    const card = buildExtendedCard(i, resolvedHexes);
+    cards.push(card);
+  }
+
+  section.appendChild(groupHeader("Extended Colors", () => {
+    cards.forEach(card => card._reset && card._reset());
+  }));
+
+  cards.forEach(card => section.appendChild(card));
+  return section;
+}
+
+/* ===========================
+   SHARED: USWDS TOKEN LOOKUP
+=========================== */
+
+function findToken(hex) {
+  if (!hex) return null;
+  const h = hex.toLowerCase();
+  for (const [family, data] of Object.entries(USWDS_COLORS)) {
+    for (const [step, val] of Object.entries(data)) {
+      if (val.toLowerCase() === h) return uswdsTokenName(family, Number(step));
+    }
+  }
+  return null;
+}
+
+/* ===========================
+   EXPORT THEME.JSON
+=========================== */
+
+function exportThemeJSON() {
+  /* Return a theme.json color value — token ref if USWDS match found, else hex */
+  function colorValue(hex, isUswdsMode) {
+    if (isUswdsMode) {
+      const token = findToken(hex);
+      if (token) return `var(--token--color--${token})`;
+    }
+    return hex || '#000000';
+  }
+
+  const palette = [];
+
+  /* --- Primary (7) --- */
+  const primSlugs = ["primary-lightest","primary-lighter","primary-light","primary","primary-dark","primary-darker","primary-darkest"];
+  const primNames = ["Primary Lightest","Primary Lighter","Primary Light","Primary","Primary Dark","Primary Darker","Primary Darkest"];
+  const primUswds = sectionState.primary.mode === "uswds";
+  (currentSystem.primary || []).forEach((c, i) => palette.push({ slug: primSlugs[i], color: colorValue(c, primUswds), name: primNames[i] }));
+
+  /* --- Secondary (7) --- */
+  const secSlugs = ["secondary-lightest","secondary-lighter","secondary-light","secondary","secondary-dark","secondary-darker","secondary-darkest"];
+  const secNames = ["Secondary Lightest","Secondary Lighter","Secondary Light","Secondary","Secondary Dark","Secondary Darker","Secondary Darkest"];
+  const secUswds = sectionState.secondary.mode === "uswds";
+  (currentSystem.secondary || []).forEach((c, i) => palette.push({ slug: secSlugs[i], color: colorValue(c, secUswds), name: secNames[i] }));
+
+  /* --- Tertiary (7) --- */
+  const terSlugs = ["tertiary-lightest","tertiary-lighter","tertiary-light","tertiary","tertiary-dark","tertiary-darker","tertiary-darkest"];
+  const terNames = ["Tertiary Lightest","Tertiary Lighter","Tertiary Light","Tertiary","Tertiary Dark","Tertiary Darker","Tertiary Darkest"];
+  const terUswds = sectionState.tertiary.mode === "uswds";
+  (currentSystem.tertiary || []).forEach((c, i) => palette.push({ slug: terSlugs[i], color: colorValue(c, terUswds), name: terNames[i] }));
+
+  /* --- Extended palettes --- */
+  if (document.getElementById("enableExtended").checked) {
+    const count = parseInt(document.getElementById("extCount").value);
+    for (let n = 1; n <= count; n++) {
+      const idx = n - 1;
+      const colors  = currentSystem.extended[idx] || [];
+      const isUswds = extState[idx].source === "uswds";
+      const extSlugs = ["lightest","light","","dark","darkest"].map(s => s ? `extended-${n}-${s}` : `extended-${n}`);
+      const extNames = TONE_NAMES_5.map(t => t === "Base" ? `Extended Palette ${n}` : `Extended Palette ${n} ${t}`);
+      colors.forEach((c, i) => palette.push({ slug: extSlugs[i], color: colorValue(c, isUswds), name: extNames[i] }));
+    }
+  }
+
+  /* --- Semantic colors --- */
+  const sem     = currentSystem.semantic || {};
+  const semUswds = sectionState.semantic.mode === "uswds";
+  palette.push({ slug: "background", color: colorValue(sem.background, semUswds), name: "Background" });
+  palette.push({ slug: "foreground", color: colorValue(sem.foreground,  semUswds), name: "Foreground" });
+  palette.push({ slug: "reverse",    color: colorValue(sem.reverse,     semUswds), name: "Reverse (On Color/Image)" });
+
+  /* --- Base grays (7) — slugs reverse in dark mode, names describe visual lightness --- */
+  const graySlugsLight = ["base-minus-3","base-minus-2","base-minus-1","base","base-plus-1","base-plus-2","base-plus-3"];
+  const grayNamesAll   = ["Base Lightest","Base Lighter","Base Light","Base","Base Dark","Base Darker","Base Darkest"];
+  const graySlugs = darkMode ? [...graySlugsLight].reverse() : graySlugsLight;
+  const grayUswds = sectionState.gray.mode === "uswds";
+  (currentSystem.grays || []).forEach((c, i) => palette.push({ slug: graySlugs[i], color: colorValue(c, grayUswds), name: grayNamesAll[i] }));
+
+  /* --- Translucent variants (always custom rgba — never USWDS tokens) --- */
+  const sem2 = currentSystem.semantic || {};
+  palette.push({ slug: "translucent",                color: sem2.translucent              || TRANSLUCENT_DEFAULTS.translucent,              name: "Translucent" });
+  palette.push({ slug: "translucent-subtle",         color: sem2.translucentSubtle        || TRANSLUCENT_DEFAULTS.translucentSubtle,        name: "Translucent Subtle" });
+  palette.push({ slug: "translucent-reverse",        color: sem2.translucentReverse       || TRANSLUCENT_DEFAULTS.translucentReverse,       name: "Translucent Reverse" });
+  palette.push({ slug: "translucent-reverse-subtle", color: sem2.translucentReverseSubtle || TRANSLUCENT_DEFAULTS.translucentReverseSubtle, name: "Translucent Reverse Subtle" });
+
+  const themeJson = {
+    "$schema": "https://schemas.wp.org/trunk/theme.json",
+    "version": 3,
+    "settings": {
+      "color": {
+        "custom": false,
+        "customDuotone": false,
+        "customGradient": false,
+        "defaultDuotone": false,
+        "defaultPalette": false,
+        "defaultGradients": false,
+        "palette": palette,
+        "duotone": [],
+        "gradients": []
+      }
+    }
+  };
+
+  const blob = new Blob([JSON.stringify(themeJson, null, "\t")], { type: "application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "theme.json";
+  a.click();
 }
 
 /* ===========================
@@ -459,26 +1303,33 @@ function group(title, baseHex, colorName, extNum, sliderId, defaultShift){
 
 function exportCSS(){
   const lines = [":root {"];
-  const toneNames = ["lightest","lighter","light","base","dark","darker","darkest"];
+  const t7 = ["lightest","lighter","light","base","dark","darker","darkest"];
+  const t5 = ["lightest","light","base","dark","darkest"];
 
-  function addVars(prefix, arr){
-    if (!arr) return;
+  function addVars(prefix, arr, names){
+    if (!arr || !arr.length) return;
     arr.forEach((color, i) => {
-      lines.push(`  --${prefix}-${toneNames[i]}: ${color};`);
+      const suffix = names[i] === "base" ? "" : `-${names[i]}`;
+      lines.push(`  --${prefix}${suffix}: ${color};`);
     });
   }
 
   lines.push("\n  /* Primary */");
-  addVars("color-primary",          currentSystem.primary);
-  addVars("color-primary-extended", currentSystem.primaryShift);
+  addVars("color-primary", currentSystem.primary, t7);
 
   lines.push("\n  /* Secondary */");
-  addVars("color-secondary",          currentSystem.secondary);
-  addVars("color-secondary-extended", currentSystem.secondaryShift);
+  addVars("color-secondary", currentSystem.secondary, t7);
 
   lines.push("\n  /* Tertiary */");
-  addVars("color-tertiary",          currentSystem.tertiary);
-  addVars("color-tertiary-extended", currentSystem.tertiaryShift);
+  addVars("color-tertiary", currentSystem.tertiary, t7);
+
+  lines.push("\n  /* Extended */");
+  currentSystem.extended.forEach((colors, i) => {
+    if (colors && colors.length){
+      lines.push(`\n  /* Extended Palette ${i + 1} */`);
+      addVars(`color-extended-${i + 1}`, colors, t5);
+    }
+  });
 
   lines.push("\n  /* Semantic */");
   lines.push(`  --color-background: ${currentSystem.semantic.background};`);
@@ -486,12 +1337,15 @@ function exportCSS(){
   lines.push(`  --color-reverse:    ${currentSystem.semantic.reverse};`);
 
   lines.push("\n  /* Grays */");
-  addVars("color-gray", currentSystem.grays);
+  const graySlugsLight = ["base-minus-3","base-minus-2","base-minus-1","base","base-plus-1","base-plus-2","base-plus-3"];
+  const graySlugs = darkMode ? [...graySlugsLight].reverse() : graySlugsLight;
+  currentSystem.grays.forEach((color, i) => {
+    lines.push(`  --color-${graySlugs[i]}: ${color};`);
+  });
 
   lines.push("}");
 
-  const css = lines.join("\n");
-  const blob = new Blob([css], { type: "text/css" });
+  const blob = new Blob([lines.join("\n")], { type: "text/css" });
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
   a.download = "color-system.css";
@@ -516,12 +1370,98 @@ function exportCSS(){
    real layer per swatch, named by its token label.
 =========================== */
 
+/* T-values derived from USWDS gray-5→gray-80 distribution (non-linear, perceptually weighted) */
+const GRAY_T = [0, 0.201, 0.345, 0.634, 0.763, 0.881, 1.0];
+
+function rampFromBgFg(bgHex, fgHex) {
+  const bg = hexToRgb(bgHex);
+  const fg = hexToRgb(fgHex);
+  return GRAY_T.map(t => {
+    const r = Math.round(bg.r + (fg.r - bg.r) * t);
+    const g = Math.round(bg.g + (fg.g - bg.g) * t);
+    const b = Math.round(bg.b + (fg.b - bg.b) * t);
+    return "#" + [r, g, b].map(v => v.toString(16).padStart(2, "0")).join("");
+  });
+}
+
 function hexToRgb(hex) {
   return {
     r: parseInt(hex.substr(1,2),16),
     g: parseInt(hex.substr(3,2),16),
     b: parseInt(hex.substr(5,2),16)
   };
+}
+
+const TRANSLUCENT_DEFAULTS = {
+  translucent:               "rgba(0,0,0,0.6)",
+  translucentSubtle:         "rgba(0,0,0,0.05)",
+  translucentReverse:        "rgba(255,255,255,0.75)",
+  translucentReverseSubtle:  "rgba(255,255,255,0.15)",
+};
+
+function isValidColor(val) {
+  if (/^#[0-9a-fA-F]{6}([0-9a-fA-F]{2})?$/i.test(val)) return true;
+  if (/^rgba?\(\s*\d{1,3}\s*,\s*\d{1,3}\s*,\s*\d{1,3}\s*(,\s*[\d.]+\s*)?\)$/i.test(val)) return true;
+  return false;
+}
+
+/* ===========================
+   WCAG CONTRAST
+=========================== */
+
+function relativeLuminance(hex) {
+  const { r, g, b } = hexToRgb(hex);
+  return [r, g, b].reduce((sum, c, i) => {
+    const s = c / 255;
+    const lin = s <= 0.03928 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4);
+    return sum + lin * [0.2126, 0.7152, 0.0722][i];
+  }, 0);
+}
+
+function contrastRatio(hex1, hex2) {
+  if (!/^#[0-9a-fA-F]{6}$/i.test(hex1) || !/^#[0-9a-fA-F]{6}$/i.test(hex2)) return 1;
+  const l1 = relativeLuminance(hex1), l2 = relativeLuminance(hex2);
+  return (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
+}
+
+/* Registry of badge-refresh functions — one per live swatch */
+let swatchRegistry = [];
+
+function applyTheme() {
+  const sem   = currentSystem.semantic || {};
+  const grays = currentSystem.grays    || [];
+  const prim  = currentSystem.primary  || [];
+  const sec   = currentSystem.secondary|| [];
+
+  // In dark mode the gray slug mapping is reversed, so "base-minus-3" = darkest physical color
+  const gi = i => grays[darkMode ? (6 - i) : i] || "#808080";
+
+  const vars = {
+    '--color-background':    sem.background   || '#fafafa',
+    '--color-foreground':    sem.foreground   || '#1f2020',
+    '--color-reverse':       sem.reverse      || '#ffffff',
+    '--color-base-minus-3':  gi(0),
+    '--color-base-minus-2':  gi(1),
+    '--color-base-minus-1':  gi(2),
+    '--color-base':          gi(3),
+    '--color-base-plus-1':   gi(4),
+    '--color-base-plus-2':   gi(5),
+    '--color-base-plus-3':   gi(6),
+    '--color-primary':       prim[3] || '#0050d8',
+    '--color-primary-dark':  prim[4] || '#1a4480',
+    '--color-secondary':     sec[3]  || '#d83933',
+    '--color-secondary-dark':sec[4]  || '#b50909',
+    '--label-bg':     darkMode ? 'rgba(0,0,0,0.6)'                        : 'rgba(255,255,255,0.75)',
+    '--shadow-group': darkMode ? '0 2px 10px rgba(255,255,255,0.07)'     : '0 2px 10px rgba(0,0,0,0.08)',
+    '--shadow-swatch':darkMode ? '0 2px 6px rgba(255,255,255,0.1)'       : '0 2px 6px rgba(0,0,0,0.12)',
+  };
+
+  const styleEl = document.getElementById('theme-vars');
+  if (styleEl) {
+    styleEl.textContent = ':root{\n' +
+      Object.entries(vars).map(([k,v]) => `  ${k}:${v};`).join('\n') +
+      '\n}';
+  }
 }
 
 /* Pick black or white label text based on relative luminance */
@@ -532,116 +1472,122 @@ function labelColor(hex) {
 }
 
 function exportFigmaSVG() {
-  const SW  = 100;   // swatch width
-  const SH  = 100;   // swatch height
-  const GAP = 12;    // gap between swatches
-  const R   = 8;     // corner radius
-  const PAD = 20;    // group padding
-  const GROUP_GAP = 24;
-  const TITLE_H   = 28;   // group title row height
-  const SECTION_H = 20;   // sub-section label row height
+  const SW  = 100, SH = 100, GAP = 12, R = 8, PAD = 20;
+  const GROUP_GAP = 24, TITLE_H = 28, SECTION_H = 20;
 
-  /* Build section data from currentSystem */
-  const mkBase  = name => TONE_NAMES_7.map(t => t === "Base" ? name : `${name} ${t}`);
-  const mkExt   = num  => TONE_NAMES_5.map(t => t === "Base" ? `Extended Palette ${num}` : `Extended Palette ${num} ${t}`);
-  const grayNames = TONE_NAMES_7.map(t => t === "Base" ? "Base" : `Base ${t}`);
+  const sem        = currentSystem.semantic || {};
+  const pageBg     = (darkMode ? currentSystem.grays?.[6] : currentSystem.grays?.[0]) || '#f5f5f5';
+  const sectionBg  = sem.background || '#ffffff';
+  const fgColor    = sem.foreground  || '#1f2020';
+  const labelFill  = darkMode ? 'black' : 'white';
+  const labelAlpha = darkMode ? '0.75'  : '0.85';
+  const labelTc    = darkMode ? '#ffffff' : '#1f2020';
+
+  /* Display value: USWDS token name if found, else hex/rgba string */
+  function colorLabel(color) {
+    if (!color) return '';
+    const token = findToken(color);
+    if (token) return token;
+    if (/^rgba?/i.test(color)) return color;
+    return color.toUpperCase();
+  }
+
+  /* AA/AAA badges for a swatch color */
+  function badges(color) {
+    const result = [];
+    for (const semHex of [sem.foreground || '#1f2020', sem.background || '#fafafa']) {
+      const ratio = contrastRatio(color, semHex);
+      const level = ratio >= 7 ? 'AAA' : ratio >= 4.5 ? 'AA' : null;
+      if (level) result.push({ text: level, fill: semHex });
+    }
+    return result;
+  }
+
+  /* Section data */
+  const mkBase = name => TONE_NAMES_7.map(t => t === "Base" ? name : `${name} ${t}`);
+  const mkExt  = n    => TONE_NAMES_5.map(t => t === "Base" ? `Extended Palette ${n}` : `Extended Palette ${n} ${t}`);
+  const graySlugsLight = ["base-minus-3","base-minus-2","base-minus-1","base","base-plus-1","base-plus-2","base-plus-3"];
+  const graySlugs = darkMode ? [...graySlugsLight].reverse() : graySlugsLight;
+
+  const extSections = currentSystem.extended
+    .map((colors, i) => ({ title: `Extended Palette ${i+1}`, rows: [{ label:"", colors, names: mkExt(i+1) }] }))
+    .filter(s => s.rows[0].colors?.length);
 
   const sections = [
-    { title: "Primary System", rows: [
-        { label: "Base Ramp",     colors: currentSystem.primary,        names: mkBase("Primary") },
-        { label: "Extended Ramp", colors: currentSystem.primaryShift,   names: mkExt(1) }
+    { title:"Primary Colors",   rows:[{ label:"", colors:currentSystem.primary,   names:mkBase("Primary")   }] },
+    { title:"Secondary Colors", rows:[{ label:"", colors:currentSystem.secondary, names:mkBase("Secondary") }] },
+    { title:"Tertiary Colors",  rows:[{ label:"", colors:currentSystem.tertiary,  names:mkBase("Tertiary")  }] },
+    ...extSections,
+    { title:"Semantic Colors", rows:[
+      { label:"", colors:[sem.background, sem.foreground, sem.reverse], names:["Background","Foreground","Reverse"] },
+      { label:"Translucent", colors:[sem.translucent, sem.translucentSubtle, sem.translucentReverse, sem.translucentReverseSubtle],
+        names:["Translucent","Translucent Subtle","Translucent Reverse","Translucent Reverse Subtle"] }
     ]},
-    { title: "Secondary System", rows: [
-        { label: "Base Ramp",     colors: currentSystem.secondary,      names: mkBase("Secondary") },
-        { label: "Extended Ramp", colors: currentSystem.secondaryShift, names: mkExt(2) }
-    ]},
-    { title: "Tertiary System", rows: [
-        { label: "Base Ramp",     colors: currentSystem.tertiary,       names: mkBase("Tertiary") },
-        { label: "Extended Ramp", colors: currentSystem.tertiaryShift,  names: mkExt(3) }
-    ]},
-    { title: "Semantic Colors", rows: [
-        { label: "", colors: [
-            currentSystem.semantic.background,
-            currentSystem.semantic.foreground,
-            currentSystem.semantic.reverse
-          ],
-          names: ["Background","Foreground","Reverse"]
-        }
-    ]},
-    { title: "Base Grays", rows: [
-        { label: "", colors: currentSystem.grays, names: grayNames }
-    ]}
+    { title:"Base Grays", rows:[{ label:"", colors:currentSystem.grays, names:TONE_NAMES_7.map(t=>t==="Base"?"Base":`Base ${t}`) }] }
   ];
 
-  /* Measure max row width to set canvas width */
-  const maxSwatches = Math.max(...sections.flatMap(s => s.rows.map(r => r.colors.length)));
-  const rowW = maxSwatches * (SW + GAP) - GAP;
-  const canvasW = PAD * 2 + rowW;
+  const maxSwatches = Math.max(...sections.flatMap(s => s.rows.map(r => (r.colors||[]).length)));
+  const canvasW = PAD*2 + maxSwatches*(SW+GAP) - GAP;
 
-  /* Build SVG elements, tracking Y position */
   const elems = [];
   let y = PAD;
 
   sections.forEach(section => {
     const groupStartY = y;
 
-    /* Group title */
-    elems.push(
-      `<text x="${PAD}" y="${y + 18}" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#1f2020">${escXML(section.title)}</text>`
-    );
+    elems.push(`<text x="${PAD}" y="${y+18}" font-family="Arial,sans-serif" font-size="16" font-weight="bold" fill="${fgColor}">${escXML(section.title)}</text>`);
     y += TITLE_H;
 
     section.rows.forEach(rowDef => {
-      /* Sub-section label (skip if empty) */
       if (rowDef.label) {
-        elems.push(
-          `<text x="${PAD}" y="${y + 13}" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#555555">${escXML(rowDef.label)}</text>`
-        );
+        elems.push(`<text x="${PAD}" y="${y+13}" font-family="Arial,sans-serif" font-size="11" font-weight="bold" fill="${fgColor}" opacity="0.6">${escXML(rowDef.label)}</text>`);
         y += SECTION_H;
       }
 
-      /* Swatches */
-      rowDef.colors.forEach((color, i) => {
-        const x = PAD + i * (SW + GAP);
-        const tc = labelColor(color);
-        const tokenName = rowDef.names[i] || (i + 1);
+      (rowDef.colors || []).forEach((color, i) => {
+        if (!color) return;
+        const x   = PAD + i*(SW+GAP);
+        const name = escXML(rowDef.names?.[i] || '');
+        const val  = escXML(colorLabel(color));
+        const bs   = badges(color);
 
-        /* Swatch rect — named via id so Figma shows it as a layer */
-        elems.push(`<rect id="${escXML(tokenName)}" x="${x}" y="${y}" width="${SW}" height="${SH}" rx="${R}" ry="${R}" fill="${color}" />`);
+        /* Swatch */
+        elems.push(`<rect id="${name}" x="${x}" y="${y}" width="${SW}" height="${SH}" rx="${R}" ry="${R}" fill="${color}" />`);
 
-        /* Token label (top-left, small) */
-        elems.push(
-          `<text x="${x + 6}" y="${y + 15}" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="${tc}" opacity="0.85">${escXML(String(tokenName))}</text>`
-        );
+        /* Label background strip */
+        elems.push(`<rect x="${x}" y="${y+SH-30}" width="${SW}" height="30" fill="${labelFill}" fill-opacity="${labelAlpha}" />`);
 
-        /* Hex value (bottom-left) */
-        elems.push(
-          `<text x="${x + 6}" y="${y + SH - 8}" font-family="Arial, sans-serif" font-size="9" fill="${tc}" opacity="0.85">${color.toUpperCase()}</text>`
-        );
+        /* Swatch name */
+        elems.push(`<text x="${x+4}" y="${y+SH-17}" font-family="Arial,sans-serif" font-size="7.5" font-weight="bold" fill="${labelTc}">${name}</text>`);
+
+        /* Color value (token or hex) */
+        elems.push(`<text x="${x+4}" y="${y+SH-6}" font-family="Arial,sans-serif" font-size="7.5" fill="${labelTc}" opacity="0.8">${val}</text>`);
+
+        /* AA/AAA contrast badges */
+        bs.forEach((b, bi) => {
+          elems.push(`<text x="${x+4}" y="${y+11+bi*10}" font-family="Arial,sans-serif" font-size="8" font-weight="bold" fill="${b.fill}">${b.text}</text>`);
+        });
       });
 
       y += SH + GAP;
     });
 
-    /* Group background rect — drawn before content but placed via insert */
-    const groupH = y - groupStartY + PAD / 2;
-    elems.unshift(
-      `<rect x="4" y="${groupStartY - 8}" width="${canvasW - 8}" height="${groupH}" rx="10" ry="10" fill="#ffffff" opacity="0.6" />`
-    );
+    /* Section background — unshift so it renders behind content */
+    const groupH = y - groupStartY + PAD/2;
+    elems.unshift(`<rect x="4" y="${groupStartY-8}" width="${canvasW-8}" height="${groupH}" rx="10" ry="10" fill="${sectionBg}" />`);
 
     y += GROUP_GAP;
   });
 
   const totalH = y + PAD;
-
   const svg = [
     `<svg xmlns="http://www.w3.org/2000/svg" width="${canvasW}" height="${totalH}" viewBox="0 0 ${canvasW} ${totalH}">`,
-    `  <rect width="${canvasW}" height="${totalH}" fill="#f5f5f5" />`,
+    `  <rect width="${canvasW}" height="${totalH}" fill="${pageBg}" />`,
     ...elems.map(e => "  " + e),
     `</svg>`
-  ].join("\n");
+  ].join('\n');
 
-  const blob = new Blob([svg], { type: "image/svg+xml" });
+  const blob = new Blob([svg], { type:"image/svg+xml" });
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
   a.download = "color-system.svg";
@@ -657,74 +1603,261 @@ function escXML(str) {
 }
 
 /* ===========================
+   SEMANTIC GROUP
+=========================== */
+
+function buildSemanticGroup() {
+  const state = sectionState.semantic;
+  const ALL_FAMILIES = GRAY_FAMILIES;
+  const g = document.createElement("div");
+  g.className = "group";
+
+  const rampArea = document.createElement("div");
+  let lastSwatches = [];
+
+  const CORE_ROLES = [
+    { label: "Background", key: "background", lightOrDark: darkMode ? "dark"  : "light" },
+    { label: "Foreground", key: "foreground",  lightOrDark: darkMode ? "light" : "dark"  },
+    { label: "Reverse",    key: "reverse",     fixedStep: 0                              },
+  ];
+  const TRANSLUCENT_ROLES = [
+    { label: "Translucent",                key: "translucent",              rgba: true, defaultValue: TRANSLUCENT_DEFAULTS.translucent              },
+    { label: "Translucent Subtle",         key: "translucentSubtle",        rgba: true, defaultValue: TRANSLUCENT_DEFAULTS.translucentSubtle         },
+    { label: "Translucent Reverse",        key: "translucentReverse",       rgba: true, defaultValue: TRANSLUCENT_DEFAULTS.translucentReverse        },
+    { label: "Translucent Reverse Subtle", key: "translucentReverseSubtle", rgba: true, defaultValue: TRANSLUCENT_DEFAULTS.translucentReverseSubtle  },
+  ];
+  const SEMANTIC_ROLES = [...CORE_ROLES, ...TRANSLUCENT_ROLES];
+
+  function stepsForFamily(fam) {
+    const data = USWDS_COLORS[fam] || {};
+    return Object.keys(data).map(Number).sort((a,b)=>a-b).filter(s=>s>=0);
+  }
+
+  function buildRamp() {
+    rampArea.innerHTML = "";
+
+    /* --- Core row: Background, Foreground, Reverse --- */
+    const coreRow = document.createElement("div");
+    coreRow.className = "row";
+
+    CORE_ROLES.forEach(({ label, key, lightOrDark, fixedStep }) => {
+      let color, cfg = null;
+      if (state.mode === "uswds") {
+        const fam   = state.family;
+        const steps = stepsForFamily(fam);
+        const step  = fixedStep !== undefined
+          ? fixedStep
+          : (lightOrDark === "light" ? steps[1] : steps[steps.length - 1]);
+        color = lookupStep(fam, step);
+        cfg   = { family: fam, step };
+      } else {
+        color = currentSystem.semantic[key] ||
+          (fixedStep === 0 ? "#ffffff" : lightOrDark === "light" ? "#FAFAFA" : "#1F2020");
+      }
+      currentSystem.semantic[key] = color;
+      coreRow.appendChild(swatch(color, label, false,
+        val => { currentSystem.semantic[key] = val; swatchRegistry.forEach(fn => fn()); }, cfg));
+    });
+    rampArea.appendChild(coreRow);
+
+    /* --- Translucent row --- */
+    rampArea.appendChild(subtitle("Translucent"));
+    const transRow = document.createElement("div");
+    transRow.className = "row";
+
+    TRANSLUCENT_ROLES.forEach(({ label, key, defaultValue }) => {
+      const color = currentSystem.semantic[key] || defaultValue;
+      currentSystem.semantic[key] = color;
+      transRow.appendChild(swatch(color, label, false,
+        val => { currentSystem.semantic[key] = val; swatchRegistry.forEach(fn => fn()); },
+        null)); // always hex/rgba input — never USWDS
+    });
+    rampArea.appendChild(transRow);
+
+    lastSwatches = Array.from(rampArea.querySelectorAll(".swatch"));
+  }
+
+  function resetSemantic() {
+    Object.assign(currentSystem.semantic, { ...TRANSLUCENT_DEFAULTS });
+    const def = SECTION_DEFAULTS.semantic;
+    Object.assign(state, { ...def });
+    modeSelect.value = state.mode;
+    familySelect.value = state.family;
+    familyWrap.style.display = state.mode === "uswds" ? "" : "none";
+    buildRamp();
+  }
+
+  g.appendChild(groupHeader("Semantic Colors", resetSemantic));
+
+  /* Source UI — all families available for semantic colors */
+  const sourceUI = document.createElement("div");
+  sourceUI.className = "color-source-ui";
+
+  const modeSelect = document.createElement("select");
+  modeSelect.innerHTML = '<option value="uswds">USWDS</option><option value="custom">Custom</option>';
+  modeSelect.value = state.mode;
+
+  const familyWrap = document.createElement("span");
+  const familySelect = document.createElement("select");
+  ALL_FAMILIES.forEach(f => {
+    const o = document.createElement("option");
+    o.value = f; o.textContent = f;
+    familySelect.appendChild(o);
+  });
+  if (!ALL_FAMILIES.includes(state.family)) state.family = "Gray";
+  familySelect.value = state.family;
+  familyWrap.appendChild(familySelect);
+  familyWrap.style.display = state.mode === "uswds" ? "" : "none";
+
+  modeSelect.addEventListener("change", () => {
+    state.mode = modeSelect.value;
+    familyWrap.style.display = state.mode === "uswds" ? "" : "none";
+    buildRamp();
+  });
+  familySelect.addEventListener("change", () => { state.family = familySelect.value; buildRamp(); });
+
+  sourceUI.appendChild(modeSelect);
+  sourceUI.appendChild(familyWrap);
+  g.appendChild(sourceUI);
+  g.appendChild(rampArea);
+  buildRamp();
+  return g;
+}
+
+/* ===========================
+   GRAY GROUP
+=========================== */
+
+function buildGrayGroup() {
+  const state = sectionState.gray;
+  const g = document.createElement("div");
+  g.className = "group";
+
+  const rampArea = document.createElement("div");
+  let lastColors = [], lastRampRow = null;
+  const grayLabels = TONE_NAMES_7.map(t => t === "Base" ? "Base" : `Base ${t}`);
+
+  function buildRamp() {
+    rampArea.innerHTML = "";
+    let colors, cfgs = null;
+
+    if (state.mode === "uswds") {
+      colors = GRAY_STEPS.map(s => lookupStep(state.family, s));
+      cfgs   = GRAY_STEPS.map(s => ({ family: state.family, step: s }));
+    } else {
+      const { colors: c, anchorSlot } = ramp7Smart(state.customHex || "#757575");
+      colors = c;
+      rampArea.appendChild(anchorInfo(anchorSlot, state.customHex || "#757575"));
+    }
+
+    lastColors = colors;
+    currentSystem.grays = [...colors];
+    rampArea.appendChild(subtitle("Color Ramp"));
+    lastRampRow = row(colors, grayLabels, -1, (i, val) => { currentSystem.grays[i] = val; }, cfgs);
+    rampArea.appendChild(lastRampRow);
+  }
+
+  const { element: graySourceEl, reset: resetGray } = buildColorSourceUI("gray", GRAY_FAMILIES, buildRamp);
+  g.appendChild(groupHeader("Base Grays", resetGray));
+  g.appendChild(graySourceEl);
+  g.appendChild(rampArea);
+  buildRamp();
+  return g;
+}
+
+/* ===========================
    GENERATE
 =========================== */
 
 function generate(){
-  const primary   = document.getElementById("primary").value.trim();
-  const secondary = document.getElementById("secondary").value.trim();
-  const tertiary  = document.getElementById("tertiary").value.trim();
-  const useDefault = document.getElementById("defaultGray").checked;
-
+  swatchRegistry = [];
   const out = document.getElementById("output");
   out.innerHTML = "";
 
-  /* Build groups — each returns { element, colors } */
-  const pGroup = group("Primary System",   primary,   "Primary",   1, "primaryShift",   180);
-  const sGroup = group("Secondary System", secondary, "Secondary", 2, "secondaryShift", 150);
-  const tGroup = group("Tertiary System",  tertiary,  "Tertiary",  3, "tertiaryShift",  150);
-
-  /* Snapshot into currentSystem */
   currentSystem = {
-    primary:        pGroup.colors,
-    primaryShift:   ramp5(primary,   180),
-    secondary:      sGroup.colors,
-    secondaryShift: ramp5(secondary, 150),
-    tertiary:       tGroup.colors,
-    tertiaryShift:  ramp5(tertiary,  150),
-    semantic: {
-      background: "#FAFAFA",
-      foreground: "#1F2020",
-      reverse:    "#FFFFFF"
-    },
-    grays: useDefault
-      ? ["#FAFAFA","#F3F3F3","#E8E8E8","#DCDCDC","#B8B8B8","#8C8C8C","#717271"]
-      : ramp7Smart("#808080").colors
+    primary:   [],
+    secondary: [],
+    tertiary:  [],
+    extended:  [[], [], []],
+    grays:     [],
+    semantic: { background: "#FAFAFA", foreground: "#1F2020", reverse: "#FFFFFF", ...TRANSLUCENT_DEFAULTS }
   };
+
+  const pGroup = group("Primary Colors",   "primary",   "Primary",   "primary");
+  const sGroup = group("Secondary Colors", "secondary", "Secondary", "secondary");
+  const tGroup = group("Tertiary Colors",  "tertiary",  "Tertiary",  "tertiary");
 
   out.appendChild(pGroup.element);
   out.appendChild(sGroup.element);
   out.appendChild(tGroup.element);
 
-  /* SEMANTIC */
-  const semantic = document.createElement("div");
-  semantic.className = "group";
+  currentExtSectionEl = buildExtendedSection({});
+  if (currentExtSectionEl) out.appendChild(currentExtSectionEl);
 
-  const semTitle = document.createElement("div");
-  semTitle.className = "group-title";
-  semTitle.innerText = "Semantic Colors";
-  semantic.appendChild(semTitle);
+  currentSemanticGroupEl = buildSemanticGroup();
+  out.appendChild(currentSemanticGroupEl);
 
-  const semRow = document.createElement("div");
-  semRow.className = "row";
-  semRow.appendChild(swatch(currentSystem.semantic.background, "Background"));
-  semRow.appendChild(swatch(currentSystem.semantic.foreground,  "Foreground"));
-  semRow.appendChild(swatch(currentSystem.semantic.reverse,     "Reverse"));
-  semantic.appendChild(semRow);
-  out.appendChild(semantic);
+  currentGrayGroupEl = buildGrayGroup();
+  out.appendChild(currentGrayGroupEl);
 
-  /* GRAYS */
-  const grayGroup = document.createElement("div");
-  grayGroup.className = "group";
-
-  const grayTitle = document.createElement("div");
-  grayTitle.className = "group-title";
-  grayTitle.innerText = "Base Grays";
-  grayGroup.appendChild(grayTitle);
-  const grayLabels = TONE_NAMES_7.map(t => t === "Base" ? "Base" : `Base ${t}`);
-  grayGroup.appendChild(row(currentSystem.grays, grayLabels));
-  out.appendChild(grayGroup);
+  // Refresh all contrast badges and apply page theme now that colors are finalised
+  swatchRegistry.forEach(fn => fn());
+  applyTheme();
 }
+
+function resetAll() {
+  Object.keys(SECTION_DEFAULTS).forEach(k => {
+    Object.assign(sectionState[k], JSON.parse(JSON.stringify(SECTION_DEFAULTS[k])));
+  });
+  EXT_SECTION_DEFAULTS.forEach((d, i) => {
+    Object.assign(extState[i], JSON.parse(JSON.stringify(d)));
+  });
+  generate();
+}
+
+document.getElementById("darkMode").addEventListener("change", function() {
+  darkMode = this.checked;
+
+  if (currentSemanticGroupEl) {
+    const newSem = buildSemanticGroup();
+    currentSemanticGroupEl.replaceWith(newSem);
+    currentSemanticGroupEl = newSem;
+  }
+
+  if (currentGrayGroupEl) {
+    const newGray = buildGrayGroup();
+    currentGrayGroupEl.replaceWith(newGray);
+    currentGrayGroupEl = newGray;
+  }
+
+  swatchRegistry.forEach(fn => fn());
+  applyTheme();
+});
+
+function rebuildExtSection() {
+  const enabled = document.getElementById("enableExtended").checked;
+  const newExt = enabled ? buildExtendedSection({}) : null;
+
+  if (currentExtSectionEl) {
+    if (newExt) {
+      currentExtSectionEl.replaceWith(newExt);
+    } else {
+      currentExtSectionEl.remove();
+    }
+  } else if (newExt && currentSemanticGroupEl) {
+    currentSemanticGroupEl.before(newExt);
+  }
+  currentExtSectionEl = newExt;
+  swatchRegistry.forEach(fn => fn());
+  applyTheme();
+}
+
+document.getElementById("enableExtended").addEventListener("change", function(){
+  document.getElementById("extCountWrap").style.display = this.checked ? "" : "none";
+  rebuildExtSection();
+});
+
+document.getElementById("extCount").addEventListener("change", rebuildExtSection);
 
 generate();
 </script>
