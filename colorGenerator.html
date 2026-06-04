@@ -651,7 +651,7 @@ function ramp7Smart(hex) {
 function ramp5(hex, shift){
   const { h, s } = hexToHsl(hex);
   const shifted = (h + shift) % 360;
-  return [0.75, 0.60, 0.45, 0.30, 0.18].map(v => hslToHex(shifted, s, v));
+  return [0.93, 0.75, 0.50, 0.30, 0.18].map(v => hslToHex(shifted, s, v));
 }
 
 /* ===========================
@@ -1031,7 +1031,7 @@ function buildExtendedCard(num, sourceHexes){
   card.appendChild(controls);
 
   /* Ramp row */
-  const EXT5_TARGETS = [0.75, 0.60, 0.45, 0.30, 0.18];
+  const EXT5_TARGETS = [0.93, 0.75, 0.50, 0.30, 0.18];
 
   function getSourceHex(){
     if (state.source === "custom"){
