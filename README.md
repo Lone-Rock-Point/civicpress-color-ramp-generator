@@ -2,6 +2,8 @@
 
 A single-file browser tool for building and exporting a complete color system based on the [USWDS (U.S. Web Design System)](https://designsystem.digital.gov/) color token scale, tailored for use with WordPress theme.json (version 3).
 
+[![Launch Color Ramp Generator](https://img.shields.io/badge/Launch%20Color%20Ramp%20Generator-0050d8?style=for-the-badge)](https://lone-rock-point.github.io/civicpress-color-ramp-generator/colorGenerator.html)
+
 ## What it does
 
 The generator lets you pick color families from the full USWDS token palette and automatically builds 7-step ramps for your primary, secondary, and tertiary brand colors, plus 5-step extended palettes and semantic/gray scales. Every color choice is reflected live on the page itself — backgrounds, text, buttons, borders, and shadows all update as you work.
