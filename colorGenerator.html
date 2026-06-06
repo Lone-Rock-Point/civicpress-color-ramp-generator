@@ -349,6 +349,7 @@ input[type=range]{
   <button onclick="exportThemeJSON()">Export theme.json</button>
   <button class="export-btn figma-btn" style="margin-left:0" onclick="exportFigmaSVG()">Export SVG</button>
   <button class="export-btn" style="margin-left:0" onclick="exportCSS()">Export CSS Variables</button>
+  <button class="export-btn" style="margin-left:0" onclick="copyURL()">Copy URL</button>
   <button class="reset-btn" style="margin-left:auto;padding:10px 14px;font-size:14px" onclick="resetAll()">Reset All</button>
 </div>
 
@@ -547,6 +548,11 @@ const EXT_RAMP_DEFAULTS = [
     ]
   },
 ];
+
+/* Preloaded colors from URL — consumed once by generate() */
+let _preload = null;
+/* Tracks which system keys still have unconsumed preloaded colors */
+let _preloadedKeys = new Set();
 
 /* Section state — survives regeneration */
 let sectionState = {
@@ -884,7 +890,7 @@ function buildColorSourceUI(sectionKey, families, onRebuild) {
 
   function syncHex() {
     const v = seedIn.value.trim();
-    if (/^#[0-9a-fA-F]{6}$/.test(v)) { state.customHex = v; if (state.generateRamp) onRebuild(); }
+    if (/^#[0-9a-fA-F]{6}$/.test(v)) { state.customHex = v; if (state.generateRamp) onRebuild(); scheduleURLUpdate(); }
   }
   bindColorPicker(seedIn);
   seedIn.addEventListener("blur", syncHex);
@@ -894,6 +900,7 @@ function buildColorSourceUI(sectionKey, families, onRebuild) {
     state.generateRamp = genCheckbox.checked;
     seedWrap.style.display = state.generateRamp ? "inline-flex" : "none";
     onRebuild();
+    scheduleURLUpdate();
   });
 
   modeSelect.addEventListener("change", () => {
@@ -906,10 +913,12 @@ function buildColorSourceUI(sectionKey, families, onRebuild) {
     familyWrap.style.display = state.mode === "uswds" ? "" : "none";
     customWrap.style.display  = state.mode === "custom" ? "" : "none";
     onRebuild();
+    scheduleURLUpdate();
   });
   familySelect.addEventListener("change", () => {
     state.family = familySelect.value;
     onRebuild();
+    scheduleURLUpdate();
   });
 
   wrap.appendChild(modeSelect);
@@ -955,18 +964,31 @@ function group(title, sectionKey, colorName, systemKey) {
         colors = steps.map(s => lookupStep(state.family, s));
         cfgs   = steps.map(s => ({ family: state.family, step: s }));
       }
+      // Consume preloaded colors (from URL) once — prevents stale data leaking into later rebuilds
+      const preloaded = _preloadedKeys.has(systemKey) ? (currentSystem[systemKey] || []).slice() : null;
+      if (preloaded) _preloadedKeys.delete(systemKey);
+
+      if (preloaded && preloaded.length === colors.length) colors = [...preloaded];
       lastColors = colors;
       currentSystem[systemKey] = [...colors];
       rampArea.appendChild(subtitle("Color Ramp"));
       lastRampRow = row(colors, baseLabels, -1, (i, val) => { currentSystem[systemKey][i] = val; }, cfgs);
+      // Sync step-selects to the actual displayed colors
+      lastRampRow.querySelectorAll('.step-select').forEach((sel, i) => { if (colors[i]) sel.value = colors[i]; });
     } else {
+      // Consume preloaded colors once here too, so a mode switch to USWDS later doesn't use stale data
+      const preloaded = _preloadedKeys.has(systemKey) ? (currentSystem[systemKey] || []).slice() : null;
+      if (preloaded) _preloadedKeys.delete(systemKey);
+
       // Preserve whatever colors are currently showing; fall back to theme defaults
-      const preserved = currentSystem[systemKey];
+      const preserved = preloaded || currentSystem[systemKey];
       const fallback  = SECTION_RAMP_DEFAULTS[sectionKey]?.colors || Array(7).fill("#808080");
       const baseColors = (preserved && preserved.length === 7) ? [...preserved] : [...fallback];
 
       if (state.generateRamp && /^#[0-9a-fA-F]{6}$/.test(state.customHex || "")) {
-        const { colors, anchorSlot } = ramp7Smart(state.customHex);
+        let { colors, anchorSlot } = ramp7Smart(state.customHex);
+        // Apply preloaded individual swatch overrides if available
+        if (preloaded && preloaded.length === colors.length) colors = [...preloaded];
         lastColors = colors;
         currentSystem[systemKey] = [...colors];
         rampArea.appendChild(anchorInfo(anchorSlot, state.customHex));
@@ -1119,8 +1141,17 @@ function buildExtendedCard(num, sourceHexes){
     rampContainer.appendChild(newRow);
   }
 
-  const initialColors = computeColors() || ramp5(sourceHexes.primary, 0);
+  const extKey = `extended${idx}`;
+  const preExtColors = _preloadedKeys.has(extKey) ? currentSystem.extended[idx] : null;
+  if (preExtColors) _preloadedKeys.delete(extKey);
+  const initialColors = (preExtColors && preExtColors.length)
+    ? preExtColors
+    : (computeColors() || ramp5(sourceHexes.primary, 0));
   applyRamp(initialColors, state.source === "uswds" ? -1 : computeAnchorSlot());
+  // Sync step-selects to preloaded colors
+  if (preExtColors && preExtColors.length && state.source === "uswds") {
+    rampContainer.querySelectorAll('.step-select').forEach((sel, i) => { if (preExtColors[i]) sel.value = preExtColors[i]; });
+  }
 
   /* Expose reset — restores source, family, and swatches to section defaults */
   card._reset = () => {
@@ -1160,23 +1191,27 @@ function buildExtendedCard(num, sourceHexes){
       customWrap.querySelector("input[type=text]").value = defaultHex;
     }
     updateRamp();
+    scheduleURLUpdate();
   });
 
   uswdsFamilySelect.addEventListener("change", () => {
     state.family = uswdsFamilySelect.value;
     updateRamp();
+    scheduleURLUpdate();
   });
 
   shiftWrap.querySelector("input[type=range]").addEventListener("input", function(){
     state.shift = parseInt(this.value);
     shiftWrap.querySelector(".slider-value").innerText = state.shift + "°";
     updateRamp();
+    scheduleURLUpdate();
   });
 
   bindColorPicker(customWrap.querySelector("input[type=text]"));
   customWrap.querySelector("input[type=text]").addEventListener("input", function(){
     state.custom = this.value;
     updateRamp();
+    scheduleURLUpdate();
   });
 
   return card;
@@ -1494,6 +1529,7 @@ function applyTheme() {
       Object.entries(vars).map(([k,v]) => `  ${k}:${v};`).join('\n') +
       '\n}';
   }
+  scheduleURLUpdate();
 }
 
 /* Pick black or white label text based on relative luminance */
@@ -1745,8 +1781,9 @@ function buildSemanticGroup() {
     state.mode = modeSelect.value;
     familyWrap.style.display = state.mode === "uswds" ? "" : "none";
     buildRamp();
+    scheduleURLUpdate();
   });
-  familySelect.addEventListener("change", () => { state.family = familySelect.value; buildRamp(); });
+  familySelect.addEventListener("change", () => { state.family = familySelect.value; buildRamp(); scheduleURLUpdate(); });
 
   sourceUI.appendChild(modeSelect);
   sourceUI.appendChild(familyWrap);
@@ -1776,6 +1813,12 @@ function buildGrayGroup() {
     if (state.mode === "uswds") {
       colors = GRAY_STEPS.map(s => lookupStep(state.family, s));
       cfgs   = GRAY_STEPS.map(s => ({ family: state.family, step: s }));
+      // Apply preloaded per-swatch colors (from URL) only on initial page load — consumed once
+      if (_preloadedKeys.has('grays')) {
+        const preColors = currentSystem.grays;
+        if (preColors && preColors.length === colors.length) colors = [...preColors];
+        _preloadedKeys.delete('grays');
+      }
     } else {
       const { colors: c, anchorSlot } = ramp7Smart(state.customHex || "#757575");
       colors = c;
@@ -1786,6 +1829,7 @@ function buildGrayGroup() {
     currentSystem.grays = [...colors];
     rampArea.appendChild(subtitle("Color Ramp"));
     lastRampRow = row(colors, grayLabels, -1, (i, val) => { currentSystem.grays[i] = val; }, cfgs);
+    if (cfgs) lastRampRow.querySelectorAll('.step-select').forEach((sel, i) => { if (colors[i]) sel.value = colors[i]; });
     rampArea.appendChild(lastRampRow);
   }
 
@@ -1802,17 +1846,31 @@ function buildGrayGroup() {
 =========================== */
 
 function generate(){
+  const preload = _preload;
+  _preload = null;
+
+  // Track which keys have preloaded colors so buildRamp consumes them only once
+  _preloadedKeys = new Set();
+  if (preload?.primary?.length)   _preloadedKeys.add('primary');
+  if (preload?.secondary?.length) _preloadedKeys.add('secondary');
+  if (preload?.tertiary?.length)  _preloadedKeys.add('tertiary');
+  if (preload?.grays?.length)     _preloadedKeys.add('grays');
+  if (preload?.extended) {
+    preload.extended.forEach((c, i) => { if (c?.length) _preloadedKeys.add(`extended${i}`); });
+  }
+
   swatchRegistry = [];
   const out = document.getElementById("output");
   out.innerHTML = "";
 
   currentSystem = {
-    primary:   [],
-    secondary: [],
-    tertiary:  [],
-    extended:  [[], [], []],
-    grays:     [],
-    semantic: { background: "#FAFAFA", foreground: "#1F2020", reverse: "#FFFFFF", ...TRANSLUCENT_DEFAULTS }
+    primary:   preload?.primary   || [],
+    secondary: preload?.secondary || [],
+    tertiary:  preload?.tertiary  || [],
+    extended:  preload?.extended  || [[], [], []],
+    grays:     preload?.grays     || [],
+    semantic: { background: "#FAFAFA", foreground: "#1F2020", reverse: "#FFFFFF",
+                ...TRANSLUCENT_DEFAULTS, ...(preload?.semantic || {}) }
   };
 
   const pGroup = group("Primary Colors",   "primary",   "Primary",   "primary");
@@ -1849,6 +1907,7 @@ function resetAll() {
 
 document.getElementById("darkMode").addEventListener("change", function() {
   darkMode = this.checked;
+  scheduleURLUpdate();
 
   if (currentSemanticGroupEl) {
     const newSem = buildSemanticGroup();
@@ -1887,10 +1946,170 @@ function rebuildExtSection() {
 document.getElementById("enableExtended").addEventListener("change", function(){
   document.getElementById("extCountWrap").style.display = this.checked ? "" : "none";
   rebuildExtSection();
+  scheduleURLUpdate();
 });
 
-document.getElementById("extCount").addEventListener("change", rebuildExtSection);
+document.getElementById("extCount").addEventListener("change", () => { rebuildExtSection(); scheduleURLUpdate(); });
 
+/* ===========================
+   URL STATE PERSISTENCE
+=========================== */
+
+function colorsEqual(a, b) {
+  if (!a || !b || a.length !== b.length) return false;
+  return a.every((v, i) => (v||'').toLowerCase() === (b[i]||'').toLowerCase());
+}
+
+function expectedColors(sectionKey) {
+  const s = sectionState[sectionKey];
+  if (s.mode !== 'uswds') return null;
+  const def = SECTION_RAMP_DEFAULTS[sectionKey];
+  if (s.family === 'CivicPress Default' && def) return def.colors;
+  const steps = getMainSteps(s.family);
+  return steps.map(st => lookupStep(s.family, st));
+}
+
+function encodeStateToURL() {
+  const p = new URLSearchParams();
+  const extEl  = document.getElementById("enableExtended");
+  const extCEl = document.getElementById("extCount");
+
+  if (darkMode) p.set('dm', '1');
+  if (!extEl.checked) p.set('ext', '0');
+  if (extCEl.value !== '3') p.set('extc', extCEl.value);
+
+  const prefixes = { primary:'p', secondary:'s', tertiary:'t', gray:'gr', semantic:'sem' };
+  for (const [key, px] of Object.entries(prefixes)) {
+    const s   = sectionState[key];
+    const def = SECTION_DEFAULTS[key] || {};
+    if (s.mode !== def.mode) p.set(`${px}m`, s.mode);
+    if (s.mode === 'uswds'  && s.family !== def.family) p.set(`${px}f`, s.family);
+    if (s.mode === 'custom' && s.customHex) p.set(`${px}x`, s.customHex);
+    if (s.mode === 'custom' && s.generateRamp !== undefined && !!s.generateRamp !== !!def.generateRamp)
+      p.set(`${px}g`, s.generateRamp ? '1' : '0');
+  }
+
+  // Encode per-swatch colors whenever they differ from expected (captures individual overrides)
+  const h = arr => (arr || []).filter(Boolean).map(c => c.replace('#','')).join(',');
+  for (const [key, px] of [['primary','p'],['secondary','s'],['tertiary','t']]) {
+    const colors = currentSystem[key] || [];
+    if (colors.length && !colorsEqual(colors, expectedColors(key))) p.set(`${px}c`, h(colors));
+  }
+  // Gray colors: encode if they differ from the expected USWDS gray steps
+  const grayColors = currentSystem.grays || [];
+  const expGray = sectionState.gray.mode === 'uswds'
+    ? GRAY_STEPS.map(s => lookupStep(sectionState.gray.family || 'Gray', s))
+    : null;
+  if (grayColors.length && !colorsEqual(grayColors, expGray)) p.set('grc', h(grayColors));
+
+  // Semantic core colors only when in custom mode
+  const sem = currentSystem.semantic || {};
+  if (sectionState.semantic.mode === 'custom') {
+    if (sem.background) p.set('sbg', sem.background.replace('#',''));
+    if (sem.foreground) p.set('sfg', sem.foreground.replace('#',''));
+    if (sem.reverse)    p.set('srv', sem.reverse.replace('#',''));
+  }
+  const td = TRANSLUCENT_DEFAULTS;
+  if (sem.translucent              && sem.translucent              !== td.translucent)              p.set('str',  sem.translucent);
+  if (sem.translucentSubtle        && sem.translucentSubtle        !== td.translucentSubtle)        p.set('strs', sem.translucentSubtle);
+  if (sem.translucentReverse       && sem.translucentReverse       !== td.translucentReverse)       p.set('strr', sem.translucentReverse);
+  if (sem.translucentReverseSubtle && sem.translucentReverseSubtle !== td.translucentReverseSubtle) p.set('strrs',sem.translucentReverseSubtle);
+
+  if (extEl.checked) {
+    const count = parseInt(extCEl.value);
+    for (let i = 0; i < count; i++) {
+      const e   = extState[i];
+      const def = EXT_SECTION_DEFAULTS[i];
+      if (e.source !== def.source) p.set(`e${i}s`, e.source);
+      if (e.source === 'uswds'   && e.family !== def.family)  p.set(`e${i}f`, e.family);
+      if (e.source !== 'uswds'   && e.source !== 'custom' && e.shift !== def.shift) p.set(`e${i}h`, String(e.shift));
+      if (e.source === 'custom'  && e.custom) p.set(`e${i}x`, e.custom.replace('#',''));
+      // Extended colors: encode if they differ from expected defaults
+      const extColors = currentSystem.extended[i] || [];
+      const expExt = (e.source === 'uswds' && e.family === 'CivicPress Default' && EXT_RAMP_DEFAULTS[i])
+        ? EXT_RAMP_DEFAULTS[i].colors
+        : (e.source === 'uswds' ? EXT_STEPS.map(s => lookupStep(e.family, s)) : null);
+      if (extColors.length && !colorsEqual(extColors, expExt)) p.set(`e${i}c`, h(extColors));
+    }
+  }
+
+  return p.toString();
+}
+
+function applyStateFromURL() {
+  const p = new URLSearchParams(location.search);
+  if (!location.search) return;
+
+  if (p.has('dm')) {
+    darkMode = p.get('dm') === '1';
+    document.getElementById("darkMode").checked = darkMode;
+  }
+
+  const extEl  = document.getElementById("enableExtended");
+  const extCEl = document.getElementById("extCount");
+  if (p.get('ext') === '0') {
+    extEl.checked = false;
+    document.getElementById("extCountWrap").style.display = "none";
+  }
+  if (p.has('extc')) extCEl.value = p.get('extc');
+
+  const prefixes = { primary:'p', secondary:'s', tertiary:'t', gray:'gr', semantic:'sem' };
+  for (const [key, px] of Object.entries(prefixes)) {
+    const s = sectionState[key];
+    if (p.has(`${px}m`)) s.mode = p.get(`${px}m`);
+    if (p.has(`${px}f`)) s.family = p.get(`${px}f`);
+    if (p.has(`${px}x`)) s.customHex = p.get(`${px}x`);
+    if (p.has(`${px}g`)) s.generateRamp = p.get(`${px}g`) === '1';
+  }
+
+  const dec = str => str.split(',').map(c => '#' + c);
+  const preload = {};
+  if (p.has('pc'))  preload.primary   = dec(p.get('pc'));
+  if (p.has('sc'))  preload.secondary = dec(p.get('sc'));
+  if (p.has('tc'))  preload.tertiary  = dec(p.get('tc'));
+  if (p.has('grc')) preload.grays     = dec(p.get('grc'));
+
+  const sem = {};
+  if (p.has('sbg'))  sem.background              = '#' + p.get('sbg');
+  if (p.has('sfg'))  sem.foreground              = '#' + p.get('sfg');
+  if (p.has('srv'))  sem.reverse                 = '#' + p.get('srv');
+  if (p.has('str'))  sem.translucent             = p.get('str');
+  if (p.has('strs')) sem.translucentSubtle        = p.get('strs');
+  if (p.has('strr')) sem.translucentReverse       = p.get('strr');
+  if (p.has('strrs'))sem.translucentReverseSubtle = p.get('strrs');
+  if (Object.keys(sem).length) preload.semantic = sem;
+
+  for (let i = 0; i < 3; i++) {
+    if (p.has(`e${i}s`)) extState[i].source = p.get(`e${i}s`);
+    if (p.has(`e${i}f`)) extState[i].family = p.get(`e${i}f`);
+    if (p.has(`e${i}h`)) extState[i].shift  = parseInt(p.get(`e${i}h`));
+    if (p.has(`e${i}x`)) extState[i].custom = '#' + p.get(`e${i}x`);
+    if (p.has(`e${i}c`)) {
+      if (!preload.extended) preload.extended = [[], [], []];
+      preload.extended[i] = dec(p.get(`e${i}c`));
+    }
+  }
+
+  _preload = preload;
+}
+
+let _urlTimer = null;
+function scheduleURLUpdate() {
+  clearTimeout(_urlTimer);
+  _urlTimer = setTimeout(() => {
+    const qs = encodeStateToURL();
+    history.replaceState(null, '', qs ? '?' + qs : location.pathname);
+  }, 200);
+}
+
+function copyURL() {
+  const qs = encodeStateToURL();
+  const url = location.origin + location.pathname + (qs ? '?' + qs : '');
+  history.replaceState(null, '', qs ? '?' + qs : location.pathname);
+  navigator.clipboard.writeText(url).then(() => showTooltip("URL copied!"));
+}
+
+applyStateFromURL();
 generate();
 </script>
 
