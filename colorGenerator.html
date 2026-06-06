@@ -883,7 +883,13 @@ function buildColorSourceUI(sectionKey, families, onRebuild) {
   seedIn.type = "text";
   seedIn.value = state.customHex || "#808080";
   seedIn.style.cssText = "width:110px;padding:6px 8px;border:1px solid #ccc;border-radius:6px";
+
+  const resetRampBtn = document.createElement("button");
+  resetRampBtn.textContent = "Reset Ramp";
+  resetRampBtn.style.cssText = "padding:5px 10px;font-size:12px;border:1px solid currentColor;border-radius:6px;background:transparent;cursor:pointer;white-space:nowrap";
+
   seedWrap.appendChild(seedIn);
+  seedWrap.appendChild(resetRampBtn);
 
   customWrap.appendChild(genLabel);
   customWrap.appendChild(seedWrap);
@@ -892,6 +898,12 @@ function buildColorSourceUI(sectionKey, families, onRebuild) {
     const v = seedIn.value.trim();
     if (/^#[0-9a-fA-F]{6}$/.test(v)) { state.customHex = v; if (state.generateRamp) onRebuild(); scheduleURLUpdate(); }
   }
+
+  resetRampBtn.addEventListener("click", () => {
+    currentSystem[sectionKey] = [];
+    onRebuild();
+    scheduleURLUpdate();
+  });
   bindColorPicker(seedIn);
   seedIn.addEventListener("blur", syncHex);
   seedIn.addEventListener("keydown", e => { if (e.key === "Enter") seedIn.blur(); });
