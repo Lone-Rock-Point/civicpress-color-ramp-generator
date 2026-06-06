@@ -886,7 +886,8 @@ function buildColorSourceUI(sectionKey, families, onRebuild) {
 
   const resetRampBtn = document.createElement("button");
   resetRampBtn.textContent = "Reset Ramp";
-  resetRampBtn.style.cssText = "padding:5px 10px;font-size:12px;border:1px solid #555;border-radius:6px;background:transparent;color:#333;cursor:pointer;white-space:nowrap";
+  resetRampBtn.className = "reset-btn";
+  resetRampBtn.style.display = "none";
 
   seedWrap.appendChild(seedIn);
   seedWrap.appendChild(resetRampBtn);
@@ -896,11 +897,16 @@ function buildColorSourceUI(sectionKey, families, onRebuild) {
 
   function syncHex() {
     const v = seedIn.value.trim();
-    if (/^#[0-9a-fA-F]{6}$/.test(v)) { state.customHex = v; if (state.generateRamp) onRebuild(); scheduleURLUpdate(); }
+    if (/^#[0-9a-fA-F]{6}$/.test(v)) {
+      state.customHex = v;
+      if (state.generateRamp) { resetRampBtn.style.display = "none"; onRebuild(); }
+      scheduleURLUpdate();
+    }
   }
 
   resetRampBtn.addEventListener("click", () => {
     currentSystem[sectionKey] = [];
+    resetRampBtn.style.display = "none";
     onRebuild();
     scheduleURLUpdate();
   });
@@ -950,7 +956,9 @@ function buildColorSourceUI(sectionKey, families, onRebuild) {
     onRebuild();
   }
 
-  return { element: wrap, reset };
+  function showResetRamp() { if (state.generateRamp) resetRampBtn.style.display = ""; }
+
+  return { element: wrap, reset, showResetRamp };
 }
 
 function group(title, sectionKey, colorName, systemKey) {
@@ -1005,7 +1013,10 @@ function group(title, sectionKey, colorName, systemKey) {
         currentSystem[systemKey] = [...colors];
         rampArea.appendChild(anchorInfo(anchorSlot, state.customHex));
         rampArea.appendChild(subtitle("Color Ramp"));
-        lastRampRow = row(colors, baseLabels, anchorSlot, (i, val) => { currentSystem[systemKey][i] = val; });
+        lastRampRow = row(colors, baseLabels, anchorSlot, (i, val) => {
+          currentSystem[systemKey][i] = val;
+          sourceUI.showResetRamp();
+        });
       } else {
         lastColors = baseColors;
         currentSystem[systemKey] = [...baseColors];
@@ -1016,7 +1027,8 @@ function group(title, sectionKey, colorName, systemKey) {
     rampArea.appendChild(lastRampRow);
   }
 
-  const { element: sourceEl, reset: resetSection } = buildColorSourceUI(sectionKey, NON_GRAY_FAMILIES, buildRamp);
+  const sourceUI = buildColorSourceUI(sectionKey, NON_GRAY_FAMILIES, buildRamp);
+  const { element: sourceEl, reset: resetSection } = sourceUI;
   g.appendChild(groupHeader(title, resetSection));
   g.appendChild(sourceEl);
   g.appendChild(rampArea);
