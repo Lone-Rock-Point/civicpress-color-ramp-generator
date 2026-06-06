@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "color-ramp-generator",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["http-server", "/Users/michelleschulp/Documents/Dropbox/WEBSITES/civicpress-color-ramp-generator", "-p", "4321", "--cors", "-c-1"],
+      "port": 4321
+    }
+  ]
+}
