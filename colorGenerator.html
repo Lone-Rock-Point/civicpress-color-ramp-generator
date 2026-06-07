@@ -1101,10 +1101,16 @@ function buildExtendedCard(num, sourceHexes){
       style="width:100px;padding:6px 8px;border:1px solid #ccc;border-radius:6px" />
   `;
 
+  const resetRampBtn = document.createElement("button");
+  resetRampBtn.textContent = "Reset Ramp";
+  resetRampBtn.className = "reset-btn";
+  resetRampBtn.style.display = "none";
+
   controls.appendChild(sourceSelect);
   controls.appendChild(uswdsFamilyWrap);
   controls.appendChild(shiftWrap);
   controls.appendChild(customWrap);
+  controls.appendChild(resetRampBtn);
   card.appendChild(controls);
 
   /* Ramp row */
@@ -1160,10 +1166,19 @@ function buildExtendedCard(num, sourceHexes){
     currentSystem.extended[idx] = colors;
     rampContainer.innerHTML = "";
     const newRow = row(colors, extLabels, anchorSlot,
-      (i, val) => { currentSystem.extended[idx][i] = val; },
+      (i, val) => {
+        currentSystem.extended[idx][i] = val;
+        if (state.source !== "uswds") resetRampBtn.style.display = "";
+      },
       getSwatchConfigs());
     rampContainer.appendChild(newRow);
   }
+
+  resetRampBtn.addEventListener("click", () => {
+    resetRampBtn.style.display = "none";
+    updateRamp();
+    scheduleURLUpdate();
+  });
 
   const extKey = `extended${idx}`;
   const preExtColors = _preloadedKeys.has(extKey) ? currentSystem.extended[idx] : null;
@@ -1189,6 +1204,7 @@ function buildExtendedCard(num, sourceHexes){
     uswdsFamilyWrap.style.display = isUswds  ? "inline-flex" : "none";
     shiftWrap.style.display       = isShift  ? "flex"        : "none";
     customWrap.style.display      = isCustom ? "flex"        : "none";
+    hideResetRamp();
     updateRamp();
     swatchRegistry.forEach(fn => fn());
   };
@@ -1200,6 +1216,8 @@ function buildExtendedCard(num, sourceHexes){
     applyRamp(colors, computeAnchorSlot());
   }
 
+  function hideResetRamp() { resetRampBtn.style.display = "none"; }
+
   sourceSelect.addEventListener("change", () => {
     state.source = sourceSelect.value;
     const isUswds  = state.source === "uswds";
@@ -1208,18 +1226,19 @@ function buildExtendedCard(num, sourceHexes){
     uswdsFamilyWrap.style.display = isUswds  ? "inline-flex" : "none";
     shiftWrap.style.display       = isShift  ? "flex"        : "none";
     customWrap.style.display      = isCustom ? "flex"        : "none";
-    // Pre-fill custom input so computeColors() doesn't return null on first switch
     if (isCustom && !state.custom) {
       const defaultHex = lookupStep(uswdsFamilySelect.value, 50);
       state.custom = defaultHex;
       customWrap.querySelector("input[type=text]").value = defaultHex;
     }
+    hideResetRamp();
     updateRamp();
     scheduleURLUpdate();
   });
 
   uswdsFamilySelect.addEventListener("change", () => {
     state.family = uswdsFamilySelect.value;
+    hideResetRamp();
     updateRamp();
     scheduleURLUpdate();
   });
@@ -1227,6 +1246,7 @@ function buildExtendedCard(num, sourceHexes){
   shiftWrap.querySelector("input[type=range]").addEventListener("input", function(){
     state.shift = parseInt(this.value);
     shiftWrap.querySelector(".slider-value").innerText = state.shift + "°";
+    hideResetRamp();
     updateRamp();
     scheduleURLUpdate();
   });
@@ -1234,6 +1254,7 @@ function buildExtendedCard(num, sourceHexes){
   bindColorPicker(customWrap.querySelector("input[type=text]"));
   customWrap.querySelector("input[type=text]").addEventListener("input", function(){
     state.custom = this.value;
+    hideResetRamp();
     updateRamp();
     scheduleURLUpdate();
   });
