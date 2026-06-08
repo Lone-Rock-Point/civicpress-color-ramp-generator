@@ -204,6 +204,26 @@ button:hover{
   letter-spacing:0.03em;
 }
 
+/* Brand toggle button — star in upper right of swatch */
+.brand-badge {
+  position:absolute;
+  top:4px;
+  right:5px;
+  background:none;
+  border:none;
+  cursor:pointer;
+  font-size:13px;
+  line-height:1;
+  padding:0;
+  color:white;
+  opacity:0.2;
+  text-shadow:0 0 4px rgba(0,0,0,0.5);
+  transition:opacity 0.15s;
+  z-index:1;
+}
+.brand-badge:hover { opacity:0.65; }
+.brand-badge.active { opacity:1; }
+
 .label{
   background:var(--label-bg,rgba(255,255,255,0.75));
   padding:2px 4px;
@@ -554,6 +574,9 @@ let _preload = null;
 /* Tracks which system keys still have unconsumed preloaded colors */
 let _preloadedKeys = new Set();
 
+/* Brand color markers — set of keys like "primary:3", "gray:0", "extended0:2", "semantic:background" */
+let brandColors = new Set();
+
 /* Section state — survives regeneration */
 let sectionState = {
   primary:   { ...SECTION_DEFAULTS.primary   },
@@ -700,7 +723,7 @@ function showTooltip(text) {
   setTimeout(() => t.classList.remove("show"), 900);
 }
 
-function swatch(color, label, isAnchor = false, onChange = null, uswdsConfig = null){
+function swatch(color, label, isAnchor = false, onChange = null, uswdsConfig = null, brandKey = null){
   const d = document.createElement("div");
   d.className = "swatch";
   d.style.background = color;
@@ -795,16 +818,39 @@ function swatch(color, label, isAnchor = false, onChange = null, uswdsConfig = n
 
   d.appendChild(badgesEl);
   refreshBadges();
+
+  // Brand toggle — click to mark this color as a brand color (shows ★ in SVG as *)
+  if (brandKey !== null) {
+    const brandBtn = document.createElement("button");
+    brandBtn.type = "button";
+    brandBtn.className = "brand-badge" + (brandColors.has(brandKey) ? " active" : "");
+    brandBtn.title = "Mark as brand color";
+    brandBtn.textContent = "★";
+    brandBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (brandColors.has(brandKey)) {
+        brandColors.delete(brandKey);
+        brandBtn.classList.remove("active");
+      } else {
+        brandColors.add(brandKey);
+        brandBtn.classList.add("active");
+      }
+      scheduleURLUpdate();
+    });
+    d.appendChild(brandBtn);
+  }
+
   return d;
 }
 
-function row(colors, labels, anchorSlot = -1, onChange = null, swatchConfigs = null){
+function row(colors, labels, anchorSlot = -1, onChange = null, swatchConfigs = null, brandKeys = null){
   const r = document.createElement("div");
   r.className = "row";
   colors.forEach((c, i) => {
     const cfg = swatchConfigs ? swatchConfigs[i] : null;
+    const bk  = brandKeys ? brandKeys[i] : null;
     r.appendChild(swatch(c, labels[i], i === anchorSlot,
-      onChange ? (val) => onChange(i, val) : null, cfg));
+      onChange ? (val) => onChange(i, val) : null, cfg, bk));
   });
   return r;
 }
@@ -994,7 +1040,8 @@ function group(title, sectionKey, colorName, systemKey) {
       lastColors = colors;
       currentSystem[systemKey] = [...colors];
       rampArea.appendChild(subtitle("Color Ramp"));
-      lastRampRow = row(colors, baseLabels, -1, (i, val) => { currentSystem[systemKey][i] = val; }, cfgs);
+      lastRampRow = row(colors, baseLabels, -1, (i, val) => { currentSystem[systemKey][i] = val; }, cfgs,
+        colors.map((_, i) => `${sectionKey}:${i}`));
       // Sync step-selects to the actual displayed colors
       lastRampRow.querySelectorAll('.step-select').forEach((sel, i) => { if (colors[i]) sel.value = colors[i]; });
     } else {
@@ -1018,12 +1065,13 @@ function group(title, sectionKey, colorName, systemKey) {
         lastRampRow = row(colors, baseLabels, anchorSlot, (i, val) => {
           currentSystem[systemKey][i] = val;
           sourceUI.showResetRamp();
-        });
+        }, null, colors.map((_, i) => `${sectionKey}:${i}`));
       } else {
         lastColors = baseColors;
         currentSystem[systemKey] = [...baseColors];
         rampArea.appendChild(subtitle("Color Ramp"));
-        lastRampRow = row(baseColors, baseLabels, -1, (i, val) => { currentSystem[systemKey][i] = val; });
+        lastRampRow = row(baseColors, baseLabels, -1, (i, val) => { currentSystem[systemKey][i] = val; },
+          null, baseColors.map((_, i) => `${sectionKey}:${i}`));
       }
     }
     rampArea.appendChild(lastRampRow);
@@ -1198,7 +1246,8 @@ function buildExtendedCard(num, sourceHexes){
           (state.source !== "custom" || state.generateRamp);
         if (hasCanonical) resetRampBtn.style.display = "";
       },
-      getSwatchConfigs());
+      getSwatchConfigs(),
+      colors.map((_, i) => `extended${idx}:${i}`));
     rampContainer.appendChild(newRow);
   }
 
@@ -1677,20 +1726,27 @@ function exportFigmaSVG() {
   const graySlugs = darkMode ? [...graySlugsLight].reverse() : graySlugsLight;
 
   const extSections = currentSystem.extended
-    .map((colors, i) => ({ title: `Extended Palette ${i+1}`, rows: [{ label:"", colors, names: mkExt(i+1) }] }))
+    .map((colors, i) => ({ title: `Extended Palette ${i+1}`, rows: [{ label:"", colors, names: mkExt(i+1),
+      brandKeys: colors.map((_, j) => `extended${i}:${j}`) }] }))
     .filter(s => s.rows[0].colors?.length);
 
   const sections = [
-    { title:"Primary Colors",   rows:[{ label:"", colors:currentSystem.primary,   names:mkBase("Primary")   }] },
-    { title:"Secondary Colors", rows:[{ label:"", colors:currentSystem.secondary, names:mkBase("Secondary") }] },
-    { title:"Tertiary Colors",  rows:[{ label:"", colors:currentSystem.tertiary,  names:mkBase("Tertiary")  }] },
+    { title:"Primary Colors",   rows:[{ label:"", colors:currentSystem.primary,   names:mkBase("Primary"),
+        brandKeys: (currentSystem.primary||[]).map((_, i) => `primary:${i}`) }] },
+    { title:"Secondary Colors", rows:[{ label:"", colors:currentSystem.secondary, names:mkBase("Secondary"),
+        brandKeys: (currentSystem.secondary||[]).map((_, i) => `secondary:${i}`) }] },
+    { title:"Tertiary Colors",  rows:[{ label:"", colors:currentSystem.tertiary,  names:mkBase("Tertiary"),
+        brandKeys: (currentSystem.tertiary||[]).map((_, i) => `tertiary:${i}`) }] },
     ...extSections,
     { title:"Semantic Colors", rows:[
-      { label:"", colors:[sem.background, sem.foreground, sem.reverse], names:["Background","Foreground","Reverse"] },
+      { label:"", colors:[sem.background, sem.foreground, sem.reverse], names:["Background","Foreground","Reverse"],
+        brandKeys: ["semantic:background","semantic:foreground","semantic:reverse"] },
       { label:"Translucent", colors:[sem.translucent, sem.translucentSubtle, sem.translucentReverse, sem.translucentReverseSubtle],
-        names:["Translucent","Translucent Subtle","Translucent Reverse","Translucent Reverse Subtle"] }
+        names:["Translucent","Translucent Subtle","Translucent Reverse","Translucent Reverse Subtle"],
+        brandKeys: ["semantic:translucent","semantic:translucentSubtle","semantic:translucentReverse","semantic:translucentReverseSubtle"] }
     ]},
-    { title:"Base Grays", rows:[{ label:"", colors:currentSystem.grays, names:TONE_NAMES_7.map(t=>t==="Base"?"Base":`Base ${t}`) }] }
+    { title:"Base Grays", rows:[{ label:"", colors:currentSystem.grays, names:TONE_NAMES_7.map(t=>t==="Base"?"Base":`Base ${t}`),
+        brandKeys: (currentSystem.grays||[]).map((_, i) => `gray:${i}`) }] }
   ];
 
   const maxSwatches = Math.max(...sections.flatMap(s => s.rows.map(r => (r.colors||[]).length)));
@@ -1734,6 +1790,12 @@ function exportFigmaSVG() {
         bs.forEach((b, bi) => {
           elems.push(`<text x="${x+4}" y="${y+11+bi*10}" font-family="Arial,sans-serif" font-size="8" font-weight="bold" fill="${b.fill}">${b.text}</text>`);
         });
+
+        /* Brand color asterisk */
+        if (rowDef.brandKeys && brandColors.has(rowDef.brandKeys[i])) {
+          const starFill = labelColor(color);
+          elems.push(`<text x="${x+SW-10}" y="${y+15}" font-family="Arial,sans-serif" font-size="16" font-weight="bold" fill="${starFill}">*</text>`);
+        }
       });
 
       y += SH + GAP;
@@ -1823,7 +1885,8 @@ function buildSemanticGroup() {
       }
       currentSystem.semantic[key] = color;
       coreRow.appendChild(swatch(color, label, false,
-        val => { currentSystem.semantic[key] = val; swatchRegistry.forEach(fn => fn()); }, cfg));
+        val => { currentSystem.semantic[key] = val; swatchRegistry.forEach(fn => fn()); }, cfg,
+        `semantic:${key}`));
     });
     rampArea.appendChild(coreRow);
 
@@ -1837,7 +1900,7 @@ function buildSemanticGroup() {
       currentSystem.semantic[key] = color;
       transRow.appendChild(swatch(color, label, false,
         val => { currentSystem.semantic[key] = val; swatchRegistry.forEach(fn => fn()); },
-        null)); // always hex/rgba input — never USWDS
+        null, `semantic:${key}`)); // always hex/rgba input — never USWDS
     });
     rampArea.appendChild(transRow);
 
@@ -1933,7 +1996,8 @@ function buildGrayGroup() {
     lastColors = colors;
     currentSystem.grays = [...colors];
     rampArea.appendChild(subtitle("Color Ramp"));
-    lastRampRow = row(colors, grayLabels, -1, (i, val) => { currentSystem.grays[i] = val; }, cfgs);
+    lastRampRow = row(colors, grayLabels, -1, (i, val) => { currentSystem.grays[i] = val; }, cfgs,
+      colors.map((_, i) => `gray:${i}`));
     if (cfgs) lastRampRow.querySelectorAll('.step-select').forEach((sel, i) => { if (colors[i]) sel.value = colors[i]; });
     rampArea.appendChild(lastRampRow);
   }
@@ -2001,6 +2065,7 @@ function generate(){
 }
 
 function resetAll() {
+  brandColors = new Set();
   Object.keys(SECTION_DEFAULTS).forEach(k => {
     Object.assign(sectionState[k], JSON.parse(JSON.stringify(SECTION_DEFAULTS[k])));
   });
@@ -2139,6 +2204,8 @@ function encodeStateToURL() {
     }
   }
 
+  if (brandColors.size > 0) p.set('bc', [...brandColors].join(','));
+
   return p.toString();
 }
 
@@ -2198,6 +2265,8 @@ function applyStateFromURL() {
   }
 
   _preload = preload;
+
+  if (p.has('bc')) brandColors = new Set(p.get('bc').split(',').filter(Boolean));
 }
 
 let _urlTimer = null;
