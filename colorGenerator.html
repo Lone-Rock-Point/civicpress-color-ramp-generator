@@ -2236,8 +2236,8 @@ function encodeStateToURL() {
 }
 
 function applyStateFromURL() {
-  const p = new URLSearchParams(location.search);
-  if (!location.search) return;
+  const p = new URLSearchParams(location.hash.slice(1));
+  if (!location.hash) return;
 
   if (p.has('dm')) {
     darkMode = p.get('dm') === '1';
@@ -2304,14 +2304,14 @@ function scheduleURLUpdate() {
   clearTimeout(_urlTimer);
   _urlTimer = setTimeout(() => {
     const qs = encodeStateToURL();
-    history.replaceState(null, '', qs ? '?' + qs : location.pathname);
+    history.replaceState(null, '', qs ? '#' + qs : location.pathname + location.search);
   }, 200);
 }
 
 function copyURL() {
   const qs = encodeStateToURL();
   const url = location.origin + location.pathname + (qs ? '?' + qs : '');
-  history.replaceState(null, '', qs ? '?' + qs : location.pathname);
+  history.replaceState(null, '', qs ? '#' + qs : location.pathname + location.search);
   navigator.clipboard.writeText(url).then(() => showTooltip("URL copied!"));
 }
 
