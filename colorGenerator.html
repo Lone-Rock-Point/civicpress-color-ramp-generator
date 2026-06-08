@@ -1927,7 +1927,7 @@ function buildGrayGroup() {
         if (preColors && preColors.length === colors.length) colors = [...preColors];
         _preloadedKeys.delete('grays');
       }
-      rampArea.appendChild(anchorInfo(anchorSlot, state.customHex || "#757575"));
+      if (state.generateRamp) rampArea.appendChild(anchorInfo(anchorSlot, state.customHex || "#757575"));
     }
 
     lastColors = colors;
