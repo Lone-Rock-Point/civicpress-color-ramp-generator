@@ -1869,6 +1869,12 @@ function buildGrayGroup() {
     } else {
       const { colors: c, anchorSlot } = ramp7Smart(state.customHex || "#757575");
       colors = c;
+      // Apply preloaded per-swatch colors (from URL) — consumed once, prevents stale data on rebuilds
+      if (_preloadedKeys.has('grays')) {
+        const preColors = currentSystem.grays;
+        if (preColors && preColors.length === colors.length) colors = [...preColors];
+        _preloadedKeys.delete('grays');
+      }
       rampArea.appendChild(anchorInfo(anchorSlot, state.customHex || "#757575"));
     }
 
