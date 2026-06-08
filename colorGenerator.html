@@ -472,9 +472,9 @@ const SECTION_DEFAULTS = {
   semantic:  { mode: "uswds", family: "Gray" },
 };
 const EXT_SECTION_DEFAULTS = [
-  { source: "uswds", family: "CivicPress Default", shift: 150, custom: "" },
-  { source: "uswds", family: "CivicPress Default", shift: 150, custom: "" },
-  { source: "uswds", family: "CivicPress Default", shift: 150, custom: "" },
+  { source: "uswds", family: "CivicPress Default", shift: 150, custom: "", generateRamp: false },
+  { source: "uswds", family: "CivicPress Default", shift: 150, custom: "", generateRamp: false },
+  { source: "uswds", family: "CivicPress Default", shift: 150, custom: "", generateRamp: false },
 ];
 
 /* Hardcoded theme.json defaults — per-swatch family+step so each gets the right step-select */
@@ -1097,11 +1097,28 @@ function buildExtendedCard(num, sourceHexes){
   customWrap.style.display = state.source === "custom" ? "flex" : "none";
   customWrap.style.alignItems = "center";
   customWrap.style.gap = "8px";
-  customWrap.innerHTML = `
-    <label style="margin:0;font-size:12px;white-space:nowrap">Base Color:</label>
-    <input type="text" placeholder="#rrggbb" value="${state.custom}"
-      style="width:100px;padding:6px 8px;border:1px solid #ccc;border-radius:6px" />
-  `;
+
+  // "Generate Ramp" checkbox
+  const genLabel = document.createElement("label");
+  genLabel.style.cssText = "font-size:12px;display:inline-flex;align-items:center;gap:5px;white-space:nowrap;margin:0";
+  const genCheckbox = document.createElement("input");
+  genCheckbox.type = "checkbox";
+  genCheckbox.checked = !!state.generateRamp;
+  genLabel.appendChild(genCheckbox);
+  genLabel.appendChild(document.createTextNode("Generate Ramp"));
+
+  // Seed hex input — shown only when generateRamp is on
+  const seedWrap = document.createElement("span");
+  seedWrap.style.cssText = "display:inline-flex;align-items:center;gap:6px";
+  seedWrap.style.display = state.generateRamp ? "inline-flex" : "none";
+  const seedInput = document.createElement("input");
+  seedInput.type = "text";
+  seedInput.value = state.custom || "#808080";
+  seedInput.style.cssText = "width:100px;padding:6px 8px;border:1px solid #ccc;border-radius:6px";
+  seedWrap.appendChild(seedInput);
+
+  customWrap.appendChild(genLabel);
+  customWrap.appendChild(seedWrap);
 
   const resetRampBtn = document.createElement("button");
   resetRampBtn.textContent = "Reset Ramp";
@@ -1120,7 +1137,7 @@ function buildExtendedCard(num, sourceHexes){
 
   function getSourceHex(){
     if (state.source === "custom"){
-      const hex = customWrap.querySelector("input").value.trim();
+      const hex = seedInput.value.trim();
       return /^#[0-9a-fA-F]{6}$/.test(hex) ? hex : null;
     }
     return sourceHexes[state.source];
@@ -1146,8 +1163,13 @@ function buildExtendedCard(num, sourceHexes){
       return EXT_STEPS.map(s => lookupStep(fam, s));
     }
     if (state.source === "custom"){
-      const hex = customWrap.querySelector("input").value.trim();
-      return /^#[0-9a-fA-F]{6}$/.test(hex) ? ramp5(hex, 0) : null;
+      if (state.generateRamp) {
+        const hex = seedInput.value.trim();
+        return /^#[0-9a-fA-F]{6}$/.test(hex) ? ramp5(hex, 0) : null;
+      }
+      // No generate ramp: return current swatch colors as-is
+      const cur = currentSystem.extended[idx];
+      return (cur && cur.length) ? [...cur] : null;
     }
     return ramp5(sourceHexes[state.source], state.shift);
   }
@@ -1170,7 +1192,11 @@ function buildExtendedCard(num, sourceHexes){
     const newRow = row(colors, extLabels, anchorSlot,
       (i, val) => {
         currentSystem.extended[idx][i] = val;
-        if (state.source !== "uswds") resetRampBtn.style.display = "";
+        // Show Reset Ramp only when there's a canonical ramp to reset to:
+        // hue-shift sources always have one; custom only when generateRamp is on
+        const hasCanonical = state.source !== "uswds" &&
+          (state.source !== "custom" || state.generateRamp);
+        if (hasCanonical) resetRampBtn.style.display = "";
       },
       getSwatchConfigs());
     rampContainer.appendChild(newRow);
@@ -1200,6 +1226,8 @@ function buildExtendedCard(num, sourceHexes){
     Object.assign(state, { ...def });
     sourceSelect.value = state.source;
     uswdsFamilySelect.value = state.family || NON_GRAY_FAMILIES[0];
+    genCheckbox.checked = !!state.generateRamp;
+    seedWrap.style.display = state.generateRamp ? "inline-flex" : "none";
     const isUswds  = state.source === "uswds";
     const isCustom = state.source === "custom";
     const isShift  = !isUswds && !isCustom;
@@ -1228,10 +1256,20 @@ function buildExtendedCard(num, sourceHexes){
     uswdsFamilyWrap.style.display = isUswds  ? "inline-flex" : "none";
     shiftWrap.style.display       = isShift  ? "flex"        : "none";
     customWrap.style.display      = isCustom ? "flex"        : "none";
-    if (isCustom && !state.custom) {
-      const defaultHex = lookupStep(uswdsFamilySelect.value, 50);
-      state.custom = defaultHex;
-      customWrap.querySelector("input[type=text]").value = defaultHex;
+    if (isCustom) {
+      // Preserve existing colors as hex swatches — don't regenerate
+      state.generateRamp = false;
+      genCheckbox.checked = false;
+      seedWrap.style.display = "none";
+      // Seed hex defaults to the current base slot (index 2 of 5) for potential generate ramp use
+      const base = currentSystem.extended[idx] && currentSystem.extended[idx][2];
+      if (base) { state.custom = base; seedInput.value = base; }
+      hideResetRamp();
+      // Re-render current colors as editable hex swatches
+      const cur = currentSystem.extended[idx];
+      if (cur && cur.length) applyRamp([...cur], -1);
+      scheduleURLUpdate();
+      return;
     }
     hideResetRamp();
     updateRamp();
@@ -1253,13 +1291,27 @@ function buildExtendedCard(num, sourceHexes){
     scheduleURLUpdate();
   });
 
-  bindColorPicker(customWrap.querySelector("input[type=text]"));
-  customWrap.querySelector("input[type=text]").addEventListener("input", function(){
-    state.custom = this.value;
+  // Generate Ramp checkbox — show/hide seed input and regenerate
+  genCheckbox.addEventListener("change", () => {
+    state.generateRamp = genCheckbox.checked;
+    seedWrap.style.display = state.generateRamp ? "inline-flex" : "none";
     hideResetRamp();
-    updateRamp();
+    if (state.generateRamp) updateRamp();
     scheduleURLUpdate();
   });
+
+  // Seed hex input for Generate Ramp
+  bindColorPicker(seedInput);
+  function syncSeedHex() {
+    const v = seedInput.value.trim();
+    if (/^#[0-9a-fA-F]{6}$/.test(v)) {
+      state.custom = v;
+      if (state.generateRamp) { hideResetRamp(); updateRamp(); }
+      scheduleURLUpdate();
+    }
+  }
+  seedInput.addEventListener("blur", syncSeedHex);
+  seedInput.addEventListener("keydown", e => { if (e.key === "Enter") seedInput.blur(); });
 
   return card;
 }
@@ -2077,6 +2129,7 @@ function encodeStateToURL() {
       if (e.source === 'uswds'   && e.family !== def.family)  p.set(`e${i}f`, e.family);
       if (e.source !== 'uswds'   && e.source !== 'custom' && e.shift !== def.shift) p.set(`e${i}h`, String(e.shift));
       if (e.source === 'custom'  && e.custom) p.set(`e${i}x`, e.custom.replace('#',''));
+      if (e.source === 'custom'  && e.generateRamp) p.set(`e${i}g`, '1');
       // Extended colors: encode if they differ from expected defaults
       const extColors = currentSystem.extended[i] || [];
       const expExt = (e.source === 'uswds' && e.family === 'CivicPress Default' && EXT_RAMP_DEFAULTS[i])
@@ -2137,6 +2190,7 @@ function applyStateFromURL() {
     if (p.has(`e${i}f`)) extState[i].family = p.get(`e${i}f`);
     if (p.has(`e${i}h`)) extState[i].shift  = parseInt(p.get(`e${i}h`));
     if (p.has(`e${i}x`)) extState[i].custom = '#' + p.get(`e${i}x`);
+    if (p.has(`e${i}g`)) extState[i].generateRamp = p.get(`e${i}g`) === '1';
     if (p.has(`e${i}c`)) {
       if (!preload.extended) preload.extended = [[], [], []];
       preload.extended[i] = dec(p.get(`e${i}c`));
