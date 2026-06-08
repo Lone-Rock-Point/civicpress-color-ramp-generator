@@ -25,6 +25,16 @@ h1{
   font-size:22px;
   margin-bottom:18px;
 }
+h1[contenteditable]{
+  outline:none;
+  border-bottom:2px dashed transparent;
+  cursor:text;
+  transition:border-color 0.15s;
+}
+h1[contenteditable]:hover,
+h1[contenteditable]:focus{
+  border-bottom-color:var(--color-base,#ccc);
+}
 
 .input-grid{
   display:grid;
@@ -351,7 +361,7 @@ input[type=range]{
 
 <body>
 
-<h1>Color Ramp System Generator</h1>
+<h1 id="page-title" contenteditable="true" spellcheck="false">Color Ramp System Generator</h1>
 
 <div class="input-options">
   <label><input type="checkbox" id="darkMode" /> Dark Mode</label>
@@ -2066,6 +2076,8 @@ function generate(){
 
 function resetAll() {
   brandColors = new Set();
+  const titleEl = document.getElementById("page-title");
+  if (titleEl) titleEl.textContent = DEFAULT_TITLE;
   Object.keys(SECTION_DEFAULTS).forEach(k => {
     Object.assign(sectionState[k], JSON.parse(JSON.stringify(SECTION_DEFAULTS[k])));
   });
@@ -2074,6 +2086,17 @@ function resetAll() {
   });
   generate();
 }
+
+// Page title — click to edit, saves to URL
+const pageTitleEl = document.getElementById("page-title");
+const DEFAULT_TITLE = "Color Ramp System Generator";
+pageTitleEl.addEventListener("input", () => scheduleURLUpdate());
+pageTitleEl.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); pageTitleEl.blur(); } });
+// Prevent pasting rich text
+pageTitleEl.addEventListener("paste", e => {
+  e.preventDefault();
+  document.execCommand("insertText", false, e.clipboardData.getData("text/plain"));
+});
 
 document.getElementById("darkMode").addEventListener("change", function() {
   darkMode = this.checked;
@@ -2206,6 +2229,9 @@ function encodeStateToURL() {
 
   if (brandColors.size > 0) p.set('bc', [...brandColors].join(','));
 
+  const titleText = (document.getElementById("page-title")?.textContent || "").trim();
+  if (titleText && titleText !== DEFAULT_TITLE) p.set('ttl', titleText);
+
   return p.toString();
 }
 
@@ -2267,6 +2293,10 @@ function applyStateFromURL() {
   _preload = preload;
 
   if (p.has('bc')) brandColors = new Set(p.get('bc').split(',').filter(Boolean));
+  if (p.has('ttl')) {
+    const el = document.getElementById("page-title");
+    if (el) el.textContent = p.get('ttl');
+  }
 }
 
 let _urlTimer = null;
