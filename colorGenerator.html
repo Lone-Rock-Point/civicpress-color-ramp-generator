@@ -758,7 +758,7 @@ function swatch(color, label, isAnchor = false, onChange = null, uswdsConfig = n
       applyTheme();
     });
     d.addEventListener("click", (e) => {
-      if (e.target === sel) return;
+      if (e.target.closest('.label')) return;
       navigator.clipboard.writeText(sel.value);
       showTooltip("Copied " + sel.value);
     });
@@ -787,7 +787,7 @@ function swatch(color, label, isAnchor = false, onChange = null, uswdsConfig = n
       }
     });
     d.addEventListener("click", (e) => {
-      if (e.target === hexInput) return;
+      if (e.target.closest('.label')) return;
       navigator.clipboard.writeText(hexInput.value);
       showTooltip("Copied " + hexInput.value);
     });
