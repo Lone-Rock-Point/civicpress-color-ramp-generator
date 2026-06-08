@@ -842,6 +842,8 @@ function groupHeader(title, resetFn) {
 
 function buildColorSourceUI(sectionKey, families, onRebuild) {
   const state = sectionState[sectionKey];
+  // Gray colors live at currentSystem.grays, not currentSystem.gray
+  const systemColorKey = sectionKey === 'gray' ? 'grays' : sectionKey;
   const displayFamilies = SECTION_RAMP_DEFAULTS[sectionKey]
     ? ["CivicPress Default", ...families]
     : families;
@@ -905,7 +907,7 @@ function buildColorSourceUI(sectionKey, families, onRebuild) {
   }
 
   resetRampBtn.addEventListener("click", () => {
-    currentSystem[sectionKey] = [];
+    currentSystem[systemColorKey] = [];
     resetRampBtn.style.display = "none";
     onRebuild();
     scheduleURLUpdate();
@@ -925,7 +927,7 @@ function buildColorSourceUI(sectionKey, families, onRebuild) {
     state.mode = modeSelect.value;
     if (state.mode === "custom") {
       // Seed input defaults to the current Base slot (index 3) of whatever ramp is showing
-      const base = currentSystem[sectionKey] && currentSystem[sectionKey][3];
+      const base = currentSystem[systemColorKey] && currentSystem[systemColorKey][3];
       if (base) { state.customHex = base; seedIn.value = base; }
     }
     familyWrap.style.display = state.mode === "uswds" ? "" : "none";
