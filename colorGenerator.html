@@ -2310,7 +2310,7 @@ function scheduleURLUpdate() {
 
 function copyURL() {
   const qs = encodeStateToURL();
-  const url = location.origin + location.pathname + (qs ? '?' + qs : '');
+  const url = location.origin + location.pathname + (qs ? '#' + qs : '');
   history.replaceState(null, '', qs ? '#' + qs : location.pathname + location.search);
   navigator.clipboard.writeText(url).then(() => showTooltip("URL copied!"));
 }
