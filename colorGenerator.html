@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<title>Color Ramp System Generator</title>
+<title>CivicPress Token Generator</title>
 <style id="theme-vars"></style>
 <style>.clr-picker{display:none;flex-wrap:wrap;position:absolute;width:200px;z-index:1000;border-radius:10px;background-color:#fff;justify-content:flex-end;direction:ltr;box-shadow:0 0 5px rgba(0,0,0,.05),0 5px 20px rgba(0,0,0,.1);-moz-user-select:none;-webkit-user-select:none;user-select:none}.clr-picker.clr-open,.clr-picker[data-inline=true]{display:flex}.clr-picker[data-inline=true]{position:relative}.clr-gradient{position:relative;width:100%;height:100px;margin-bottom:15px;border-radius:3px 3px 0 0;background-image:linear-gradient(rgba(0,0,0,0),#000),linear-gradient(90deg,#fff,currentColor);cursor:pointer}.clr-marker{position:absolute;width:12px;height:12px;margin:-6px 0 0 -6px;border:1px solid #fff;border-radius:50%;background-color:currentColor;cursor:pointer}.clr-picker input[type=range]::-webkit-slider-runnable-track{width:100%;height:16px}.clr-picker input[type=range]::-webkit-slider-thumb{width:16px;height:16px;-webkit-appearance:none}.clr-picker input[type=range]::-moz-range-track{width:100%;height:16px;border:0}.clr-picker input[type=range]::-moz-range-thumb{width:16px;height:16px;border:0}.clr-hue{background-image:linear-gradient(to right,red 0,#ff0 16.66%,#0f0 33.33%,#0ff 50%,#00f 66.66%,#f0f 83.33%,red 100%)}.clr-alpha,.clr-hue{position:relative;width:calc(100% - 40px);height:8px;margin:5px 20px;border-radius:4px}.clr-alpha span{display:block;height:100%;width:100%;border-radius:inherit;background-image:linear-gradient(90deg,rgba(0,0,0,0),currentColor)}.clr-alpha input[type=range],.clr-hue input[type=range]{position:absolute;width:calc(100% + 32px);height:16px;left:-16px;top:-4px;margin:0;background-color:transparent;opacity:0;cursor:pointer;appearance:none;-webkit-appearance:none}.clr-alpha div,.clr-hue div{position:absolute;width:16px;height:16px;left:0;top:50%;margin-left:-8px;transform:translateY(-50%);border:2px solid #fff;border-radius:50%;background-color:currentColor;box-shadow:0 0 1px #888;pointer-events:none}.clr-alpha div:before{content:'';position:absolute;height:100%;width:100%;left:0;top:0;border-radius:50%;background-color:currentColor}.clr-format{display:none;order:1;width:calc(100% - 40px);margin:0 20px 20px}.clr-segmented{display:flex;position:relative;width:100%;margin:0;padding:0;border:1px solid #ddd;border-radius:15px;box-sizing:border-box;color:#999;font-size:12px}.clr-segmented input,.clr-segmented legend{position:absolute;width:100%;height:100%;margin:0;padding:0;border:0;left:0;top:0;opacity:0;pointer-events:none}.clr-segmented label{flex-grow:1;margin:0;padding:4px 0;font-size:inherit;font-weight:400;line-height:initial;text-align:center;cursor:pointer}.clr-segmented label:first-of-type{border-radius:10px 0 0 10px}.clr-segmented label:last-of-type{border-radius:0 10px 10px 0}.clr-segmented input:checked+label{color:#fff;background-color:#666}.clr-swatches{order:2;width:calc(100% - 32px);margin:0 16px}.clr-swatches div{display:flex;flex-wrap:wrap;padding-bottom:12px;justify-content:center}.clr-swatches button{position:relative;width:20px;height:20px;margin:0 4px 6px 4px;padding:0;border:0;border-radius:50%;color:inherit;text-indent:-1000px;white-space:nowrap;overflow:hidden;cursor:pointer}.clr-swatches button:after{content:'';display:block;position:absolute;width:100%;height:100%;left:0;top:0;border-radius:inherit;background-color:currentColor;box-shadow:inset 0 0 0 1px rgba(0,0,0,.1)}input.clr-color{order:1;width:calc(100% - 80px);height:32px;margin:15px 20px 20px auto;padding:0 10px;border:1px solid #ddd;border-radius:16px;color:#444;background-color:#fff;font-family:sans-serif;font-size:14px;text-align:center;box-shadow:none}input.clr-color:focus{outline:0;border:1px solid #1e90ff}.clr-clear,.clr-close{display:none;order:2;height:24px;margin:0 20px 20px;padding:0 20px;border:0;border-radius:12px;color:#fff;background-color:#666;font-family:inherit;font-size:12px;font-weight:400;cursor:pointer}.clr-close{display:block;margin:0 20px 20px auto}.clr-preview{position:relative;width:32px;height:32px;margin:15px 0 20px 20px;border-radius:50%;overflow:hidden}.clr-preview:after,.clr-preview:before{content:'';position:absolute;height:100%;width:100%;left:0;top:0;border:1px solid #fff;border-radius:50%}.clr-preview:after{border:0;background-color:currentColor;box-shadow:inset 0 0 0 1px rgba(0,0,0,.1)}.clr-preview button{position:absolute;width:100%;height:100%;z-index:1;margin:0;padding:0;border:0;border-radius:50%;outline-offset:-2px;background-color:transparent;text-indent:-9999px;cursor:pointer;overflow:hidden}.clr-alpha div,.clr-color,.clr-hue div,.clr-marker{box-sizing:border-box}.clr-field{display:inline-block;position:relative;color:transparent}.clr-field input{margin:0;direction:ltr}.clr-field.clr-rtl input{text-align:right}.clr-field button{position:absolute;width:30px;height:100%;right:0;top:50%;transform:translateY(-50%);margin:0;padding:0;border:0;color:inherit;text-indent:-1000px;white-space:nowrap;overflow:hidden;pointer-events:none}.clr-field.clr-rtl button{right:auto;left:0}.clr-field button:after{content:'';display:block;position:absolute;width:100%;height:100%;left:0;top:0;border-radius:inherit;background-color:currentColor;box-shadow:inset 0 0 1px rgba(0,0,0,.5)}.clr-alpha,.clr-alpha div,.clr-field button,.clr-preview:before,.clr-swatches button{background-image:repeating-linear-gradient(45deg,#aaa 25%,transparent 25%,transparent 75%,#aaa 75%,#aaa),repeating-linear-gradient(45deg,#aaa 25%,#fff 25%,#fff 75%,#aaa 75%,#aaa);background-position:0 0,4px 4px;background-size:8px 8px}.clr-marker:focus{outline:0}.clr-keyboard-nav .clr-alpha input:focus+div,.clr-keyboard-nav .clr-hue input:focus+div,.clr-keyboard-nav .clr-marker:focus,.clr-keyboard-nav .clr-segmented input:focus+label{outline:0;box-shadow:0 0 0 2px #1e90ff,0 0 2px 2px #fff}.clr-picker[data-alpha=false] .clr-alpha{display:none}.clr-picker[data-minimal=true]{padding-top:16px}.clr-picker[data-minimal=true] .clr-alpha,.clr-picker[data-minimal=true] .clr-color,.clr-picker[data-minimal=true] .clr-gradient,.clr-picker[data-minimal=true] .clr-hue,.clr-picker[data-minimal=true] .clr-preview{display:none}.clr-dark{background-color:#444}.clr-dark .clr-segmented{border-color:#777}.clr-dark .clr-swatches button:after{box-shadow:inset 0 0 0 1px rgba(255,255,255,.3)}.clr-dark input.clr-color{color:#fff;border-color:#777;background-color:#555}.clr-dark input.clr-color:focus{border-color:#1e90ff}.clr-dark .clr-preview:after{box-shadow:inset 0 0 0 1px rgba(255,255,255,.5)}.clr-dark .clr-alpha,.clr-dark .clr-alpha div,.clr-dark .clr-preview:before,.clr-dark .clr-swatches button{background-image:repeating-linear-gradient(45deg,#666 25%,transparent 25%,transparent 75%,#888 75%,#888),repeating-linear-gradient(45deg,#888 25%,#444 25%,#444 75%,#888 75%,#888)}.clr-picker.clr-polaroid{border-radius:6px;box-shadow:0 0 5px rgba(0,0,0,.1),0 5px 30px rgba(0,0,0,.2)}.clr-picker.clr-polaroid:before{content:'';display:block;position:absolute;width:16px;height:10px;left:20px;top:-10px;border:solid transparent;border-width:0 8px 10px 8px;border-bottom-color:currentColor;box-sizing:border-box;color:#fff;filter:drop-shadow(0 -4px 3px rgba(0,0,0,.1));pointer-events:none}.clr-picker.clr-polaroid.clr-dark:before{color:#444}.clr-picker.clr-polaroid.clr-left:before{left:auto;right:20px}.clr-picker.clr-polaroid.clr-top:before{top:auto;bottom:-10px;transform:rotateZ(180deg)}.clr-polaroid .clr-gradient{width:calc(100% - 20px);height:120px;margin:10px;border-radius:3px}.clr-polaroid .clr-alpha,.clr-polaroid .clr-hue{width:calc(100% - 30px);height:10px;margin:6px 15px;border-radius:5px}.clr-polaroid .clr-alpha div,.clr-polaroid .clr-hue div{box-shadow:0 0 5px rgba(0,0,0,.2)}.clr-polaroid .clr-format{width:calc(100% - 20px);margin:0 10px 15px}.clr-polaroid .clr-swatches{width:calc(100% - 12px);margin:0 6px}.clr-polaroid .clr-swatches div{padding-bottom:10px}.clr-polaroid .clr-swatches button{width:22px;height:22px}.clr-polaroid input.clr-color{width:calc(100% - 60px);margin:10px 10px 15px auto}.clr-polaroid .clr-clear{margin:0 10px 15px 10px}.clr-polaroid .clr-close{margin:0 10px 15px auto}.clr-polaroid .clr-preview{margin:10px 0 15px 10px}.clr-picker.clr-large{width:275px}.clr-large .clr-gradient{height:150px}.clr-large .clr-swatches button{width:22px;height:22px}.clr-picker.clr-pill{width:380px;padding-left:180px;box-sizing:border-box}.clr-pill .clr-gradient{position:absolute;width:180px;height:100%;left:0;top:0;margin-bottom:0;border-radius:3px 0 0 3px}.clr-pill .clr-hue{margin-top:20px}</style>
 <script>/*!
@@ -85,15 +85,15 @@ input{
 
 button{
   padding:10px 14px;
-  background:var(--color-primary,#0047BA);
-  color:var(--color-reverse,white);
+  background:var(--color-interactive,#0047BA);
+  color:var(--color-interactive-text,white);
   border:none;
   border-radius:6px;
   cursor:pointer;
 }
 
 button:hover{
-  background:var(--color-primary-dark,#003A8F);
+  background:var(--color-interactive-hover,#003A8F);
 }
 
 .export-btn{
@@ -106,11 +106,12 @@ button:hover{
 }
 
 .figma-btn{
-  background:var(--color-secondary,#7B61FF);
+  background:var(--color-secondary-ui,#7B61FF);
+  color:var(--color-secondary-ui-text,white);
 }
 
 .figma-btn:hover{
-  background:var(--color-secondary-dark,#6146e0);
+  background:var(--color-secondary-ui-hover,#6146e0);
 }
 
 .group{
@@ -258,7 +259,7 @@ button:hover{
 }
 
 .hex-input:focus{
-  outline:1px solid rgba(0,0,0,0.3);
+  outline:1px solid var(--color-ui-border,rgba(0,0,0,0.3));
   border-radius:2px;
 }
 
@@ -276,7 +277,7 @@ button:hover{
 }
 
 .anchor-info strong {
-  color:var(--color-primary,#0047BA);
+  color:var(--color-interactive,#0047BA);
 }
 
 .slider-wrap{
@@ -353,37 +354,357 @@ input[type=range]{
 }
 
 .step-select:focus{
-  outline:1px solid rgba(0,0,0,0.3);
+  outline:1px solid var(--color-ui-border,rgba(0,0,0,0.3));
   border-radius:2px;
 }
+
+/* ── Tab bar ── */
+.tab-bar{
+  display:flex;
+  gap:0;
+  margin:16px 0 0;
+  border-bottom:2px solid var(--color-base,#ccc);
+}
+.tab-btn{
+  padding:8px 22px;
+  background:transparent;
+  color:var(--color-foreground,#1f2020);
+  border:2px solid transparent;
+  border-radius:6px 6px 0 0;
+  cursor:pointer;
+  font-size:14px;
+  font-weight:500;
+  border-bottom:2px solid transparent;
+  margin-bottom:-2px;
+  transition:background 0.1s,color 0.1s,border-color 0.1s;
+}
+.tab-btn:hover{
+  background:var(--color-base-minus-2,#f5f5f5);
+}
+.tab-btn.active{
+  background:var(--color-background,white);
+  border-color:var(--color-interactive,#0047BA);
+  border-bottom-color:var(--color-background,white);
+  color:var(--color-interactive,#0047BA);
+  font-weight:700;
+}
+.tab-content{ margin-top:0; }
+
+/* ── Export modal ── */
+#export-modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.45);
+  z-index:10000;
+  align-items:center;
+  justify-content:center;
+}
+#export-modal.open{ display:flex; }
+.modal-box{
+  background:var(--color-background,white);
+  border-radius:14px;
+  padding:28px 32px;
+  min-width:280px;
+  box-shadow:0 8px 48px rgba(0,0,0,0.22);
+}
+.modal-box h3{ margin:0 0 18px; font-size:16px; }
+.modal-options{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  margin-bottom:24px;
+}
+.modal-options label{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:14px;
+  cursor:pointer;
+}
+.modal-options input[type=checkbox]{ width:16px; height:16px; cursor:pointer; }
+.modal-actions{
+  display:flex;
+  gap:8px;
+  justify-content:flex-end;
+}
+.modal-cancel-btn{
+  padding:10px 14px;
+  background:transparent;
+  color:var(--color-foreground,#333);
+  border:1px solid var(--color-base,#ccc);
+  border-radius:6px;
+  cursor:pointer;
+  font-size:14px;
+}
+.modal-cancel-btn:hover{ background:var(--color-base-minus-2,#f5f5f5); }
+
+/* ── Color slot picker ── */
+.color-slot-row{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+  gap:14px;
+  margin-top:8px;
+}
+.color-slot-card{
+  background:var(--color-base-minus-3,#fafafa);
+  border-radius:8px;
+  padding:14px;
+}
+.color-slot-title{
+  font-size:13px;
+  font-weight:700;
+  margin-bottom:10px;
+  color:var(--color-foreground,#1f2020);
+  text-transform:uppercase;
+  letter-spacing:0.05em;
+}
+.color-slot-selects{
+  display:flex;
+  gap:6px;
+  align-items:center;
+  flex-wrap:wrap;
+}
+.color-slot-selects select{ flex:1; min-width:80px; font-size:12px; padding:6px 8px; }
+.color-dot{
+  width:22px;
+  height:22px;
+  border-radius:50%;
+  border:1px solid rgba(0,0,0,0.12);
+  flex-shrink:0;
+}
+
+/* ── Typography tab layout ── */
+.font-settings-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(210px,1fr));
+  gap:14px;
+  margin-top:8px;
+}
+.font-role-card{
+  background:var(--color-base-minus-3,#fafafa);
+  border-radius:8px;
+  padding:14px;
+}
+.font-role-title{
+  font-size:13px;
+  font-weight:700;
+  margin-bottom:12px;
+  color:var(--color-foreground,#1f2020);
+  text-transform:uppercase;
+  letter-spacing:0.05em;
+}
+.font-role-card .field-label{
+  display:block;
+  font-size:10px;
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:0.06em;
+  color:var(--color-base-plus-1,#777);
+  margin:8px 0 3px;
+}
+.font-role-card input[type=text],
+.font-role-card select{
+  width:100%;
+  box-sizing:border-box;
+  font-size:12px;
+  padding:6px 8px;
+}
+.font-role-card input[type=text]::-webkit-calendar-picker-indicator{ display:none !important; }
+.font-role-card input[type=text]::-webkit-list-button{ display:none !important; }
+.gfont-status{
+  font-size:10px;
+  margin-top:3px;
+  min-height:14px;
+  color:var(--color-base-plus-1,#777);
+}
+.gfont-status.loaded{ color:var(--color-font-confirm,#1a4480); }
+.gfont-status.error{ color:#cf222e; }
+
+/* ── Type scale table ── */
+.type-scale-table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:13px;
+}
+.type-scale-table th{
+  text-align:left;
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:0.06em;
+  color:var(--color-base-plus-1,#777);
+  padding:6px 8px 8px;
+  border-bottom:2px solid var(--color-base,#ddd);
+  white-space:nowrap;
+}
+.type-scale-table td{
+  padding:5px 8px;
+  border-bottom:1px solid var(--color-base-minus-1,#eee);
+  vertical-align:middle;
+}
+.type-scale-table tr:last-child td{ border-bottom:none; }
+.type-scale-table input[type=number]{
+  width:58px;
+  padding:4px 6px;
+  text-align:center;
+  font-size:12px;
+}
+.clamp-output{
+  font-family:monospace;
+  font-size:10px;
+  color:var(--color-base-plus-1,#555);
+  white-space:nowrap;
+}
+.vp-preview-text{ font-weight:600; white-space:nowrap; }
+.size-name-cell{ font-weight:600; white-space:nowrap; }
+
+/* Viewport slider row */
+.vp-slider-row{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  margin-bottom:16px;
+  flex-wrap:wrap;
+  font-size:13px;
+}
+.vp-slider-row input[type=range]{ width:260px; }
+.vp-value-label{ font-weight:700; min-width:56px; }
+
+/* ── Typography preview ── */
+.typo-preview-section{ margin-top:8px; }
+.typo-preview-section h1,
+.typo-preview-section h2,
+.typo-preview-section h3,
+.typo-preview-section h4,
+.typo-preview-section h5,
+.typo-preview-section h6{
+  margin:0 0 10px;
+  font-weight:inherit;
+  line-height:inherit;
+}
+.typo-preview-section p{ margin:0 0 12px; }
+.preview-label{
+  font-size:10px;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:0.07em;
+  color:var(--color-base-plus-1,#888);
+  margin-bottom:4px;
+}
+.preview-row{
+  border-bottom:1px solid var(--color-base-minus-1,#eee);
+  padding:10px 0;
+}
+.preview-row:last-child{ border-bottom:none; }
+
+/* ── Utilities tab ── */
+.util-section{ margin-bottom:32px; }
+.util-section-title{
+  font-size:11px; font-weight:700; text-transform:uppercase;
+  letter-spacing:0.08em; color:var(--color-base-plus-1,#777);
+  margin-bottom:14px;
+}
+.util-variant-label{
+  font-size:11px; font-weight:600; color:var(--color-base-plus-1,#888);
+  margin-bottom:6px;
+}
+.util-btn-row{ display:flex; gap:8px; margin-bottom:14px; flex-wrap:wrap; }
+.util-btn{
+  padding:9px 20px; border-radius:4px; font-size:14px; font-weight:700;
+  cursor:default; border:2px solid transparent; white-space:nowrap;
+  font-family:inherit; background:transparent; outline:none;
+  display:inline-block; box-sizing:border-box;
+}
+button.util-btn { cursor:default; }
+button.util-btn.util-btn-interactive,
+button.util-btn.util-btn-outline-interactive,
+button.util-btn.util-btn-reverse-interactive,
+button.util-btn.util-btn-outline-reverse-interactive {
+  cursor:pointer; transition:background 0.12s, border-color 0.12s, color 0.12s;
+}
+.util-input-label{
+  display:block; font-size:12px; font-weight:600;
+  color:var(--color-base-plus-1,#666); margin-bottom:6px;
+}
+.util-reverse-panel{
+  background:var(--color-base-plus-3,#1f2020);
+  border-radius:8px; padding:16px 20px; margin-bottom:4px;
+}
+.util-reverse-panel .util-variant-label{ color:rgba(255,255,255,0.5); }
+.util-mock-input{
+  display:block; width:260px; padding:8px 12px; border-radius:4px;
+  border:1px solid; background:transparent; font-size:14px;
+  color:var(--color-foreground,#1f2020); outline:none;
+  font-family:inherit;
+}
+.util-table{
+  width:100%; border-collapse:collapse; font-size:13px;
+  border-radius:6px; overflow:hidden;
+}
+.util-table td{
+  padding:10px 14px; border-bottom:1px solid;
+}
+.util-table tr:last-child td{ border-bottom:none; }
 </style>
 </head>
 
 <body>
 
-<h1 id="page-title" contenteditable="true" spellcheck="false">Color Ramp System Generator</h1>
+<h1 id="page-title" contenteditable="true" spellcheck="false">CivicPress Token Generator</h1>
 
-<div class="input-options">
-  <label><input type="checkbox" id="darkMode" /> Dark Mode</label>
-  <label><input type="checkbox" id="enableExtended" checked /> Enable Extended Colors</label>
-  <label id="extCountWrap">Count
-    <select id="extCount">
-      <option value="1">1</option>
-      <option value="2">2</option>
-      <option value="3" selected>3</option>
-    </select>
-  </label>
-</div>
-
-<div style="display:flex;align-items:center;gap:8px;margin-bottom:0">
-  <button onclick="exportThemeJSON()">Export theme.json</button>
-  <button class="export-btn figma-btn" style="margin-left:0" onclick="exportFigmaSVG()">Export SVG</button>
-  <button class="export-btn" style="margin-left:0" onclick="exportCSS()">Export CSS Variables</button>
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;flex-wrap:wrap">
+  <button onclick="openExportModal('theme')">Export theme.json</button>
+  <button class="export-btn figma-btn" style="margin-left:0" onclick="openExportModal('svg')">Export SVG</button>
+  <button class="export-btn" style="margin-left:0" onclick="openExportModal('css')">Export CSS Variables</button>
   <button class="export-btn" style="margin-left:0" onclick="copyURL()">Copy URL</button>
-  <button class="reset-btn" style="margin-left:auto;padding:10px 14px;font-size:14px" onclick="resetAll()">Reset All</button>
+  <label style="margin-left:auto;display:flex;align-items:center;gap:6px;font-size:14px;cursor:pointer;white-space:nowrap">
+    <input type="checkbox" id="darkMode" style="width:15px;height:15px;cursor:pointer" /> Dark Mode
+  </label>
+  <button class="reset-btn" style="padding:10px 14px;font-size:14px" onclick="resetAll()">Reset All</button>
 </div>
 
-<div id="output"></div>
+<div class="tab-bar">
+  <button class="tab-btn active" id="tab-btn-color" onclick="switchTab('color')">Color</button>
+  <button class="tab-btn" id="tab-btn-typography" onclick="switchTab('typography')">Typography</button>
+  <button class="tab-btn" id="tab-btn-utilities" onclick="switchTab('utilities')">Utilities</button>
+</div>
+
+<div id="tab-color" class="tab-content">
+  <div class="input-options">
+    <label><input type="checkbox" id="enableExtended" checked /> Enable Extended Colors</label>
+    <label id="extCountWrap">Count
+      <select id="extCount">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3" selected>3</option>
+      </select>
+    </label>
+  </div>
+  <div id="output"></div>
+</div>
+
+<div id="tab-typography" class="tab-content" style="display:none">
+  <div id="typo-output"></div>
+</div>
+
+<div id="tab-utilities" class="tab-content" style="display:none">
+  <div id="utilities-output"></div>
+</div>
+
+<div id="export-modal">
+  <div class="modal-box">
+    <h3>Select export content</h3>
+    <div class="modal-options">
+      <label><input type="checkbox" id="modal-export-color" checked> Color</label>
+      <label><input type="checkbox" id="modal-export-typography" checked> Typography</label>
+      <label><input type="checkbox" id="modal-export-utilities" checked> Utilities</label>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-cancel-btn" onclick="closeExportModal()">Cancel</button>
+      <button id="modal-confirm-btn" onclick="confirmExport()">Download</button>
+    </div>
+  </div>
+</div>
 
 <div class="tooltip" id="tooltip">Copied</div>
 
@@ -940,7 +1261,7 @@ function buildColorSourceUI(sectionKey, families, onRebuild) {
   const seedIn = document.createElement("input");
   seedIn.type = "text";
   seedIn.value = state.customHex || "#808080";
-  seedIn.style.cssText = "width:110px;padding:6px 8px;border:1px solid #ccc;border-radius:6px";
+  seedIn.style.cssText = "width:110px;padding:6px 8px;border:1px solid var(--color-ui-border,#ccc);border-radius:6px";
 
   const resetRampBtn = document.createElement("button");
   resetRampBtn.textContent = "Reset Ramp";
@@ -1070,6 +1391,8 @@ function group(title, sectionKey, colorName, systemKey) {
         if (preloaded && preloaded.length === colors.length) colors = [...preloaded];
         lastColors = colors;
         currentSystem[systemKey] = [...colors];
+        if (!currentSystem.anchorSlots) currentSystem.anchorSlots = {};
+        currentSystem.anchorSlots[systemKey] = anchorSlot;
         rampArea.appendChild(anchorInfo(anchorSlot, state.customHex));
         rampArea.appendChild(subtitle("Color Ramp"));
         lastRampRow = row(colors, baseLabels, anchorSlot, (i, val) => {
@@ -1079,12 +1402,15 @@ function group(title, sectionKey, colorName, systemKey) {
       } else {
         lastColors = baseColors;
         currentSystem[systemKey] = [...baseColors];
+        if (!currentSystem.anchorSlots) currentSystem.anchorSlots = {};
+        delete currentSystem.anchorSlots[systemKey];
         rampArea.appendChild(subtitle("Color Ramp"));
         lastRampRow = row(baseColors, baseLabels, -1, (i, val) => { currentSystem[systemKey][i] = val; },
           null, baseColors.map((_, i) => `${sectionKey}:${i}`));
       }
     }
     rampArea.appendChild(lastRampRow);
+    applyTheme();
   }
 
   const sourceUI = buildColorSourceUI(sectionKey, NON_GRAY_FAMILIES, buildRamp);
@@ -1172,7 +1498,7 @@ function buildExtendedCard(num, sourceHexes){
   const seedInput = document.createElement("input");
   seedInput.type = "text";
   seedInput.value = state.custom || "#808080";
-  seedInput.style.cssText = "width:100px;padding:6px 8px;border:1px solid #ccc;border-radius:6px";
+  seedInput.style.cssText = "width:100px;padding:6px 8px;border:1px solid var(--color-ui-border,#ccc);border-radius:6px";
   seedWrap.appendChild(seedInput);
 
   customWrap.appendChild(genLabel);
@@ -1673,9 +1999,21 @@ function applyTheme() {
     '--color-base-plus-2':   gi(5),
     '--color-base-plus-3':   gi(6),
     '--color-primary':       prim[3] || '#0050d8',
+    '--color-primary-light': prim[2] || '#73b3e7',
     '--color-primary-dark':  prim[4] || '#1a4480',
+    '--color-font-confirm':  darkMode ? (prim[2] || '#73b3e7') : (prim[4] || '#1a4480'),
     '--color-secondary':     sec[3]  || '#d83933',
     '--color-secondary-dark':sec[4]  || '#b50909',
+    // Interactive UI color swaps with its reverse in dark mode
+    '--color-interactive':       darkMode ? resolveUtil('interactiveReverse')      : resolveUtil('interactive'),
+    '--color-interactive-hover': darkMode ? resolveUtil('interactiveReverseHover') : resolveUtil('interactiveHover'),
+    '--color-interactive-text':  labelColor(darkMode ? resolveUtil('interactiveReverse') : resolveUtil('interactive')),
+    // UI border — live token from utilities
+    '--color-ui-border': resolveUtil('uiBorder'),
+    // Secondary UI color uses secondary-light in dark mode
+    '--color-secondary-ui':      darkMode ? (sec[2] || '#7B61FF') : (sec[3] || '#7B61FF'),
+    '--color-secondary-ui-hover':darkMode ? (sec[1] || '#6146e0') : (sec[4] || '#6146e0'),
+    '--color-secondary-ui-text': labelColor(darkMode ? (sec[2] || '#7B61FF') : (sec[3] || '#7B61FF')),
     '--label-bg':     darkMode ? 'rgba(0,0,0,0.6)'                        : 'rgba(255,255,255,0.75)',
     '--shadow-group': darkMode ? '0 2px 10px rgba(255,255,255,0.07)'     : '0 2px 10px rgba(0,0,0,0.08)',
     '--shadow-swatch':darkMode ? '0 2px 6px rgba(255,255,255,0.1)'       : '0 2px 6px rgba(0,0,0,0.12)',
@@ -1687,6 +2025,9 @@ function applyTheme() {
       Object.entries(vars).map(([k,v]) => `  ${k}:${v};`).join('\n') +
       '\n}';
   }
+  // Refresh typography preview whenever color system changes
+  if (typeof typoBuilt !== 'undefined' && typoBuilt) updateTypePreview();
+  if (typeof utilitiesBuilt !== 'undefined' && utilitiesBuilt) updateUtilitiesPreview();
   scheduleURLUpdate();
 }
 
@@ -1740,23 +2081,29 @@ function exportFigmaSVG() {
       brandKeys: colors.map((_, j) => `extended${i}:${j}`) }] }))
     .filter(s => s.rows[0].colors?.length);
 
+  const anchorSlots = currentSystem.anchorSlots || {};
   const sections = [
     { title:"Primary Colors",   rows:[{ label:"", colors:currentSystem.primary,   names:mkBase("Primary"),
-        brandKeys: (currentSystem.primary||[]).map((_, i) => `primary:${i}`) }] },
+        brandKeys: (currentSystem.primary||[]).map((_, i) => `primary:${i}`),
+        anchorSlot: anchorSlots['primary'] ?? -1 }] },
     { title:"Secondary Colors", rows:[{ label:"", colors:currentSystem.secondary, names:mkBase("Secondary"),
-        brandKeys: (currentSystem.secondary||[]).map((_, i) => `secondary:${i}`) }] },
+        brandKeys: (currentSystem.secondary||[]).map((_, i) => `secondary:${i}`),
+        anchorSlot: anchorSlots['secondary'] ?? -1 }] },
     { title:"Tertiary Colors",  rows:[{ label:"", colors:currentSystem.tertiary,  names:mkBase("Tertiary"),
-        brandKeys: (currentSystem.tertiary||[]).map((_, i) => `tertiary:${i}`) }] },
+        brandKeys: (currentSystem.tertiary||[]).map((_, i) => `tertiary:${i}`),
+        anchorSlot: anchorSlots['tertiary'] ?? -1 }] },
     ...extSections,
     { title:"Semantic Colors", rows:[
       { label:"", colors:[sem.background, sem.foreground, sem.reverse], names:["Background","Foreground","Reverse"],
-        brandKeys: ["semantic:background","semantic:foreground","semantic:reverse"] },
+        brandKeys: ["semantic:background","semantic:foreground","semantic:reverse"], anchorSlot: -1 },
       { label:"Translucent", colors:[sem.translucent, sem.translucentSubtle, sem.translucentReverse, sem.translucentReverseSubtle],
         names:["Translucent","Translucent Subtle","Translucent Reverse","Translucent Reverse Subtle"],
-        brandKeys: ["semantic:translucent","semantic:translucentSubtle","semantic:translucentReverse","semantic:translucentReverseSubtle"] }
+        brandKeys: ["semantic:translucent","semantic:translucentSubtle","semantic:translucentReverse","semantic:translucentReverseSubtle"],
+        anchorSlot: -1 }
     ]},
     { title:"Base Grays", rows:[{ label:"", colors:currentSystem.grays, names:TONE_NAMES_7.map(t=>t==="Base"?"Base":`Base ${t}`),
-        brandKeys: (currentSystem.grays||[]).map((_, i) => `gray:${i}`) }] }
+        brandKeys: (currentSystem.grays||[]).map((_, i) => `gray:${i}`),
+        anchorSlot: anchorSlots['grays'] ?? -1 }] }
   ];
 
   const maxSwatches = Math.max(...sections.flatMap(s => s.rows.map(r => (r.colors||[]).length)));
@@ -1805,6 +2152,14 @@ function exportFigmaSVG() {
         if (rowDef.brandKeys && brandColors.has(rowDef.brandKeys[i])) {
           const starFill = labelColor(color);
           elems.push(`<text x="${x+SW-10}" y="${y+15}" font-family="Arial,sans-serif" font-size="16" font-weight="bold" fill="${starFill}">*</text>`);
+        }
+
+        /* INPUT badge — shown on the swatch that matches the custom seed hex */
+        if (rowDef.anchorSlot === i) {
+          const badgeBg = labelColor(color);
+          const badgeTc = color;
+          elems.push(`<rect x="${x+SW-44}" y="${y+4}" width="40" height="14" rx="3" ry="3" fill="${badgeBg}" />`);
+          elems.push(`<text x="${x+SW-24}" y="${y+14}" font-family="Arial,sans-serif" font-size="8" font-weight="bold" fill="${badgeTc}" text-anchor="middle">INPUT</text>`);
         }
       });
 
@@ -1980,11 +2335,13 @@ function buildGrayGroup() {
 
   function buildRamp() {
     rampArea.innerHTML = "";
-    let colors, cfgs = null;
+    let colors, cfgs = null, grayAnchorSlot = -1;
 
     if (state.mode === "uswds") {
       colors = GRAY_STEPS.map(s => lookupStep(state.family, s));
       cfgs   = GRAY_STEPS.map(s => ({ family: state.family, step: s }));
+      if (!currentSystem.anchorSlots) currentSystem.anchorSlots = {};
+      delete currentSystem.anchorSlots['grays'];
       // Apply preloaded per-swatch colors (from URL) only on initial page load — consumed once
       if (_preloadedKeys.has('grays')) {
         const preColors = currentSystem.grays;
@@ -1994,6 +2351,9 @@ function buildGrayGroup() {
     } else {
       const { colors: c, anchorSlot } = ramp7Smart(state.customHex || "#757575");
       colors = c;
+      grayAnchorSlot = anchorSlot;
+      if (!currentSystem.anchorSlots) currentSystem.anchorSlots = {};
+      currentSystem.anchorSlots['grays'] = anchorSlot;
       // Apply preloaded per-swatch colors (from URL) — consumed once, prevents stale data on rebuilds
       if (_preloadedKeys.has('grays')) {
         const preColors = currentSystem.grays;
@@ -2006,10 +2366,11 @@ function buildGrayGroup() {
     lastColors = colors;
     currentSystem.grays = [...colors];
     rampArea.appendChild(subtitle("Color Ramp"));
-    lastRampRow = row(colors, grayLabels, -1, (i, val) => { currentSystem.grays[i] = val; }, cfgs,
+    lastRampRow = row(colors, grayLabels, grayAnchorSlot, (i, val) => { currentSystem.grays[i] = val; }, cfgs,
       colors.map((_, i) => `gray:${i}`));
     if (cfgs) lastRampRow.querySelectorAll('.step-select').forEach((sel, i) => { if (colors[i]) sel.value = colors[i]; });
     rampArea.appendChild(lastRampRow);
+    applyTheme();
   }
 
   const { element: graySourceEl, reset: resetGray } = buildColorSourceUI("gray", GRAY_FAMILIES, buildRamp);
@@ -2049,7 +2410,8 @@ function generate(){
     extended:  preload?.extended  || [[], [], []],
     grays:     preload?.grays     || [],
     semantic: { background: "#FAFAFA", foreground: "#1F2020", reverse: "#FFFFFF",
-                ...TRANSLUCENT_DEFAULTS, ...(preload?.semantic || {}) }
+                ...TRANSLUCENT_DEFAULTS, ...(preload?.semantic || {}) },
+    anchorSlots: {}
   };
 
   const pGroup = group("Primary Colors",   "primary",   "Primary",   "primary");
@@ -2089,7 +2451,7 @@ function resetAll() {
 
 // Page title — click to edit, saves to URL
 const pageTitleEl = document.getElementById("page-title");
-const DEFAULT_TITLE = "Color Ramp System Generator";
+const DEFAULT_TITLE = "CivicPress Token Generator";
 pageTitleEl.addEventListener("input", () => scheduleURLUpdate());
 pageTitleEl.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); pageTitleEl.blur(); } });
 // Prevent pasting rich text
@@ -2314,6 +2676,1622 @@ function copyURL() {
   history.replaceState(null, '', qs ? '#' + qs : location.pathname + location.search);
   navigator.clipboard.writeText(url).then(() => showTooltip("URL copied!"));
 }
+
+/* ===========================
+   TAB SWITCHER
+=========================== */
+
+let activeTab = 'color';
+
+function switchTab(tab) {
+  activeTab = tab;
+  document.getElementById('tab-color').style.display      = tab === 'color'      ? '' : 'none';
+  document.getElementById('tab-typography').style.display = tab === 'typography' ? '' : 'none';
+  document.getElementById('tab-utilities').style.display  = tab === 'utilities'  ? '' : 'none';
+  document.getElementById('tab-btn-color').classList.toggle('active',      tab === 'color');
+  document.getElementById('tab-btn-typography').classList.toggle('active', tab === 'typography');
+  document.getElementById('tab-btn-utilities').classList.toggle('active',  tab === 'utilities');
+  if (tab === 'typography' && !typoBuilt)       buildTypographyTab();
+  if (tab === 'utilities'  && !utilitiesBuilt)  buildUtilitiesTab();
+  scheduleURLUpdate();
+}
+
+/* ===========================
+   EXPORT MODAL
+=========================== */
+
+let _pendingExportType = null;
+
+function openExportModal(type) {
+  _pendingExportType = type;
+  document.getElementById('modal-confirm-btn').textContent =
+    type === 'url' ? 'Copy URL' : 'Download';
+  document.getElementById('export-modal').classList.add('open');
+}
+
+function closeExportModal() {
+  document.getElementById('export-modal').classList.remove('open');
+  _pendingExportType = null;
+}
+
+function confirmExport() {
+  const includeColor = document.getElementById('modal-export-color').checked;
+  const includeTypo  = document.getElementById('modal-export-typography').checked;
+  const includeUtil  = document.getElementById('modal-export-utilities').checked;
+  if (!includeColor && !includeTypo && !includeUtil) { showTooltip('Select at least one option'); return; }
+  const type = _pendingExportType;
+  closeExportModal();
+  if      (type === 'theme') exportThemeJSONWithTypo(includeColor, includeTypo, includeUtil);
+  else if (type === 'svg')   exportFigmaSVGWithTypo(includeColor, includeTypo, includeUtil);
+  else if (type === 'css')   exportCSSWithTypo(includeColor, includeTypo, includeUtil);
+}
+
+// Close modal on backdrop click
+document.getElementById('export-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeExportModal();
+});
+
+/* ===========================
+   TYPOGRAPHY STATE
+=========================== */
+
+const TYPO_SCALE_DEFAULTS = [
+  { name: 'display',      label: 'Display',      minPx: 48, maxPx: 64 },
+  { name: 'xx-large',     label: 'XX-Large',     minPx: 38, maxPx: 48 },
+  { name: 'x-large',      label: 'X-Large',      minPx: 32, maxPx: 40 },
+  { name: 'large',        label: 'Large',        minPx: 28, maxPx: 36 },
+  { name: 'medium',       label: 'Medium',       minPx: 24, maxPx: 28 },
+  { name: 'emphasis',     label: 'Emphasis',     minPx: 20, maxPx: 24 },
+  { name: 'intermediate', label: 'Intermediate', minPx: 18, maxPx: 21 },
+  { name: 'normal',       label: 'Normal',       minPx: 16, maxPx: 18 },
+  { name: 'small',        label: 'Small',        minPx: 14, maxPx: 16 },
+  { name: 'x-small',      label: 'X-Small',      minPx: 12, maxPx: 14 },
+  { name: 'xx-small',     label: 'XX-Small',     minPx: 10, maxPx: 12 },
+];
+
+const FONT_ROLE_DEFAULTS = {
+  body:        { family: '"Public Sans", sans-serif', weight: '400' },
+  heading:     { family: '"Public Sans", sans-serif', weight: '600' },
+  subheading:  { family: '"Public Sans", sans-serif', weight: '700' },
+  interactive: { family: '"Public Sans", sans-serif', weight: '700' },
+};
+
+// Color role defaults: { group, slug }
+const TYPO_COLOR_DEFAULTS = {
+  bodyText:  { group: 'semantic', slug: 'foreground'  },
+  h1Color:   { group: 'semantic', slug: 'foreground'  },
+  h2Color:   { group: 'semantic', slug: 'foreground'  },
+  h3Color:   { group: 'semantic', slug: 'foreground'  },
+  h4Color:   { group: 'base',     slug: 'base-plus-3' },
+  h5Color:   { group: 'base',     slug: 'base-plus-2' },
+  h6Color:   { group: 'base',     slug: 'base-plus-2' },
+  linkText:  { group: 'primary',  slug: 'primary'     },
+};
+
+let typoScale  = TYPO_SCALE_DEFAULTS.map(s => ({...s}));
+let fontRoles  = JSON.parse(JSON.stringify(FONT_ROLE_DEFAULTS));
+let typoColors = JSON.parse(JSON.stringify(TYPO_COLOR_DEFAULTS));
+let previewVw  = 1400;
+let typoBuilt  = false;
+let typoSlotRegistry = [];
+let utilitiesBuilt = false;
+
+/* Returns the ordered list of color groups and their slugs, built from currentSystem */
+function getColorGroups() {
+  const groups = [
+    {
+      group: 'semantic', label: 'Semantic',
+      slugs: ['background','foreground','reverse',
+              'translucent','translucent-subtle','translucent-reverse','translucent-reverse-subtle'],
+    },
+    {
+      group: 'base', label: 'Base',
+      slugs: ['base-minus-3','base-minus-2','base-minus-1','base','base-plus-1','base-plus-2','base-plus-3'],
+    },
+    { group: 'primary',   label: 'Primary',
+      slugs: ['primary-lightest','primary-lighter','primary-light','primary','primary-dark','primary-darker','primary-darkest'] },
+    { group: 'secondary', label: 'Secondary',
+      slugs: ['secondary-lightest','secondary-lighter','secondary-light','secondary','secondary-dark','secondary-darker','secondary-darkest'] },
+    { group: 'tertiary',  label: 'Tertiary',
+      slugs: ['tertiary-lightest','tertiary-lighter','tertiary-light','tertiary','tertiary-dark','tertiary-darker','tertiary-darkest'] },
+    { group: 'interactive', label: 'Interactive',
+      slugs: ['interactive', 'interactive-reverse'] },
+  ];
+  // Extended palettes — only include ones that have data
+  const extCount = parseInt(document.getElementById('extCount')?.value || '3');
+  const extEnabled = document.getElementById('enableExtended')?.checked !== false;
+  if (extEnabled) {
+    for (let n = 1; n <= extCount; n++) {
+      if (currentSystem.extended?.[n-1]?.length) {
+        groups.push({
+          group: `extended-${n}`, label: `Extended ${n}`,
+          slugs: [`extended-${n}-lightest`,`extended-${n}-light`,`extended-${n}`,`extended-${n}-dark`,`extended-${n}-darkest`],
+        });
+      }
+    }
+  }
+  return groups;
+}
+
+/* Resolve a { group, slug } to a hex/rgba string from currentSystem */
+function resolveTypoColor(group, slug) {
+  const s = currentSystem;
+  if (!s) return '#808080';
+  if (group === 'semantic') {
+    // semantic keys are camelCase internally (translucentSubtle, etc.)
+    const camelKey = slug.replace(/-([a-z])/g, (_, c) => c.toUpperCase());
+    return s.semantic?.[camelKey] || s.semantic?.[slug] || '#808080';
+  }
+  if (group === 'base') {
+    const map = {'base-minus-3':0,'base-minus-2':1,'base-minus-1':2,'base':3,'base-plus-1':4,'base-plus-2':5,'base-plus-3':6};
+    const idx = map[slug];
+    if (idx === undefined || !s.grays?.[idx]) return '#808080';
+    const physicalIdx = darkMode ? (6 - idx) : idx;
+    return s.grays[physicalIdx] || '#808080';
+  }
+  if (group === 'primary' || group === 'secondary' || group === 'tertiary') {
+    const base = group;
+    const suffixMap = {
+      [`${base}-lightest`]:0,[`${base}-lighter`]:1,[`${base}-light`]:2,
+      [base]:3,[`${base}-dark`]:4,[`${base}-darker`]:5,[`${base}-darkest`]:6,
+    };
+    const idx = suffixMap[slug];
+    return (idx !== undefined && s[base]?.[idx]) ? s[base][idx] : '#808080';
+  }
+  if (group === 'interactive') {
+    if (slug === 'interactive-reverse') return resolveUtil('interactiveReverse');
+    return resolveUtil('interactive');
+  }
+  if (group.startsWith('extended-')) {
+    const n = parseInt(group.split('-')[1]) - 1;
+    const extMap = {
+      [`extended-${n+1}-lightest`]:0,[`extended-${n+1}-light`]:1,[`extended-${n+1}`]:2,
+      [`extended-${n+1}-dark`]:3,[`extended-${n+1}-darkest`]:4,
+    };
+    const idx = extMap[slug];
+    return (idx !== undefined && s.extended?.[n]?.[idx]) ? s.extended[n][idx] : '#808080';
+  }
+  return '#808080';
+}
+
+/* Build one color-slot card: label + group select + slug select + color dot.
+   stateObj defaults to typoColors; registry to typoSlotRegistry; onChangeCb to updateTypePreview. */
+function buildColorSlot(roleKey, label, stateObj, registry, onChangeCb) {
+  stateObj  = stateObj  || typoColors;
+  registry  = registry  || typoSlotRegistry;
+  onChangeCb = onChangeCb || updateTypePreview;
+  const state = stateObj[roleKey];
+  const groups = getColorGroups();
+
+  const card = document.createElement('div');
+  card.className = 'color-slot-card';
+  const title = document.createElement('div');
+  title.className = 'color-slot-title';
+  title.textContent = label;
+  card.appendChild(title);
+
+  const row = document.createElement('div');
+  row.className = 'color-slot-selects';
+
+  const groupSel = document.createElement('select');
+  groups.forEach(g => {
+    const o = document.createElement('option');
+    o.value = g.group; o.textContent = g.label;
+    if (g.group === state.group) o.selected = true;
+    groupSel.appendChild(o);
+  });
+
+  const slugSel = document.createElement('select');
+  function rebuildSlugOptions() {
+    slugSel.innerHTML = '';
+    const grp = groups.find(g => g.group === groupSel.value);
+    if (!grp) return;
+    grp.slugs.forEach(s => {
+      const o = document.createElement('option');
+      o.value = s; o.textContent = s;
+      if (s === state.slug) o.selected = true;
+      slugSel.appendChild(o);
+    });
+  }
+  rebuildSlugOptions();
+
+  const dot = document.createElement('div');
+  dot.className = 'color-dot';
+  function refreshDot() {
+    const hex = resolveTypoColor(groupSel.value, slugSel.value);
+    dot.style.background = hex;
+  }
+  refreshDot();
+  registry.push(refreshDot);
+
+  groupSel.addEventListener('change', () => {
+    state.group = groupSel.value;
+    // Pick first slug of new group as default
+    const grp = groups.find(g => g.group === groupSel.value);
+    state.slug = grp ? grp.slugs[0] : '';
+    rebuildSlugOptions();
+    refreshDot();
+    onChangeCb();
+    scheduleURLUpdate();
+  });
+  slugSel.addEventListener('change', () => {
+    state.slug = slugSel.value;
+    refreshDot();
+    onChangeCb();
+    scheduleURLUpdate();
+  });
+
+  row.appendChild(groupSel);
+  row.appendChild(slugSel);
+  row.appendChild(dot);
+  card.appendChild(row);
+  return card;
+}
+
+const FONT_SUGGESTIONS = [
+  'Public Sans',
+  'Inter',
+  'Roboto',
+  'Open Sans',
+  'Lato',
+  'Montserrat',
+  'Source Sans Pro',
+  'Noto Sans',
+  'Merriweather',
+  'Playfair Display',
+  'PT Serif',
+  'IBM Plex Sans',
+  'IBM Plex Serif',
+  'DM Sans',
+  'DM Serif Display',
+  'Outfit',
+  'Raleway',
+  'Nunito',
+  'Josefin Sans',
+  'Cormorant Garamond',
+];
+
+/* ===========================
+   GOOGLE FONTS LOADER
+=========================== */
+
+const _loadedGFonts = new Set();
+
+function loadGoogleFont(name) {
+  if (!name || _loadedGFonts.has(name)) return;
+  _loadedGFonts.add(name);
+  const link = document.createElement('link');
+  link.rel  = 'stylesheet';
+  link.href = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(name)}:wght@100;200;300;400;500;600;700;800;900&display=swap`;
+  document.head.appendChild(link);
+}
+
+// Returns the CSS font-family stack for a loaded Google Font name
+function gFontFamily(name) {
+  const generic = /serif|cursive|fantasy|mono/i.test(name) ? 'serif' : 'sans-serif';
+  return `"${name}", ${generic}`;
+}
+
+// Given a raw input value, decide if it looks like a bare font name
+// (not already a CSS stack) and attempt to load + return a clean family string.
+// Returns null if the value already looks like a full stack.
+function tryLoadGoogleFont(raw) {
+  const val = raw.trim();
+  if (!val) return null;
+  // Already a stack (contains comma or CSS keywords like -apple-system)
+  if (val.includes(',') || val.includes('-apple-system') || val.includes('system-ui')) return null;
+  // Strip surrounding quotes if present
+  const name = val.replace(/^["']|["']$/g, '').trim();
+  loadGoogleFont(name);
+  return gFontFamily(name);
+}
+
+// Load Public Sans on startup so the default renders immediately
+loadGoogleFont('Public Sans');
+
+/* ===========================
+   WP-STYLE CLAMP CALCULATOR
+=========================== */
+
+function wpClamp(minPx, maxPx, minVw = 320, maxVw = 1400) {
+  const minRem = +(minPx / 16).toFixed(4);
+  const maxRem = +(maxPx / 16).toFixed(4);
+  if (minPx === maxPx) return `${minRem}rem`;
+  const slope = (maxRem - minRem) / (maxVw - minVw);
+  const interceptRem = +(minRem - slope * minVw).toFixed(4);
+  const slopeVw     = +(slope * 100).toFixed(4);
+  const intPart = interceptRem >= 0
+    ? `+ ${interceptRem}rem`
+    : `- ${Math.abs(interceptRem)}rem`;
+  return `clamp(${minRem}rem, ${slopeVw}vw ${intPart}, ${maxRem}rem)`;
+}
+
+function evalClampPx(minPx, maxPx, vwPx, minVw = 320, maxVw = 1400) {
+  const slope  = (maxPx - minPx) / (maxVw - minVw);
+  const result = minPx + slope * (vwPx - minVw);
+  return Math.max(minPx, Math.min(maxPx, result));
+}
+
+/* ===========================
+   TYPOGRAPHY TAB BUILDER
+=========================== */
+
+function buildTypographyTab() {
+  typoBuilt = true;
+  typoSlotRegistry = [];
+  const out = document.getElementById('typo-output');
+  out.innerHTML = '';
+
+  /* ── Font Settings group ── */
+  const fontGroup = document.createElement('div');
+  fontGroup.className = 'group';
+  fontGroup.style.marginTop = '28px';
+
+  const fontHeader = groupHeader('Font Roles', () => {
+    fontRoles = JSON.parse(JSON.stringify(FONT_ROLE_DEFAULTS));
+    buildTypographyTab();
+  });
+  fontGroup.appendChild(fontHeader);
+
+  const grid = document.createElement('div');
+  grid.className = 'font-settings-grid';
+
+  const fontRoleKeys = [
+    { key: 'body',        label: 'Body' },
+    { key: 'heading',     label: 'Heading' },
+    { key: 'subheading',  label: 'Subheading' },
+    { key: 'interactive', label: 'Interactive' },
+  ];
+
+  // datalist for font suggestions
+  const dl = document.createElement('datalist');
+  dl.id = 'font-family-list';
+  FONT_SUGGESTIONS.forEach(f => {
+    const o = document.createElement('option'); o.value = f; o.textContent = f; dl.appendChild(o);
+  });
+  fontGroup.appendChild(dl);
+
+  fontRoleKeys.forEach(({ key, label }) => {
+    const role = fontRoles[key];
+    const card = document.createElement('div');
+    card.className = 'font-role-card';
+    card.innerHTML = `<div class="font-role-title">${label}</div>`;
+
+    // Family
+    const famLabel = document.createElement('span');
+    famLabel.className = 'field-label'; famLabel.textContent = 'Font Family';
+    const famInput = document.createElement('input');
+    famInput.type = 'text'; famInput.setAttribute('list','font-family-list');
+    famInput.value = role.family;
+    const famStatus = document.createElement('div');
+    famStatus.className = 'gfont-status';
+
+    function applyFontValue(raw) {
+      const loaded = tryLoadGoogleFont(raw);
+      if (loaded) {
+        famInput.value = loaded;
+        fontRoles[key].family = loaded;
+        famStatus.textContent = `Loaded "${raw.replace(/^["']|["']$/g,'').trim()}" from Google Fonts`;
+        famStatus.className = 'gfont-status loaded';
+      } else {
+        fontRoles[key].family = raw.trim() || FONT_ROLE_DEFAULTS[key].family;
+        famStatus.textContent = '';
+        famStatus.className = 'gfont-status';
+      }
+      updateTypePreview();
+      scheduleURLUpdate();
+    }
+
+    // Show status for already-loaded Google Font on rebuild
+    (function(){
+      const m = role.family.match(/^"([^"]+)",\s*(sans-serif|serif)$/);
+      if (m && _loadedGFonts.has(m[1])) {
+        famStatus.textContent = `Loaded "${m[1]}" from Google Fonts`;
+        famStatus.className = 'gfont-status loaded';
+      }
+    })();
+
+    famInput.addEventListener('change', () => applyFontValue(famInput.value));
+
+    // Weight
+    const wtLabel = document.createElement('span');
+    wtLabel.className = 'field-label'; wtLabel.textContent = 'Weight';
+    const wtSelect = document.createElement('select');
+    [['100','Thin'],['200','Extra Light'],['300','Light'],
+     ['400','Regular'],['500','Medium'],['600','Semibold'],
+     ['700','Bold'],['800','Extra Bold'],['900','Black']
+    ].forEach(([v, t]) => {
+      const o = document.createElement('option'); o.value = v; o.textContent = t;
+      if (v === role.weight) o.selected = true;
+      wtSelect.appendChild(o);
+    });
+    wtSelect.addEventListener('change', () => {
+      fontRoles[key].weight = wtSelect.value;
+      updateTypePreview();
+      scheduleURLUpdate();
+    });
+
+    card.appendChild(famLabel); card.appendChild(famInput); card.appendChild(famStatus);
+    card.appendChild(wtLabel);  card.appendChild(wtSelect);
+    grid.appendChild(card);
+  });
+
+  fontGroup.appendChild(grid);
+  out.appendChild(fontGroup);
+
+  /* ── Typography Colors group ── */
+  const colorGroup = document.createElement('div');
+  colorGroup.className = 'group';
+  colorGroup.style.marginTop = '28px';
+  colorGroup.appendChild(groupHeader('Typography Colors', () => {
+    typoColors = JSON.parse(JSON.stringify(TYPO_COLOR_DEFAULTS));
+    buildTypographyTab();
+  }));
+
+  const colorSlotRow = document.createElement('div');
+  colorSlotRow.className = 'color-slot-row';
+  [
+    ['bodyText', 'Body Text'],
+    ['h1Color',  'H1'],
+    ['h2Color',  'H2'],
+    ['h3Color',  'H3'],
+    ['h4Color',  'H4'],
+    ['h5Color',  'H5'],
+    ['h6Color',  'H6'],
+    ['linkText', 'Link'],
+  ].forEach(([key, lbl]) => colorSlotRow.appendChild(buildColorSlot(key, lbl)));
+  colorGroup.appendChild(colorSlotRow);
+  out.appendChild(colorGroup);
+
+  /* ── Type Scale group ── */
+  const scaleGroup = document.createElement('div');
+  scaleGroup.className = 'group';
+  scaleGroup.style.marginTop = '28px';
+
+  scaleGroup.appendChild(groupHeader('Type Scale', () => {
+    typoScale = TYPO_SCALE_DEFAULTS.map(s => ({...s}));
+    buildTypographyTab();
+  }));
+
+  // Viewport slider
+  const vpRow = document.createElement('div');
+  vpRow.className = 'vp-slider-row';
+  const vpSlider = document.createElement('input');
+  vpSlider.type = 'range'; vpSlider.min = 320; vpSlider.max = 1400; vpSlider.value = previewVw;
+  const vpLabel = document.createElement('span');
+  vpLabel.className = 'vp-value-label'; vpLabel.textContent = previewVw + 'px';
+  const vpDesc = document.createElement('span');
+  vpDesc.textContent = 'Preview viewport:';
+  vpRow.appendChild(vpDesc); vpRow.appendChild(vpSlider); vpRow.appendChild(vpLabel);
+  vpSlider.addEventListener('input', () => {
+    previewVw = parseInt(vpSlider.value);
+    vpLabel.textContent = previewVw + 'px';
+    refreshScaleTable();
+    updateTypePreview();
+  });
+  scaleGroup.appendChild(vpRow);
+
+  // Table
+  const tableWrap = document.createElement('div');
+  tableWrap.style.overflowX = 'auto';
+  const table = document.createElement('table');
+  table.className = 'type-scale-table';
+  table.id = 'scale-table';
+  table.innerHTML = `<thead><tr>
+    <th>Size</th>
+    <th>Min (px)</th>
+    <th>Max (px)</th>
+    <th>At ${previewVw}px</th>
+    <th>Preview</th>
+  </tr></thead>`;
+  const tbody = document.createElement('tbody');
+  tbody.id = 'scale-tbody';
+
+  typoScale.forEach((size, idx) => {
+    const tr = document.createElement('tr');
+    tr.id = `scale-row-${size.name}`;
+
+    const tdName = document.createElement('td');
+    tdName.className = 'size-name-cell'; tdName.textContent = size.label;
+
+    const tdMin = document.createElement('td');
+    const minIn = document.createElement('input');
+    minIn.type = 'number'; minIn.min = 6; minIn.max = 200; minIn.value = size.minPx;
+    minIn.addEventListener('change', () => {
+      typoScale[idx].minPx = Math.max(6, Math.min(200, parseInt(minIn.value)||size.minPx));
+      minIn.value = typoScale[idx].minPx;
+      refreshScaleRow(tr, typoScale[idx]);
+      updateTypePreview();
+      scheduleURLUpdate();
+    });
+    tdMin.appendChild(minIn);
+
+    const tdMax = document.createElement('td');
+    const maxIn = document.createElement('input');
+    maxIn.type = 'number'; maxIn.min = 6; maxIn.max = 400; maxIn.value = size.maxPx;
+    maxIn.addEventListener('change', () => {
+      typoScale[idx].maxPx = Math.max(6, Math.min(400, parseInt(maxIn.value)||size.maxPx));
+      maxIn.value = typoScale[idx].maxPx;
+      refreshScaleRow(tr, typoScale[idx]);
+      updateTypePreview();
+      scheduleURLUpdate();
+    });
+    tdMax.appendChild(maxIn);
+
+    const tdVp = document.createElement('td');
+    const vpSpan = document.createElement('span');
+    vpSpan.id = `vp-${size.name}`;
+    vpSpan.textContent = evalClampPx(size.minPx, size.maxPx, previewVw).toFixed(1) + 'px';
+    tdVp.appendChild(vpSpan);
+
+    const tdPreview = document.createElement('td');
+    const previewSpan = document.createElement('span');
+    previewSpan.id = `preview-text-${size.name}`;
+    previewSpan.className = 'vp-preview-text';
+    tdPreview.appendChild(previewSpan);
+
+    tr.appendChild(tdName); tr.appendChild(tdMin); tr.appendChild(tdMax);
+    tr.appendChild(tdVp); tr.appendChild(tdPreview);
+    tbody.appendChild(tr);
+  });
+
+  table.appendChild(tbody);
+  tableWrap.appendChild(table);
+  scaleGroup.appendChild(tableWrap);
+  out.appendChild(scaleGroup);
+
+  /* ── Typography Preview group ── */
+  const previewGroup = document.createElement('div');
+  previewGroup.className = 'group';
+  previewGroup.style.marginTop = '28px';
+  const previewHeader = document.createElement('div');
+  previewHeader.className = 'group-header';
+  const previewTitle = document.createElement('div');
+  previewTitle.className = 'group-title'; previewTitle.textContent = 'Typography Preview';
+  previewHeader.appendChild(previewTitle);
+  previewGroup.appendChild(previewHeader);
+
+  const previewArea = document.createElement('div');
+  previewArea.id = 'typo-preview-area';
+  previewArea.className = 'typo-preview-section';
+  previewGroup.appendChild(previewArea);
+  out.appendChild(previewGroup);
+
+  refreshScaleTable();
+  updateTypePreview();
+}
+
+function refreshScaleRow(tr, size) {
+  const vpEl = document.getElementById(`vp-${size.name}`);
+  if (vpEl) vpEl.textContent = evalClampPx(size.minPx, size.maxPx, previewVw).toFixed(1) + 'px';
+}
+
+function refreshScaleTable() {
+  // Update the "At Xpx" column header
+  const thead = document.querySelector('#scale-table thead tr');
+  if (thead) thead.cells[4].textContent = `At ${previewVw}px`;
+
+  typoScale.forEach(size => {
+    refreshScaleRow(null, size);
+  });
+  updatePreviewTexts();
+}
+
+function updatePreviewTexts() {
+  const bodyFam = fontRoles.body.family;
+  const bodyWt  = fontRoles.body.weight;
+
+  typoScale.forEach(size => {
+    const span = document.getElementById(`preview-text-${size.name}`);
+    if (!span) return;
+    const px = evalClampPx(size.minPx, size.maxPx, previewVw);
+    span.style.fontFamily  = bodyFam;
+    span.style.fontWeight  = bodyWt;
+    span.style.fontSize    = px + 'px';
+    span.textContent       = 'The quick brown fox';
+  });
+}
+
+function updateTypePreview() {
+  updatePreviewTexts();
+  typoSlotRegistry.forEach(fn => fn());
+  const area = document.getElementById('typo-preview-area');
+  if (!area) return;
+  area.innerHTML = '';
+
+  const headFam   = fontRoles.heading.family;
+  const headWt    = fontRoles.heading.weight;
+  const bodyFam   = fontRoles.body.family;
+  const bodyWt    = fontRoles.body.weight;
+  const bodyColor = resolveTypoColor(typoColors.bodyText.group, typoColors.bodyText.slug);
+  const linkColor = resolveTypoColor(typoColors.linkText.group, typoColors.linkText.slug);
+  const hColors   = ['h1Color','h2Color','h3Color','h4Color','h5Color','h6Color']
+    .map(k => resolveTypoColor(typoColors[k].group, typoColors[k].slug));
+  const primaryColor = linkColor;
+
+  area.style.background = '';
+  area.style.padding    = '20px 24px';
+  area.style.borderRadius = '8px';
+
+  // Helper: get font size at previewVw for a given scale name
+  function sizeFor(name) {
+    const s = typoScale.find(t => t.name === name);
+    return s ? evalClampPx(s.minPx, s.maxPx, previewVw) : 16;
+  }
+
+  // Size+weight mappings mirror theme.json styles.elements (h1–h6)
+  const subFam = fontRoles.subheading.family;
+  const headings = [
+    { tag: 'H1', size: sizeFor('xx-large'),     family: headFam, weight: headWt,                      color: hColors[0] },
+    { tag: 'H2', size: sizeFor('large'),         family: headFam, weight: headWt,                      color: hColors[1] },
+    { tag: 'H3', size: sizeFor('emphasis'),      family: headFam, weight: fontRoles.subheading.weight, color: hColors[2] },
+    { tag: 'H4', size: sizeFor('intermediate'),  family: subFam,  weight: fontRoles.subheading.weight, color: hColors[3] },
+    { tag: 'H5', size: sizeFor('normal'),        family: subFam,  weight: fontRoles.subheading.weight, color: hColors[4] },
+    { tag: 'H6', size: sizeFor('small'),         family: subFam,  weight: fontRoles.subheading.weight, color: hColors[5] },
+  ];
+
+  headings.forEach(({ tag, size, family, weight, color }) => {
+    const row = document.createElement('div');
+    row.className = 'preview-row';
+    const lbl = document.createElement('div');
+    lbl.className = 'preview-label'; lbl.textContent = tag;
+    const el = document.createElement(tag.toLowerCase());
+    el.style.fontFamily  = family;
+    el.style.fontWeight  = weight;
+    el.style.fontSize    = size + 'px';
+    el.style.margin      = '0';
+    el.style.color = color;
+    el.textContent = `${tag} — The quick brown fox jumps over the lazy dog`;
+    row.appendChild(lbl); row.appendChild(el);
+    area.appendChild(row);
+  });
+
+  // Lede
+  const ledeRow = document.createElement('div');
+  ledeRow.className = 'preview-row';
+  const ledeLabel = document.createElement('div');
+  ledeLabel.className = 'preview-label'; ledeLabel.textContent = 'Lede';
+  const ledeEl = document.createElement('p');
+  ledeEl.style.fontFamily  = bodyFam;
+  ledeEl.style.fontWeight  = bodyWt;
+  ledeEl.style.fontSize    = sizeFor('intermediate') + 'px';
+  ledeEl.style.color       = bodyColor;
+  ledeEl.style.margin      = '0';
+  ledeEl.textContent = 'An introductory paragraph that draws the reader in with a broader statement about the topic, setting the stage for the content that follows.';
+  ledeRow.appendChild(ledeLabel); ledeRow.appendChild(ledeEl);
+  area.appendChild(ledeRow);
+
+  // Paragraph with link
+  const paraRow = document.createElement('div');
+  paraRow.className = 'preview-row';
+  const paraLabel = document.createElement('div');
+  paraLabel.className = 'preview-label'; paraLabel.textContent = 'Paragraph';
+  const paraEl = document.createElement('p');
+  paraEl.style.fontFamily  = bodyFam;
+  paraEl.style.fontWeight  = bodyWt;
+  paraEl.style.fontSize    = sizeFor('normal') + 'px';
+  paraEl.style.color       = bodyColor;
+  paraEl.style.margin      = '0';
+  paraEl.style.maxWidth    = '65ch';
+  paraEl.innerHTML = `Body text establishes the reading rhythm of your content. Good typography choices balance readability with personality. <a href="#" style="color:${linkColor};text-decoration:underline" onclick="return false">Inline links</a> should be clearly distinguishable from surrounding text while maintaining visual harmony.`;
+  paraRow.appendChild(paraLabel); paraRow.appendChild(paraEl);
+  area.appendChild(paraRow);
+}
+
+/* ===========================
+   UTILITIES TAB
+=========================== */
+
+// Resolve any palette slug to a live hex/rgba value
+function resolveSlug(slug) {
+  const s = currentSystem;
+  const grayMap = {'base-minus-3':0,'base-minus-2':1,'base-minus-1':2,'base':3,'base-plus-1':4,'base-plus-2':5,'base-plus-3':6};
+  if (slug in grayMap) {
+    const physIdx = darkMode ? (6 - grayMap[slug]) : grayMap[slug];
+    return s.grays?.[physIdx] || '#808080';
+  }
+  const primMap = {'primary-lightest':0,'primary-lighter':1,'primary-light':2,'primary':3,'primary-dark':4,'primary-darker':5,'primary-darkest':6};
+  if (slug in primMap) return s.primary?.[primMap[slug]] || '#808080';
+  const sem = s.semantic || {};
+  if (slug === 'translucent')                return sem.translucent              || 'rgba(0,0,0,0.6)';
+  if (slug === 'translucent-subtle')         return sem.translucentSubtle        || 'rgba(0,0,0,0.05)';
+  if (slug === 'translucent-reverse')        return sem.translucentReverse       || 'rgba(255,255,255,0.75)';
+  if (slug === 'translucent-reverse-subtle') return sem.translucentReverseSubtle || 'rgba(255,255,255,0.15)';
+  if (slug === 'background') return sem.background || '#fafafa';
+  if (slug === 'foreground') return sem.foreground || '#1f2020';
+  if (slug === 'reverse')    return sem.reverse    || '#ffffff';
+  return '#808080';
+}
+
+const UTIL_COLOR_DEFAULTS = {
+  interactive:                 { group: 'primary',  slug: 'primary'                   },
+  interactiveHover:            { group: 'primary',  slug: 'primary-dark'              },
+  interactiveActive:           { group: 'primary',  slug: 'primary-darker'            },
+  interactiveOutlineBg:        { group: 'semantic', slug: 'translucent-reverse'       },
+  interactiveReverse:          { group: 'primary',  slug: 'primary-light'             },
+  interactiveReverseHover:     { group: 'primary',  slug: 'primary-lighter'           },
+  interactiveReverseActive:    { group: 'primary',  slug: 'primary-lightest'          },
+  interactiveReverseOutlineBg: { group: 'semantic', slug: 'translucent'               },
+  uiBorder:                    { group: 'base',     slug: 'base-minus-1'              },
+  tableBorder:                 { group: 'base',     slug: 'base-minus-2'              },
+  tableHeader:                 { group: 'semantic', slug: 'translucent'               },
+  tableStripe:                 { group: 'semantic', slug: 'translucent-subtle'        },
+};
+
+// Deep-clone defaults into live state
+let utilColors = JSON.parse(JSON.stringify(UTIL_COLOR_DEFAULTS));
+let utilSlotRegistry = [];
+
+function resolveUtil(key) {
+  const uc = utilColors[key];
+  if (!uc) return '#808080';
+  return resolveTypoColor(uc.group, uc.slug);
+}
+
+function buildUtilitiesTab() {
+  utilitiesBuilt = true;
+  utilSlotRegistry = [];
+  const out = document.getElementById('utilities-output');
+  out.innerHTML = '';
+  out.style.padding = '28px 0';
+
+  // Helper: build a row of color-slot cards for given keys
+  function makeSlotRow(keys) {
+    const row = document.createElement('div');
+    row.className = 'color-slot-row';
+    keys.forEach(([key, label]) => {
+      row.appendChild(buildColorSlot(key, label, utilColors, utilSlotRegistry, updateUtilitiesPreview));
+    });
+    return row;
+  }
+
+  // ── Interactive States ──
+  const interactiveGroup = document.createElement('div');
+  interactiveGroup.className = 'group';
+  interactiveGroup.style.marginTop = '28px';
+  interactiveGroup.appendChild(groupHeader('State Variables', () => updateUtilitiesPreview()));
+
+  // Color selectors
+  interactiveGroup.appendChild(makeSlotRow([
+    ['interactive',         'Interactive'],
+    ['interactiveHover',    'Interactive Hover'],
+    ['interactiveActive',   'Interactive Active'],
+    ['interactiveOutlineBg','Outline Background'],
+  ]));
+  interactiveGroup.appendChild(makeSlotRow([
+    ['interactiveReverse',          'Reverse'],
+    ['interactiveReverseHover',     'Reverse Hover'],
+    ['interactiveReverseActive',    'Reverse Active'],
+    ['interactiveReverseOutlineBg', 'Reverse Outline Bg'],
+  ]));
+
+  const interactiveWrap = document.createElement('div');
+  interactiveWrap.id = 'util-interactive-wrap';
+  interactiveWrap.style.marginTop = '24px';
+  interactiveGroup.appendChild(interactiveWrap);
+  out.appendChild(interactiveGroup);
+
+  // ── UI Border ──
+  const borderGroup = document.createElement('div');
+  borderGroup.className = 'group';
+  borderGroup.style.marginTop = '28px';
+  borderGroup.appendChild(groupHeader('UI Border', () => updateUtilitiesPreview()));
+  borderGroup.appendChild(makeSlotRow([['uiBorder', 'UI Border Color']]));
+  const borderWrap = document.createElement('div');
+  borderWrap.id = 'util-border-wrap';
+  borderWrap.style.padding = '8px 0';
+  borderWrap.style.marginTop = '24px';
+  borderGroup.appendChild(borderWrap);
+  out.appendChild(borderGroup);
+
+  // ── Table ──
+  const tableGroup = document.createElement('div');
+  tableGroup.className = 'group';
+  tableGroup.style.marginTop = '28px';
+  tableGroup.appendChild(groupHeader('Table Colors', () => updateUtilitiesPreview()));
+  tableGroup.appendChild(makeSlotRow([
+    ['tableHeader', 'Table Header'],
+    ['tableStripe',  'Table Stripe'],
+    ['tableBorder',  'Table Border'],
+  ]));
+  const tableWrap = document.createElement('div');
+  tableWrap.id = 'util-table-wrap';
+  tableWrap.style.marginTop = '24px';
+  tableGroup.appendChild(tableWrap);
+  out.appendChild(tableGroup);
+
+  updateUtilitiesPreview();
+}
+
+function updateUtilitiesPreview() {
+  // Refresh color-slot dots
+  utilSlotRegistry.forEach(fn => fn());
+
+  // Resolve live font families
+  const bodyFont       = fontRoles?.body?.family        || 'inherit';
+  const interactiveFont = fontRoles?.interactive?.family || 'inherit';
+
+  // ── Resolve all tokens from live utilColors ──
+  let int_    = resolveUtil('interactive');
+  let intHov  = resolveUtil('interactiveHover');
+  let intAct  = resolveUtil('interactiveActive');
+  let intOutBg= resolveUtil('interactiveOutlineBg');
+  let rev_    = resolveUtil('interactiveReverse');
+  let revHov  = resolveUtil('interactiveReverseHover');
+  let revAct  = resolveUtil('interactiveReverseActive');
+  let revOutBg= resolveUtil('interactiveReverseOutlineBg');
+
+  // In dark mode the page background IS the reverse context, so swap the two sets
+  if (darkMode) {
+    [int_, rev_]       = [rev_, int_];
+    [intHov, revHov]   = [revHov, intHov];
+    [intAct, revAct]   = [revAct, intAct];
+    [intOutBg, revOutBg] = [revOutBg, intOutBg];
+  }
+
+  const interactive             = int_;
+  const interactiveHover        = intHov;
+  const interactiveActive       = intAct;
+  const interactiveOutlineBg    = intOutBg;
+  const interactiveReverse      = rev_;
+  const interactiveReverseHover = revHov;
+  const interactiveReverseActive= revAct;
+  const interactiveReverseOutlineBg = revOutBg;
+  const uiBorderColor  = resolveUtil('uiBorder');
+  const tableBorderColor = resolveUtil('tableBorder');
+  const tableHeaderColor = resolveUtil('tableHeader');
+  const tableStripeColor = resolveUtil('tableStripe');
+  const fgColor = resolveSlug('foreground');
+  const panelBg = resolveSlug('base-plus-3');
+
+  // ── Inject/update hover-state CSS for Default buttons ──
+  let hoverStyle = document.getElementById('util-hover-styles');
+  if (!hoverStyle) {
+    hoverStyle = document.createElement('style');
+    hoverStyle.id = 'util-hover-styles';
+    document.head.appendChild(hoverStyle);
+  }
+  hoverStyle.textContent = `
+    .util-btn-interactive:hover  { background:${interactiveHover}  !important; border-color:${interactiveHover}  !important; color:${labelColor(interactiveHover)}  !important; }
+    .util-btn-interactive:active { background:${interactiveActive} !important; border-color:${interactiveActive} !important; color:${labelColor(interactiveActive)} !important; }
+    .util-btn-outline-interactive:hover  { background:${interactiveOutlineBg} !important; border-color:${interactiveHover}  !important; color:${interactiveHover}  !important; }
+    .util-btn-outline-interactive:active { background:${interactiveOutlineBg} !important; border-color:${interactiveActive} !important; color:${interactiveActive} !important; }
+    .util-btn-reverse-interactive:hover  { background:${interactiveReverseHover}  !important; border-color:${interactiveReverseHover}  !important; color:${labelColor(interactiveReverseHover)}  !important; }
+    .util-btn-reverse-interactive:active { background:${interactiveReverseActive} !important; border-color:${interactiveReverseActive} !important; color:${labelColor(interactiveReverseActive)} !important; }
+    .util-btn-outline-reverse-interactive:hover  { background:${interactiveReverseOutlineBg} !important; border-color:${interactiveReverseHover}  !important; color:${interactiveReverseHover}  !important; }
+    .util-btn-outline-reverse-interactive:active { background:${interactiveReverseOutlineBg} !important; border-color:${interactiveReverseActive} !important; color:${interactiveReverseActive} !important; }
+  `;
+
+  // ── Interactive wrap ──
+  const iWrap = document.getElementById('util-interactive-wrap');
+  if (iWrap) {
+    iWrap.innerHTML = '';
+
+    // makeBtn: hoverClass set → real interactive button; omitted → static state-preview button
+    function makeBtn(label, bg, border, color, hoverClass) {
+      const b = document.createElement('button');
+      b.className = 'util-btn' + (hoverClass ? ` ${hoverClass}` : '');
+      b.textContent = label;
+      b.style.background  = bg;
+      b.style.borderColor = border;
+      b.style.color       = color;
+      b.style.fontFamily  = interactiveFont;
+      b.style.cursor      = hoverClass ? 'pointer' : 'default';
+      return b;
+    }
+    function makeRow(buttons) {
+      const r = document.createElement('div');
+      r.className = 'util-btn-row';
+      buttons.forEach(b => r.appendChild(b));
+      return r;
+    }
+    function makeLabel(text, color) {
+      const l = document.createElement('div');
+      l.className = 'util-variant-label';
+      l.textContent = text;
+      if (color) l.style.color = color;
+      return l;
+    }
+
+    // Filled
+    iWrap.appendChild(makeLabel('Interactive'));
+    iWrap.appendChild(makeRow([
+      makeBtn('Default', interactive,       interactive,       labelColor(interactive), 'util-btn-interactive'),
+      makeBtn('Hover',   interactiveHover,  interactiveHover,  labelColor(interactiveHover)),
+      makeBtn('Active',  interactiveActive, interactiveActive, labelColor(interactiveActive)),
+    ]));
+
+    // Outline
+    iWrap.appendChild(makeLabel('Interactive Outline'));
+    iWrap.appendChild(makeRow([
+      makeBtn('Default', interactiveOutlineBg, interactive,       interactive,       'util-btn-outline-interactive'),
+      makeBtn('Hover',   interactiveOutlineBg, interactiveHover,  interactiveHover),
+      makeBtn('Active',  interactiveOutlineBg, interactiveActive, interactiveActive),
+    ]));
+
+    // Reverse panel
+    const panel = document.createElement('div');
+    panel.className = 'util-reverse-panel';
+    panel.style.background = panelBg;
+    const panelLabelColor = labelColor(panelBg) === '#ffffff' ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.45)';
+
+    panel.appendChild(makeLabel('Interactive Reverse', panelLabelColor));
+    panel.appendChild(makeRow([
+      makeBtn('Default', interactiveReverse,       interactiveReverse,       labelColor(interactiveReverse),       'util-btn-reverse-interactive'),
+      makeBtn('Hover',   interactiveReverseHover,  interactiveReverseHover,  labelColor(interactiveReverseHover)),
+      makeBtn('Active',  interactiveReverseActive, interactiveReverseActive, labelColor(interactiveReverseActive)),
+    ]));
+
+    panel.appendChild(makeLabel('Interactive Outline Reverse', panelLabelColor));
+    panel.appendChild(makeRow([
+      makeBtn('Default', interactiveReverseOutlineBg, interactiveReverse,       interactiveReverse,       'util-btn-outline-reverse-interactive'),
+      makeBtn('Hover',   interactiveReverseOutlineBg, interactiveReverseHover,  interactiveReverseHover),
+      makeBtn('Active',  interactiveReverseOutlineBg, interactiveReverseActive, interactiveReverseActive),
+    ]));
+
+    iWrap.appendChild(panel);
+  }
+
+  // ── UI Border ──
+  const bWrap = document.getElementById('util-border-wrap');
+  if (bWrap) {
+    bWrap.innerHTML = '';
+    const lbl = document.createElement('label');
+    lbl.className = 'util-input-label';
+    lbl.textContent = 'Input label';
+    lbl.style.fontFamily = bodyFont;
+    const input = document.createElement('input');
+    input.className = 'util-mock-input';
+    input.type = 'text';
+    input.placeholder = 'Input field';
+    input.value = '';
+    input.style.borderColor = uiBorderColor;
+    input.style.color = fgColor;
+    input.style.fontFamily = bodyFont;
+    bWrap.appendChild(lbl);
+    bWrap.appendChild(input);
+  }
+
+  // ── Table ──
+  const tWrap = document.getElementById('util-table-wrap');
+  if (tWrap) {
+    tWrap.innerHTML = '';
+    const table = document.createElement('table');
+    table.className = 'util-table';
+
+    const reverseColor = resolveSlug('reverse');
+    const rows = [
+      { label: 'Table Header',      bg: tableHeaderColor,  border: tableBorderColor, color: reverseColor, bold: true  },
+      { label: 'Table Row',         bg: 'transparent',     border: tableBorderColor, color: fgColor,      bold: false },
+      { label: 'Table Striped Row', bg: tableStripeColor,  border: tableBorderColor, color: fgColor,      bold: false },
+      { label: 'Table Row',         bg: 'transparent',     border: tableBorderColor, color: fgColor,      bold: false },
+    ];
+
+    rows.forEach(({ label, bg, border, color, bold }) => {
+      const tr = document.createElement('tr');
+      tr.style.background = bg;
+      const td = document.createElement('td');
+      td.textContent = label;
+      td.style.borderBottomColor = border;
+      td.style.color = color;
+      td.style.fontWeight = bold ? '700' : '400';
+      td.style.fontFamily = bodyFont;
+      tr.appendChild(td);
+      table.appendChild(tr);
+    });
+
+    tWrap.appendChild(table);
+  }
+}
+
+/* ===========================
+   TYPOGRAPHY EXPORTS
+=========================== */
+
+function exportThemeJSONWithTypo(includeColor, includeTypo, includeUtil) {
+  if (includeColor && !includeTypo && !includeUtil) { exportThemeJSON(); return; }
+
+  function colorValue(hex, isUswdsMode) {
+    if (isUswdsMode) {
+      const token = findToken(hex);
+      if (token) return `var(--token--color--${token})`;
+    }
+    return hex || '#000000';
+  }
+
+  const palette = [];
+  if (includeColor) {
+    const primSlugs  = ["primary-lightest","primary-lighter","primary-light","primary","primary-dark","primary-darker","primary-darkest"];
+    const primNames  = ["Primary Lightest","Primary Lighter","Primary Light","Primary","Primary Dark","Primary Darker","Primary Darkest"];
+    (currentSystem.primary || []).forEach((c, i) => palette.push({ slug: primSlugs[i], color: colorValue(c, sectionState.primary.mode==="uswds"), name: primNames[i] }));
+    const secSlugs   = ["secondary-lightest","secondary-lighter","secondary-light","secondary","secondary-dark","secondary-darker","secondary-darkest"];
+    const secNames   = ["Secondary Lightest","Secondary Lighter","Secondary Light","Secondary","Secondary Dark","Secondary Darker","Secondary Darkest"];
+    (currentSystem.secondary || []).forEach((c, i) => palette.push({ slug: secSlugs[i], color: colorValue(c, sectionState.secondary.mode==="uswds"), name: secNames[i] }));
+    const terSlugs   = ["tertiary-lightest","tertiary-lighter","tertiary-light","tertiary","tertiary-dark","tertiary-darker","tertiary-darkest"];
+    const terNames   = ["Tertiary Lightest","Tertiary Lighter","Tertiary Light","Tertiary","Tertiary Dark","Tertiary Darker","Tertiary Darkest"];
+    (currentSystem.tertiary || []).forEach((c, i) => palette.push({ slug: terSlugs[i], color: colorValue(c, sectionState.tertiary.mode==="uswds"), name: terNames[i] }));
+    if (document.getElementById("enableExtended").checked) {
+      const count = parseInt(document.getElementById("extCount").value);
+      for (let n = 1; n <= count; n++) {
+        const idx = n - 1;
+        const colors = currentSystem.extended[idx] || [];
+        const isUswds = extState[idx].source === "uswds";
+        const extSlugs = ["lightest","light","","dark","darkest"].map(s => s ? `extended-${n}-${s}` : `extended-${n}`);
+        const extNames = TONE_NAMES_5.map(t => t === "Base" ? `Extended Palette ${n}` : `Extended Palette ${n} ${t}`);
+        colors.forEach((c, i) => palette.push({ slug: extSlugs[i], color: colorValue(c, isUswds), name: extNames[i] }));
+      }
+    }
+    const sem = currentSystem.semantic || {};
+    palette.push({ slug: "background", color: colorValue(sem.background, sectionState.semantic.mode==="uswds"), name: "Background" });
+    palette.push({ slug: "foreground", color: colorValue(sem.foreground,  sectionState.semantic.mode==="uswds"), name: "Foreground" });
+    palette.push({ slug: "reverse",    color: colorValue(sem.reverse,     sectionState.semantic.mode==="uswds"), name: "Reverse (On Color/Image)" });
+    const graySlugsLight = ["base-minus-3","base-minus-2","base-minus-1","base","base-plus-1","base-plus-2","base-plus-3"];
+    const graySlugs = darkMode ? [...graySlugsLight].reverse() : graySlugsLight;
+    (currentSystem.grays || []).forEach((c, i) => palette.push({ slug: graySlugs[i], color: colorValue(c, sectionState.gray.mode==="uswds"), name: ["Base Lightest","Base Lighter","Base Light","Base","Base Dark","Base Darker","Base Darkest"][i] }));
+    const sem2 = currentSystem.semantic || {};
+    palette.push({ slug: "translucent",                color: sem2.translucent              || TRANSLUCENT_DEFAULTS.translucent,              name: "Translucent" });
+    palette.push({ slug: "translucent-subtle",         color: sem2.translucentSubtle        || TRANSLUCENT_DEFAULTS.translucentSubtle,        name: "Translucent Subtle" });
+    palette.push({ slug: "translucent-reverse",        color: sem2.translucentReverse       || TRANSLUCENT_DEFAULTS.translucentReverse,       name: "Translucent Reverse" });
+    palette.push({ slug: "translucent-reverse-subtle", color: sem2.translucentReverseSubtle || TRANSLUCENT_DEFAULTS.translucentReverseSubtle, name: "Translucent Reverse Subtle" });
+  }
+
+  const settings = {};
+  if (includeColor && palette.length) {
+    settings.color = {
+      custom: false, customDuotone: false, customGradient: false,
+      defaultDuotone: false, defaultPalette: false, defaultGradients: false,
+      palette, duotone: [], gradients: []
+    };
+  }
+
+  if (includeTypo) {
+    // Deduplicate font families by actual font name; derive slug from name
+    function extractFontName(family) {
+      // Take the first token, strip quotes
+      return family.split(',')[0].trim().replace(/^["']|["']$/g, '').trim();
+    }
+    function nameToSlug(name) {
+      return name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+    }
+    const seenSlugs = new Set();
+    const fontFamilies = [];
+    Object.values(fontRoles).forEach(role => {
+      const name = extractFontName(role.family);
+      const slug = nameToSlug(name);
+      if (!seenSlugs.has(slug)) {
+        seenSlugs.add(slug);
+        fontFamilies.push({ name, slug, fontFamily: role.family });
+      }
+    });
+
+    const fontSizes = [...typoScale]
+      .sort((a, b) => a.minPx - b.minPx)
+      .map(size => ({
+        name: size.label,
+        slug: size.name,
+        size: size.maxPx + 'px',
+        fluid: { min: size.minPx + 'px', max: size.maxPx + 'px' },
+      }));
+
+    settings.typography = {
+      fluid: true,
+      fontFamilies,
+      fontSizes,
+    };
+
+    const WEIGHT_NAMES_CUSTOM = { '100':'thin','200':'extra-light','300':'light','400':'regular','500':'medium','600':'semibold','700':'bold','800':'extra-bold','900':'black' };
+    settings.custom = settings.custom || {};
+    ['body', 'heading', 'subheading', 'interactive'].forEach(key => {
+      const role = fontRoles[key];
+      const famName = role.family.split(',')[0].trim().replace(/^["']|["']$/g, '').trim();
+      const famSlug = famName.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+      settings.custom[key] = {
+        typography: {
+          fontFamily: `var(--wp--preset--font-family--${famSlug})`,
+          fontWeight: `var(--theme--type--weight--${WEIGHT_NAMES_CUSTOM[role.weight] || role.weight})`,
+        },
+      };
+    });
+  }
+
+  if (includeUtil) {
+    if (!settings.custom) settings.custom = {};
+    settings.custom.color = {
+      interactive:                       `var(--wp--preset--color--${utilColors.interactive.slug})`,
+      interactiveHover:                  `var(--wp--preset--color--${utilColors.interactiveHover.slug})`,
+      interactiveActive:                 `var(--wp--preset--color--${utilColors.interactiveActive.slug})`,
+      interactiveOutlineBackground:      `var(--wp--preset--color--${utilColors.interactiveOutlineBg.slug})`,
+      interactiveReverse:                `var(--wp--preset--color--${utilColors.interactiveReverse.slug})`,
+      interactiveReverseHover:           `var(--wp--preset--color--${utilColors.interactiveReverseHover.slug})`,
+      interactiveReverseActive:          `var(--wp--preset--color--${utilColors.interactiveReverseActive.slug})`,
+      interactiveReverseOutlineBackground: `var(--wp--preset--color--${utilColors.interactiveReverseOutlineBg.slug})`,
+      uiBorder:    `var(--wp--preset--color--${utilColors.uiBorder.slug})`,
+      tableBorder: `var(--wp--preset--color--${utilColors.tableBorder.slug})`,
+      tableHeader: `var(--wp--preset--color--${utilColors.tableHeader.slug})`,
+      tableStripe: `var(--wp--preset--color--${utilColors.tableStripe.slug})`,
+    };
+  }
+
+  const styles = {};
+
+  if (includeTypo) {
+    function colorRef(group, slug) {
+      if (group === 'interactive') return `var(--wp--custom--color--${slug})`;
+      return `var(--wp--preset--color--${slug})`;
+    }
+    function famRef(family) {
+      const name = family.split(',')[0].trim().replace(/^["']|["']$/g, '').trim();
+      const slug = name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+      return `var(--wp--preset--font-family--${slug})`;
+    }
+    function sizeRef(sizeName) {
+      return `var(--wp--preset--font-size--${sizeName})`;
+    }
+    const WEIGHT_NAMES = { '100':'thin','200':'extra-light','300':'light','400':'regular','500':'medium','600':'semibold','700':'bold','800':'extra-bold','900':'black' };
+    function weightRef(w) {
+      return `var(--theme--type--weight--${WEIGHT_NAMES[w] || w})`;
+    }
+
+    function toKebab(s) {
+      return s.replace(/([A-Z])/g, m => '-' + m.toLowerCase());
+    }
+    function customVar(role, prop) {
+      return `var(--wp--custom--${role}--typography--${toKebab(prop)})`;
+    }
+
+    styles.typography = {
+      fontFamily:  customVar('body', 'fontFamily'),
+      fontSize:    sizeRef('normal'),
+      fontWeight:  customVar('body', 'fontWeight'),
+    };
+
+    const headingDefs = [
+      { el: 'h1', sizeName: 'xx-large',     famRole: 'heading',    wtRole: 'heading',    colorKey: 'h1Color' },
+      { el: 'h2', sizeName: 'large',        famRole: 'heading',    wtRole: 'heading',    colorKey: 'h2Color' },
+      { el: 'h3', sizeName: 'emphasis',     famRole: 'heading',    wtRole: 'subheading', colorKey: 'h3Color' },
+      { el: 'h4', sizeName: 'intermediate', famRole: 'subheading', wtRole: 'subheading', colorKey: 'h4Color' },
+      { el: 'h5', sizeName: 'normal',       famRole: 'subheading', wtRole: 'subheading', colorKey: 'h5Color' },
+      { el: 'h6', sizeName: 'small',        famRole: 'subheading', wtRole: 'subheading', colorKey: 'h6Color' },
+    ];
+
+    styles.elements = {};
+    headingDefs.forEach(({ el, sizeName, famRole, wtRole, colorKey }) => {
+      const tc = typoColors[colorKey];
+      styles.elements[el] = {
+        color: { text: colorRef(tc.group, tc.slug) },
+        typography: {
+          fontFamily: customVar(famRole, 'fontFamily'),
+          fontSize:   sizeRef(sizeName),
+          fontWeight: customVar(wtRole,  'fontWeight'),
+        },
+      };
+    });
+
+    styles.elements.link = {
+      color: { text: colorRef(typoColors.linkText.group, typoColors.linkText.slug) },
+    };
+  }
+
+  const themeJson = {
+    "$schema": "https://schemas.wp.org/trunk/theme.json",
+    "version": 3,
+    "settings": settings,
+    ...(Object.keys(styles).length ? { styles } : {}),
+  };
+
+  const blob = new Blob([JSON.stringify(themeJson, null, "\t")], { type: "application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob); a.download = "theme.json"; a.click();
+}
+
+function exportCSSWithTypo(includeColor, includeTypo, includeUtil) {
+  const lines = [":root {"];
+
+  if (includeColor) {
+    const t7 = ["lightest","lighter","light","base","dark","darker","darkest"];
+    const t5 = ["lightest","light","base","dark","darkest"];
+    function addVars(prefix, arr, names){
+      if (!arr || !arr.length) return;
+      arr.forEach((color, i) => {
+        const suffix = names[i] === "base" ? "" : `-${names[i]}`;
+        lines.push(`  --${prefix}${suffix}: ${color};`);
+      });
+    }
+    lines.push("\n  /* Primary */");  addVars("color-primary",   currentSystem.primary,   t7);
+    lines.push("\n  /* Secondary */"); addVars("color-secondary", currentSystem.secondary, t7);
+    lines.push("\n  /* Tertiary */");  addVars("color-tertiary",  currentSystem.tertiary,  t7);
+    lines.push("\n  /* Extended */");
+    currentSystem.extended.forEach((colors, i) => {
+      if (colors && colors.length){ lines.push(`\n  /* Extended Palette ${i+1} */`); addVars(`color-extended-${i+1}`, colors, t5); }
+    });
+    lines.push("\n  /* Semantic */");
+    lines.push(`  --color-background: ${currentSystem.semantic.background};`);
+    lines.push(`  --color-foreground: ${currentSystem.semantic.foreground};`);
+    lines.push(`  --color-reverse:    ${currentSystem.semantic.reverse};`);
+    lines.push("\n  /* Grays */");
+    const graySlugsLight = ["base-minus-3","base-minus-2","base-minus-1","base","base-plus-1","base-plus-2","base-plus-3"];
+    const graySlugs = darkMode ? [...graySlugsLight].reverse() : graySlugsLight;
+    currentSystem.grays.forEach((color, i) => { lines.push(`  --color-${graySlugs[i]}: ${color};`); });
+  }
+
+  if (includeTypo) {
+    lines.push("\n  /* Font Families */");
+    Object.entries(fontRoles).forEach(([key, role]) => {
+      lines.push(`  --font-family-${key}: ${role.family};`);
+    });
+    lines.push("\n  /* Font Weights */");
+    Object.entries(fontRoles).forEach(([key, role]) => {
+      lines.push(`  --font-weight-${key}: ${role.weight};`);
+    });
+    lines.push("\n  /* Fluid Type Scale */");
+    typoScale.forEach(size => {
+      lines.push(`  --font-size-${size.name}: ${wpClamp(size.minPx, size.maxPx)};`);
+    });
+  }
+
+  if (includeUtil) {
+    lines.push("\n  /* Utilities — Interactive */");
+    lines.push(`  --color-interactive:                  ${resolveUtil('interactive')};`);
+    lines.push(`  --color-interactive-hover:            ${resolveUtil('interactiveHover')};`);
+    lines.push(`  --color-interactive-active:           ${resolveUtil('interactiveActive')};`);
+    lines.push(`  --color-interactive-outline-bg:       ${resolveUtil('interactiveOutlineBg')};`);
+    lines.push(`  --color-interactive-reverse:          ${resolveUtil('interactiveReverse')};`);
+    lines.push(`  --color-interactive-reverse-hover:    ${resolveUtil('interactiveReverseHover')};`);
+    lines.push(`  --color-interactive-reverse-active:   ${resolveUtil('interactiveReverseActive')};`);
+    lines.push(`  --color-interactive-reverse-outline-bg: ${resolveUtil('interactiveReverseOutlineBg')};`);
+    lines.push("\n  /* Utilities — UI & Table */");
+    lines.push(`  --color-ui-border:    ${resolveUtil('uiBorder')};`);
+    lines.push(`  --color-table-border: ${resolveUtil('tableBorder')};`);
+    lines.push(`  --color-table-header: ${resolveUtil('tableHeader')};`);
+    lines.push(`  --color-table-stripe: ${resolveUtil('tableStripe')};`);
+  }
+
+  lines.push("}");
+
+  const blob = new Blob([lines.join("\n")], { type: "text/css" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob); a.download = "token-system.css"; a.click();
+}
+
+function exportFigmaSVGWithTypo(includeColor, includeTypo, includeUtil) {
+  if (includeColor && !includeTypo && !includeUtil) { exportFigmaSVG(); return; }
+
+  // For SVG: export color SVG and/or a typography specimen SVG
+  if (includeColor) exportFigmaSVG();
+  if (includeUtil)  exportUtilitiesSVG();
+
+  if (includeTypo) {
+    const SW = 900, PAD = 32, GAP = 16, VW = 1400;
+    const fgColor   = currentSystem.semantic?.foreground || '#1f2020';
+    const bgColor   = currentSystem.semantic?.background || '#fafafa';
+    const linkColor = resolveTypoColor(typoColors.linkText.group, typoColors.linkText.slug);
+
+    const headFam  = fontRoles.heading.family;
+    const headWt   = fontRoles.heading.weight;
+    const subFam   = fontRoles.subheading.family;
+    const subWt    = fontRoles.subheading.weight;
+    const bodyFam  = fontRoles.body.family;
+    const bodyWt   = fontRoles.body.weight;
+
+    const hColors = ['h1Color','h2Color','h3Color','h4Color','h5Color','h6Color']
+      .map(k => resolveTypoColor(typoColors[k].group, typoColors[k].slug));
+    const bodyColor = resolveTypoColor(typoColors.bodyText.group, typoColors.bodyText.slug);
+
+    function sizeAt(name) {
+      const s = typoScale.find(t => t.name === name);
+      return s ? Math.round(evalClampPx(s.minPx, s.maxPx, VW)) : 16;
+    }
+
+    const LABEL_W = 80; // left column for tag labels
+    const TEXT_X  = PAD + LABEL_W;
+    const TEXT_W  = SW - TEXT_X - PAD;
+
+    const elems = [];
+    let y = PAD;
+
+    function sectionHead(title) {
+      elems.push(`<text x="${PAD}" y="${y + 18}" font-family="Arial,sans-serif" font-size="13" font-weight="bold" fill="${fgColor}" opacity="0.5" text-transform="uppercase">${escXML(title)}</text>`);
+      y += 30;
+    }
+
+    function tagLabel(tag, rowY, color) {
+      elems.push(`<text x="${PAD}" y="${rowY}" font-family="Arial,sans-serif" font-size="10" font-weight="bold" fill="${color || fgColor}" opacity="0.4">${escXML(tag)}</text>`);
+    }
+
+    // ── Typography Preview ──
+    sectionHead('Typography Preview');
+
+    const headingDefs = [
+      { tag: 'H1', size: sizeAt('xx-large'),    family: headFam, weight: headWt,  color: hColors[0] },
+      { tag: 'H2', size: sizeAt('large'),        family: headFam, weight: headWt,  color: hColors[1] },
+      { tag: 'H3', size: sizeAt('emphasis'),     family: headFam, weight: subWt,   color: hColors[2] },
+      { tag: 'H4', size: sizeAt('intermediate'), family: subFam,  weight: subWt,   color: hColors[3] },
+      { tag: 'H5', size: sizeAt('normal'),       family: subFam,  weight: subWt,   color: hColors[4] },
+      { tag: 'H6', size: sizeAt('small'),        family: subFam,  weight: subWt,   color: hColors[5] },
+    ];
+
+    headingDefs.forEach(({ tag, size, family, weight, color }) => {
+      const baseline = y + size;
+      tagLabel(tag, baseline, color);
+      elems.push(`<text x="${TEXT_X}" y="${baseline}" font-family="${escXML(family)},Arial,sans-serif" font-size="${size}" font-weight="${weight}" fill="${color}">${escXML(tag + ' — The quick brown fox jumps over the lazy dog')}</text>`);
+      y += size * 1.3 + GAP;
+    });
+
+    // Lede
+    const ledeSize = sizeAt('intermediate');
+    tagLabel('Lede', y + ledeSize, bodyColor);
+    elems.push(`<text x="${TEXT_X}" y="${y + ledeSize}" font-family="${escXML(bodyFam)},Arial,sans-serif" font-size="${ledeSize}" font-weight="${bodyWt}" fill="${bodyColor}">An introductory paragraph that draws the reader in with a broader statement about the topic.</text>`);
+    y += ledeSize * 1.4 + GAP;
+
+    // Paragraph with inline link (two tspans)
+    const paraSize = sizeAt('normal');
+    const paraText1 = 'Body text establishes the reading rhythm of your content. ';
+    const paraText2 = 'Inline links';
+    const paraText3 = ' should be clearly distinguishable from surrounding text.';
+    tagLabel('Paragraph', y + paraSize, bodyColor);
+    elems.push(`<text x="${TEXT_X}" y="${y + paraSize}" font-family="${escXML(bodyFam)},Arial,sans-serif" font-size="${paraSize}" font-weight="${bodyWt}" fill="${bodyColor}">${escXML(paraText1)}<tspan fill="${linkColor}" text-decoration="underline">${escXML(paraText2)}</tspan><tspan fill="${bodyColor}">${escXML(paraText3)}</tspan></text>`);
+    y += paraSize * 1.4 + GAP * 2;
+
+    // ── Type Scale ──
+    sectionHead('Fluid Type Scale (at 1400px viewport)');
+
+    const sortedScale = [...typoScale].sort((a, b) => b.minPx - a.minPx);
+    sortedScale.forEach(size => {
+      const px = Math.round(evalClampPx(size.minPx, size.maxPx, VW));
+      // Meta label: name + clamp
+      elems.push(`<text x="${PAD}" y="${y + 11}" font-family="Arial,sans-serif" font-size="9" font-weight="bold" fill="${fgColor}" opacity="0.45">${escXML(size.label)}</text>`);
+      elems.push(`<text x="${TEXT_X}" y="${y + 11}" font-family="Arial,sans-serif" font-size="9" fill="${fgColor}" opacity="0.3">${escXML(wpClamp(size.minPx, size.maxPx))}</text>`);
+      y += 14;
+      elems.push(`<text x="${PAD}" y="${y + px}" font-family="${escXML(bodyFam)},Arial,sans-serif" font-size="${px}" font-weight="${bodyWt}" fill="${fgColor}">The quick brown fox</text>`);
+      y += px * 1.3 + GAP;
+    });
+
+    const totalH = y + PAD;
+    const svg = [
+      `<svg xmlns="http://www.w3.org/2000/svg" width="${SW}" height="${totalH}" viewBox="0 0 ${SW} ${totalH}">`,
+      `  <rect width="${SW}" height="${totalH}" fill="${bgColor}"/>`,
+      ...elems.map(e => '  ' + e),
+      `</svg>`
+    ].join('\n');
+
+    const blob = new Blob([svg], { type: 'image/svg+xml' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob); a.download = 'typography-system.svg'; a.click();
+  }
+}
+
+function exportUtilitiesSVG() {
+  const PAD = 28, GROUP_GAP = 20, SECTION_GAP = 32;
+  const sem      = currentSystem.semantic || {};
+  const pageBg   = (darkMode ? currentSystem.grays?.[6] : currentSystem.grays?.[0]) || '#f5f5f5';
+  const sectionBg = sem.background || '#ffffff';
+  const fgColor  = sem.foreground  || '#1f2020';
+  const revColor = sem.reverse     || '#ffffff';
+  const panelBg  = resolveSlug('base-plus-3');
+  const panelFg  = labelColor(panelBg);
+  const panelLabel = labelColor(panelBg) === '#ffffff' ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.45)';
+
+  // Resolve interactive colors (with dark-mode swap already applied in updateUtilitiesPreview logic)
+  let int_    = resolveUtil('interactive');
+  let intHov  = resolveUtil('interactiveHover');
+  let intAct  = resolveUtil('interactiveActive');
+  let intOutBg= resolveUtil('interactiveOutlineBg');
+  let rev_    = resolveUtil('interactiveReverse');
+  let revHov  = resolveUtil('interactiveReverseHover');
+  let revAct  = resolveUtil('interactiveReverseActive');
+  let revOutBg= resolveUtil('interactiveReverseOutlineBg');
+  if (darkMode) {
+    [int_, rev_] = [rev_, int_]; [intHov, revHov] = [revHov, intHov];
+    [intAct, revAct] = [revAct, intAct]; [intOutBg, revOutBg] = [revOutBg, intOutBg];
+  }
+  const uiBorderColor   = resolveUtil('uiBorder');
+  const tableBorderColor= resolveUtil('tableBorder');
+  const tableHeaderColor= resolveUtil('tableHeader');
+  const tableStripeColor= resolveUtil('tableStripe');
+
+  const bodyFont        = (fontRoles?.body?.family        || 'Arial, sans-serif').split(',')[0].replace(/['"]/g,'').trim();
+  const interactiveFont = (fontRoles?.interactive?.family || 'Arial, sans-serif').split(',')[0].replace(/['"]/g,'').trim();
+
+  // Layout constants
+  const canvasW   = 680;
+  const inner     = canvasW - PAD * 2;
+  const BTN_W     = 120, BTN_H = 36, BTN_R = 4, BTN_GAP = 12;
+  const LABEL_H   = 18, ROW_GAP = 14, TITLE_H = 26, SUBLABEL_H = 16;
+
+  const bgRects = [], elems = [];
+  let y = PAD;
+
+  function sectionTitle(title) {
+    elems.push(`<text x="${PAD}" y="${y + 18}" font-family="Arial,sans-serif" font-size="15" font-weight="bold" fill="${fgColor}">${escXML(title)}</text>`);
+    y += TITLE_H;
+  }
+  function rowLabel(text, fill) {
+    elems.push(`<text x="${PAD}" y="${y + 12}" font-family="Arial,sans-serif" font-size="11" font-weight="600" fill="${fill || fgColor}" opacity="0.6">${escXML(text)}</text>`);
+    y += SUBLABEL_H;
+  }
+  function btn(x, bY, label, bg, border, textColor, outline) {
+    if (outline) {
+      elems.push(`<rect x="${x}" y="${bY}" width="${BTN_W}" height="${BTN_H}" rx="${BTN_R}" fill="${bg}" stroke="${border}" stroke-width="2"/>`);
+    } else {
+      elems.push(`<rect x="${x}" y="${bY}" width="${BTN_W}" height="${BTN_H}" rx="${BTN_R}" fill="${bg}"/>`);
+    }
+    elems.push(`<text x="${x + BTN_W/2}" y="${bY + BTN_H/2 + 5}" font-family="${escXML(interactiveFont)},Arial,sans-serif" font-size="13" font-weight="bold" fill="${textColor}" text-anchor="middle">${escXML(label)}</text>`);
+  }
+  function stateLabel(x, bY, label) {
+    elems.push(`<text x="${x + BTN_W/2}" y="${bY + BTN_H + 13}" font-family="Arial,sans-serif" font-size="9" fill="${fgColor}" opacity="0.45" text-anchor="middle">${escXML(label)}</text>`);
+  }
+  function btnRow(rowY, configs) {
+    configs.forEach(({ label, stateLabel: sl, bg, border, textColor, outline }, i) => {
+      const x = PAD + i * (BTN_W + BTN_GAP);
+      btn(x, rowY, label, bg, border || bg, textColor, outline);
+      elems.push(`<text x="${x + BTN_W/2}" y="${rowY + BTN_H + 13}" font-family="Arial,sans-serif" font-size="9" fill="${fgColor}" opacity="0.45" text-anchor="middle">${escXML(sl)}</text>`);
+    });
+    return BTN_H + 16; // height consumed
+  }
+
+  // ── Interactive Buttons ──
+  const btnSectionStart = y;
+  sectionTitle('Interactive Buttons');
+
+  rowLabel('Interactive');
+  y += 4;
+  const bRow1H = btnRow(y, [
+    { label: 'Default', sl: 'Default', bg: int_,    textColor: labelColor(int_) },
+    { label: 'Default', sl: 'Hover',   bg: intHov,  textColor: labelColor(intHov) },
+    { label: 'Default', sl: 'Active',  bg: intAct,  textColor: labelColor(intAct) },
+  ]);
+  y += bRow1H + ROW_GAP;
+
+  rowLabel('Interactive Outline');
+  y += 4;
+  const bRow2H = btnRow(y, [
+    { label: 'Outline', sl: 'Default', bg: intOutBg, border: int_,    textColor: int_,    outline: true },
+    { label: 'Outline', sl: 'Hover',   bg: intOutBg, border: intHov,  textColor: intHov,  outline: true },
+    { label: 'Outline', sl: 'Active',  bg: intOutBg, border: intAct,  textColor: intAct,  outline: true },
+  ]);
+  y += bRow2H + ROW_GAP;
+
+  // Reverse panel
+  const panelStartY = y;
+  y += 14; // inner padding
+
+  rowLabel('Interactive Reverse', panelLabel);
+  y += 4;
+  const bRow3H = btnRow(y, [
+    { label: 'Default', sl: 'Default', bg: rev_,    textColor: labelColor(rev_) },
+    { label: 'Default', sl: 'Hover',   bg: revHov,  textColor: labelColor(revHov) },
+    { label: 'Default', sl: 'Active',  bg: revAct,  textColor: labelColor(revAct) },
+  ]);
+  // Override state labels to use panel fg color
+  y += bRow3H + ROW_GAP;
+
+  rowLabel('Interactive Outline Reverse', panelLabel);
+  y += 4;
+  const bRow4H = btnRow(y, [
+    { label: 'Outline', sl: 'Default', bg: revOutBg, border: rev_,    textColor: rev_,    outline: true },
+    { label: 'Outline', sl: 'Hover',   bg: revOutBg, border: revHov,  textColor: revHov,  outline: true },
+    { label: 'Outline', sl: 'Active',  bg: revOutBg, border: revAct,  textColor: revAct,  outline: true },
+  ]);
+  y += bRow4H + 14; // inner padding bottom
+  bgRects.push(`<rect x="${PAD}" y="${panelStartY}" width="${inner}" height="${y - panelStartY}" rx="8" fill="${panelBg}"/>`);
+  y += GROUP_GAP;
+  const btnSectionH = y - btnSectionStart;
+  bgRects.unshift(`<rect x="4" y="${btnSectionStart - 8}" width="${canvasW - 8}" height="${btnSectionH + 4}" rx="10" fill="${sectionBg}"/>`);
+
+  y += SECTION_GAP;
+
+  // ── Input ──
+  const inputSectionStart = y;
+  sectionTitle('Form Input');
+  y += 6;
+  // Label
+  elems.push(`<text x="${PAD}" y="${y + 12}" font-family="${escXML(bodyFont)},Arial,sans-serif" font-size="12" font-weight="600" fill="${fgColor}">${escXML('Input label')}</text>`);
+  y += 20;
+  // Input box
+  const INP_W = 260, INP_H = 36;
+  elems.push(`<rect x="${PAD}" y="${y}" width="${INP_W}" height="${INP_H}" rx="4" fill="${sectionBg}" stroke="${uiBorderColor}" stroke-width="1.5"/>`);
+  elems.push(`<text x="${PAD + 10}" y="${y + INP_H/2 + 5}" font-family="${escXML(bodyFont)},Arial,sans-serif" font-size="13" fill="${fgColor}" opacity="0.4">${escXML('Input field')}</text>`);
+  y += INP_H + GROUP_GAP;
+  const inputSectionH = y - inputSectionStart;
+  bgRects.push(`<rect x="4" y="${inputSectionStart - 8}" width="${canvasW - 8}" height="${inputSectionH + 4}" rx="10" fill="${sectionBg}"/>`);
+
+  y += SECTION_GAP;
+
+  // ── Table ──
+  const tableSectionStart = y;
+  sectionTitle('Table');
+  y += 6;
+  const TBL_W = inner, ROW_H = 36, COL_LABEL_W = 180;
+  const tableRows = [
+    { label: 'Table Header',      bg: tableHeaderColor, textColor: revColor, border: tableBorderColor, bold: true },
+    { label: 'Table Row',         bg: 'transparent',    textColor: fgColor,  border: tableBorderColor, bold: false },
+    { label: 'Table Striped Row', bg: tableStripeColor, textColor: fgColor,  border: tableBorderColor, bold: false },
+    { label: 'Table Row',         bg: 'transparent',    textColor: fgColor,  border: tableBorderColor, bold: false },
+  ];
+  tableRows.forEach(({ label, bg, textColor, border, bold }) => {
+    if (bg !== 'transparent') elems.push(`<rect x="${PAD}" y="${y}" width="${TBL_W}" height="${ROW_H}" fill="${bg}"/>`);
+    elems.push(`<line x1="${PAD}" y1="${y + ROW_H}" x2="${PAD + TBL_W}" y2="${y + ROW_H}" stroke="${border}" stroke-width="1"/>`);
+    elems.push(`<text x="${PAD + 12}" y="${y + ROW_H/2 + 5}" font-family="${escXML(bodyFont)},Arial,sans-serif" font-size="13" font-weight="${bold ? 'bold' : 'normal'}" fill="${textColor}">${escXML(label)}</text>`);
+    y += ROW_H;
+  });
+  // Table outer border top
+  elems.push(`<line x1="${PAD}" y1="${y - tableRows.length * ROW_H}" x2="${PAD + TBL_W}" y2="${y - tableRows.length * ROW_H}" stroke="${tableBorderColor}" stroke-width="1"/>`);
+  y += GROUP_GAP;
+  const tableSectionH = y - tableSectionStart;
+  bgRects.push(`<rect x="4" y="${tableSectionStart - 8}" width="${canvasW - 8}" height="${tableSectionH + 4}" rx="10" fill="${sectionBg}"/>`);
+
+  y += PAD;
+
+  const totalH = y;
+  const svg = [
+    `<svg xmlns="http://www.w3.org/2000/svg" width="${canvasW}" height="${totalH}" viewBox="0 0 ${canvasW} ${totalH}">`,
+    `  <rect width="${canvasW}" height="${totalH}" fill="${pageBg}"/>`,
+    ...bgRects.map(e => '  ' + e),
+    ...elems.map(e => '  ' + e),
+    `</svg>`
+  ].join('\n');
+
+  const blob = new Blob([svg], { type: 'image/svg+xml' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'utilities-system.svg';
+  a.click();
+}
+
+/* ===========================
+   URL STATE: TYPOGRAPHY
+=========================== */
+
+const _origEncodeStateToURL = encodeStateToURL;
+encodeStateToURL = function() {
+  let qs = _origEncodeStateToURL();
+  const p = new URLSearchParams(qs);
+  if (activeTab !== 'color') p.set('tab', activeTab);
+  // Font roles — only encode if they differ from defaults
+  const roleKeys = ['body','heading','subheading','interactive'];
+  roleKeys.forEach(k => {
+    const r = fontRoles[k], d = FONT_ROLE_DEFAULTS[k];
+    if (r.family     !== d.family)     p.set(`tf_${k}_fam`, r.family);
+    if (r.weight     !== d.weight)     p.set(`tf_${k}_wt`,  r.weight);
+  });
+  // Typography colors
+  Object.entries(typoColors).forEach(([k, v]) => {
+    const d = TYPO_COLOR_DEFAULTS[k];
+    if (v.group !== d.group) p.set(`tc_${k}_g`, v.group);
+    if (v.slug  !== d.slug)  p.set(`tc_${k}_s`, v.slug);
+  });
+  // Type scale — only encode rows that differ from defaults
+  typoScale.forEach((s, i) => {
+    const d = TYPO_SCALE_DEFAULTS[i];
+    if (s.minPx !== d.minPx) p.set(`ts_${s.name}_min`, String(s.minPx));
+    if (s.maxPx !== d.maxPx) p.set(`ts_${s.name}_max`, String(s.maxPx));
+  });
+  return p.toString();
+};
+
+const _origApplyStateFromURL = applyStateFromURL;
+applyStateFromURL = function() {
+  _origApplyStateFromURL();
+  const p = new URLSearchParams(location.hash.slice(1));
+  if (p.has('tab')) {
+    // Defer tab switch until after generate() so currentSystem is populated
+    const t = p.get('tab');
+    if (t === 'typography') requestAnimationFrame(() => switchTab('typography'));
+  }
+  const roleKeys = ['body','heading','subheading','interactive'];
+  roleKeys.forEach(k => {
+    if (p.has(`tf_${k}_fam`)) fontRoles[k].family     = p.get(`tf_${k}_fam`);
+    if (p.has(`tf_${k}_wt`))  fontRoles[k].weight     = p.get(`tf_${k}_wt`);
+  });
+  typoScale.forEach(s => {
+    if (p.has(`ts_${s.name}_min`)) s.minPx = parseInt(p.get(`ts_${s.name}_min`));
+    if (p.has(`ts_${s.name}_max`)) s.maxPx = parseInt(p.get(`ts_${s.name}_max`));
+  });
+  Object.keys(typoColors).forEach(k => {
+    if (p.has(`tc_${k}_g`)) typoColors[k].group = p.get(`tc_${k}_g`);
+    if (p.has(`tc_${k}_s`)) typoColors[k].slug  = p.get(`tc_${k}_s`);
+  });
+};
 
 applyStateFromURL();
 generate();
