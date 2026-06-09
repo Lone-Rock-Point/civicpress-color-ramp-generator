@@ -1278,7 +1278,12 @@ function buildColorSourceUI(sectionKey, families, onRebuild) {
     const v = seedIn.value.trim();
     if (/^#[0-9a-fA-F]{6}$/.test(v)) {
       state.customHex = v;
-      if (state.generateRamp) { resetRampBtn.style.display = "none"; onRebuild(); }
+      if (state.generateRamp) {
+        // Clear stored colors so buildRamp generates a fresh ramp from the new seed
+        currentSystem[systemColorKey] = [];
+        resetRampBtn.style.display = "none";
+        onRebuild();
+      }
       scheduleURLUpdate();
     }
   }
@@ -1295,6 +1300,8 @@ function buildColorSourceUI(sectionKey, families, onRebuild) {
 
   genCheckbox.addEventListener("change", () => {
     state.generateRamp = genCheckbox.checked;
+    // When turning generate mode on, clear stored colors so buildRamp generates a fresh ramp
+    if (genCheckbox.checked) currentSystem[systemColorKey] = [];
     seedWrap.style.display = state.generateRamp ? "inline-flex" : "none";
     onRebuild();
     scheduleURLUpdate();
@@ -1386,9 +1393,12 @@ function group(title, sectionKey, colorName, systemKey) {
       const baseColors = (preserved && preserved.length === 7) ? [...preserved] : [...fallback];
 
       if (state.generateRamp && /^#[0-9a-fA-F]{6}$/.test(state.customHex || "")) {
-        let { colors, anchorSlot } = ramp7Smart(state.customHex);
-        // Apply preloaded individual swatch overrides if available
-        if (preloaded && preloaded.length === colors.length) colors = [...preloaded];
+        let { colors: genColors, anchorSlot } = ramp7Smart(state.customHex);
+        // Preserve user edits; only generate fresh when currentSystem is empty (seed changed, reset, or first load)
+        let colors = preloaded && preloaded.length === genColors.length ? [...preloaded]
+          : (currentSystem[systemKey] && currentSystem[systemKey].length === genColors.length)
+            ? [...currentSystem[systemKey]]
+            : genColors;
         lastColors = colors;
         currentSystem[systemKey] = [...colors];
         if (!currentSystem.anchorSlots) currentSystem.anchorSlots = {};
@@ -2350,15 +2360,19 @@ function buildGrayGroup() {
       }
     } else {
       const { colors: c, anchorSlot } = ramp7Smart(state.customHex || "#757575");
-      colors = c;
       grayAnchorSlot = anchorSlot;
       if (!currentSystem.anchorSlots) currentSystem.anchorSlots = {};
       currentSystem.anchorSlots['grays'] = anchorSlot;
-      // Apply preloaded per-swatch colors (from URL) — consumed once, prevents stale data on rebuilds
+      // Consume preloaded URL colors once; otherwise preserve any user-edited values so dark
+      // mode toggles and other rebuilds do not wipe manual swatch changes.
       if (_preloadedKeys.has('grays')) {
         const preColors = currentSystem.grays;
-        if (preColors && preColors.length === colors.length) colors = [...preColors];
+        colors = (preColors && preColors.length === c.length) ? [...preColors] : c;
         _preloadedKeys.delete('grays');
+      } else {
+        colors = (currentSystem.grays && currentSystem.grays.length === c.length)
+          ? [...currentSystem.grays]
+          : c;
       }
       if (state.generateRamp) rampArea.appendChild(anchorInfo(anchorSlot, state.customHex || "#757575"));
     }
@@ -3556,8 +3570,8 @@ function updateUtilitiesPreview() {
     .util-btn-interactive:active { background:${interactiveActive} !important; border-color:${interactiveActive} !important; color:${labelColor(interactiveActive)} !important; }
     .util-btn-outline-interactive:hover  { background:${interactiveOutlineBg} !important; border-color:${interactiveHover}  !important; color:${interactiveHover}  !important; }
     .util-btn-outline-interactive:active { background:${interactiveOutlineBg} !important; border-color:${interactiveActive} !important; color:${interactiveActive} !important; }
-    .util-btn-reverse-interactive:hover  { background:${interactiveReverseHover}  !important; border-color:${interactiveReverseHover}  !important; color:${labelColor(interactiveReverseHover)}  !important; }
-    .util-btn-reverse-interactive:active { background:${interactiveReverseActive} !important; border-color:${interactiveReverseActive} !important; color:${labelColor(interactiveReverseActive)} !important; }
+    .util-btn-reverse-interactive:hover  { background:${interactiveReverseHover}  !important; border-color:${interactiveReverseHover}  !important; color:${fgColor} !important; }
+    .util-btn-reverse-interactive:active { background:${interactiveReverseActive} !important; border-color:${interactiveReverseActive} !important; color:${fgColor} !important; }
     .util-btn-outline-reverse-interactive:hover  { background:${interactiveReverseOutlineBg} !important; border-color:${interactiveReverseHover}  !important; color:${interactiveReverseHover}  !important; }
     .util-btn-outline-reverse-interactive:active { background:${interactiveReverseOutlineBg} !important; border-color:${interactiveReverseActive} !important; color:${interactiveReverseActive} !important; }
   `;
@@ -3617,9 +3631,9 @@ function updateUtilitiesPreview() {
 
     panel.appendChild(makeLabel('Interactive Reverse', panelLabelColor));
     panel.appendChild(makeRow([
-      makeBtn('Default', interactiveReverse,       interactiveReverse,       labelColor(interactiveReverse),       'util-btn-reverse-interactive'),
-      makeBtn('Hover',   interactiveReverseHover,  interactiveReverseHover,  labelColor(interactiveReverseHover)),
-      makeBtn('Active',  interactiveReverseActive, interactiveReverseActive, labelColor(interactiveReverseActive)),
+      makeBtn('Default', interactiveReverse,       interactiveReverse,       fgColor, 'util-btn-reverse-interactive'),
+      makeBtn('Hover',   interactiveReverseHover,  interactiveReverseHover,  fgColor),
+      makeBtn('Active',  interactiveReverseActive, interactiveReverseActive, fgColor),
     ]));
 
     panel.appendChild(makeLabel('Interactive Outline Reverse', panelLabelColor));
